@@ -86,9 +86,6 @@ Widget::Widget(QWidget *parent)
     QObject::connect(clients, &client::remouveClient, this, &Widget::deletClient);
     QObject::connect(clients, &client::newuser, this, &Widget::newuser);
     clients->connectto("localhost",ui->serveurport->value(),ui->pseudo->text());
-
-    QPushButton test;
-
 }
 Widget::~Widget()
 {
@@ -204,12 +201,6 @@ void Widget::displayMessagelist(QString message)
         if(!QApplication::activeWindow()){
             QApplication::beep();
         }
-        /*QMediaPlayer player;
-        connect(&player, QOverload<QMediaPlayer::Error>::of(&QMediaPlayer::error),
-            [=](QMediaPlayer::Error error){ errorNotif(error); });
-        player.setMedia(QUrl("C:\\Users\\eneep\\Desktop\\VEHCar_Voiture demarrage et depart (ID 0189)_LS.wav"));
-        player.setVolume(100);
-        player.play();*/
     }
     if(settings->value("settings/visualNotification").toBool())
     {
@@ -219,7 +210,14 @@ void Widget::displayMessagelist(QString message)
         }
         QApplication::alert(this);
     }
-    ui->messagelist->append(message);
+    QLabel *label = new QLabel(this);
+    label->setText(message);
+    ui->messageliste->addWidget(label);
+}
+void Widget:: addmessage(QString message){
+    QLabel *label = new QLabel(this);
+    label->setText(message);
+    ui->messageliste->addWidget(label);
 }
 QString Widget::returnpseudo()
 {
@@ -232,47 +230,56 @@ void Widget::processechatbot(QString command)
    if (command==tr("bonjour")||command==tr("salut")||command==tr("hello")){//posibilier de question
        int random = rand() % 5 + 1;//on fait l'aleatoire
        if(random == 1){
-           ui->messagelist->append(generatemesage(tr("Bonjour") + ui->pseudo->text()+".",tr("Tchat Bot")));
+           addmessage(generatemesage(tr("Bonjour") + ui->pseudo->text()+".",tr("Tchat Bot")));
        }else if(random == 2){
-           ui->messagelist->append(generatemesage(tr("Salut") + ui->pseudo->text()+".",tr("Tchat Bot")));
+           addmessage(generatemesage(tr("Salut") + ui->pseudo->text()+".",tr("Tchat Bot")));
        }else if(random == 3){
-           ui->messagelist->append(generatemesage(tr("Salut🖖") + ui->pseudo->text()+".",tr("Tchat Bot")));
+           addmessage(generatemesage(tr("Salut🖖") + ui->pseudo->text()+".",tr("Tchat Bot")));
        }else if(random == 4){
-           ui->messagelist->append(generatemesage(tr("Hello") + ui->pseudo->text()+".",tr("Tchat Bot")));
+           addmessage(generatemesage(tr("Hello") + ui->pseudo->text()+".",tr("Tchat Bot")));
        }else if(random == 5){
-           ui->messagelist->append(generatemesage(tr("Hello👋") + ui->pseudo->text()+".",tr("Tchat Bot")));
+           addmessage(generatemesage(tr("Hello👋") + ui->pseudo->text()+".",tr("Tchat Bot")));
        }
    }else if (command==tr("comment t'apelle tu")||command==tr("quel est ton nom")){
        int random = rand() % 2 + 1;
        if(random == 1){
-           ui->messagelist->append(generatemesage(tr("Tu peux m'appeller Tchat Bot."),tr("Tchat Bot")));
+          addmessage(generatemesage(tr("Tu peux m'appeller Tchat Bot."),tr("Tchat Bot")));
        }else if(random == 2){
-           ui->messagelist->append(generatemesage(tr("Tu peux m'appeller Tchat Bot 😊."),tr("Tchat Bot")));
+          addmessage(generatemesage(tr("Tu peux m'appeller Tchat Bot 😊."),tr("Tchat Bot")));
        }
    }else if (command==tr("qui est tu")){
-       ui->messagelist->append(generatemesage(tr("Je suis le Tchat Bot crée par les développeurs de Ananta System, je suis encore très inachevé."),tr("Tchat Bot")));
+       addmessage(generatemesage(tr("Je suis le Tchat Bot crée par les développeurs de Ananta System, je suis encore très inachevé."),tr("Tchat Bot")));
    }else if (command=="clear"){
-       ui->messagelist->clear();
+       QLayoutItem* child;
+             while((child = ui->messageliste->takeAt(0)) != 0)
+             {
+              if(child->widget() != 0)
+              {
+               delete child->widget();
+              }
+
+              delete child;
+             }
    }else if (command=="actualise"||command=="update"){
         clients->sentcommande("updating");
    }else if (command==tr("merci")){
        int random = rand() % 7 + 1;
        if(random == 1){
-           ui->messagelist->append(generatemesage(tr("De rien 😀"),tr("Tchat Bot")));
+           addmessage(generatemesage(tr("De rien 😀"),tr("Tchat Bot")));
        }else if(random == 2){
-           ui->messagelist->append(generatemesage(tr("Tout le plaisir est pour moi 😀"),tr("Tchat Bot")));
+           addmessage(generatemesage(tr("Tout le plaisir est pour moi 😀"),tr("Tchat Bot")));
        }else if(random == 3){
-           ui->messagelist->append(generatemesage(tr("Tout le plaisir est pour moi!"),tr("Tchat Bot")));
+           addmessage(generatemesage(tr("Tout le plaisir est pour moi!"),tr("Tchat Bot")));
        }else if(random == 3){
-           ui->messagelist->append(generatemesage(tr("De rien !"),tr("Tchat Bot")));
+           addmessage(generatemesage(tr("De rien !"),tr("Tchat Bot")));
        }else if(random == 4){
-           ui->messagelist->append(generatemesage(tr("Mais je suis là pour ça bien sûr 😀"),tr("Tchat Bot")));
+          addmessage(generatemesage(tr("Mais je suis là pour ça bien sûr 😀"),tr("Tchat Bot")));
        }else if(random == 5){
-           ui->messagelist->append(generatemesage(tr("Mais je suis là pour ça bien sûr !"),tr("Tchat Bot")));
+          addmessage(generatemesage(tr("Mais je suis là pour ça bien sûr !"),tr("Tchat Bot")));
        }else if (random == 6){
-            ui->messagelist->append(generatemesage(tr("Quand tu ne me parle pas je fais que des actions répétitives, recevoir des messages et les afficher😥..."),tr("Tchat Bot")));
+            addmessage(generatemesage(tr("Quand tu ne me parle pas je fais que des actions répétitives, recevoir des messages et les afficher😥..."),tr("Tchat Bot")));
        }else if (random == 7){
-            ui->messagelist->append(generatemesage(tr("Quand tu ne me parle pas je m'ennuie 😥"),tr("Tchat Bot")));
+            addmessage(generatemesage(tr("Quand tu ne me parle pas je m'ennuie 😥"),tr("Tchat Bot")));
    }else if (command==tr("condenses")||command==tr("condense")||command==tr("condense menu")){
        condesed();
     }else if (command==tr("comment condenser la fenetre")||command==tr("comment condenser le menu")||command==tr("compacter la fenetre")){
@@ -280,7 +287,7 @@ void Widget::processechatbot(QString command)
        if(random == 1){
            displayMessagelist(generatemesage(tr("Il suffit de taper la commande /condense", "Attention bien taper la même commande!"),tr("Tchat Bot")));
        }else if(random == 2){
-           ui->messagelist->append(generatemesage(tr("Tu peux faire clique droit sur l'icône en bas à droite dans ta barre des tâches -> Condenser la fenêtre"),tr("Tchat Bot")));
+           addmessage(generatemesage(tr("Tu peux faire clique droit sur l'icône en bas à droite dans ta barre des tâches -> Condenser la fenêtre"),tr("Tchat Bot")));
        }
    }
    }else{

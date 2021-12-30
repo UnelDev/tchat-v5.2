@@ -28,12 +28,10 @@ class Widget : public QWidget
     Q_OBJECT
 
 public:
-    QList<QMap<QString,QString>> saveMessage;
     Widget(QWidget *parent = nullptr);
     ~Widget();
-    void condesed();
-
 private:
+    QList<QMap<QString,QString>> saveMessage;
     client *clients;
     cesar *encryptioncesar;
     QString levelOfSecure;
@@ -45,16 +43,15 @@ private:
     QMenu *stmenu;
     QTcpSocket *socket;
     serveur *server;
-
     quint16 messagesize;
-    int nbuser;//a elnlever
 private slots:
     QString returnpseudo();
     QString generatemesage(QString message, QString pseudo);
     QString generatedate();
+    void addmessage(QString message);
     void startTrayIcon();
     void changetransparency(Qt::ApplicationState state);
-
+    void condesed();
     void autoconnect();
     void processechatbot(QString command);
     void on_pseudo_editingFinished();

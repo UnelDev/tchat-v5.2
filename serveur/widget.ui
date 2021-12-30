@@ -21,81 +21,43 @@
    <double>1.000000000000000</double>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <widget class="QTextBrowser" name="messagelist">
-     <property name="styleSheet">
-      <string notr="true">/*
-By Wiwok at 30/09/2021
-For Ananta Project
-*/
-
-QToolTip {
-    color: #ffffff;
-    background-color: #2a82da;
-    border: 1px solid white;
-    border-radius: 1px;
-}
-
-Window {
-    background-color: rgb(53, 53, 53);
-}
-
-WindowText {
-    color: white;
-}
-
-Base {
-    background-color: rgb(25, 25, 25)
-}
-
-AlternateBase {
-    background-color: rgb(53, 53, 53);
-}
-
-ToolTipBase,
-ToolTipText {
-    color: white;
-}
-
-Text {
-    color: white;
-}
-
-Button {
-    background-color: rgb(53, 53, 53);
-}
-
-ButtonText {
-    color: white;
-}
-
-BrightText {
-    color: red;
-}
-
-Link {
-    color: rgb(42, 130, 218);
-}
-
-Highlight {
-    background-color: rgb(42, 130, 218);
-}
-
-HighlightedText {
-    color: black;
-}</string>
-     </property>
-     <property name="lineWrapColumnOrWidth">
-      <number>0</number>
-     </property>
-     <property name="html">
-      <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:7.8pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-    </widget>
+   <item row="2" column="0" colspan="2">
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QLabel" name="label_psedo">
+       <property name="text">
+        <string>Pseudo:</string>
+       </property>
+      </widget>
+     </item>
+     <item alignment="Qt::AlignLeft">
+      <widget class="QLineEdit" name="pseudo"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_message_3">
+       <property name="text">
+        <string>Message:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="mesage"/>
+     </item>
+     <item>
+      <widget class="QPushButton" name="sentbutton">
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
+       <property name="text">
+        <string>Envoyer</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>:/images/sent.png</normaloff>:/images/sent.png</iconset>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
    <item row="0" column="1">
     <layout class="QGridLayout" name="gridLayout_4">
@@ -169,43 +131,27 @@ p, li { white-space: pre-wrap; }
      </item>
     </layout>
    </item>
-   <item row="1" column="0" colspan="2">
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
-     <item>
-      <widget class="QLabel" name="label_psedo">
-       <property name="text">
-        <string>Pseudo:</string>
-       </property>
-      </widget>
-     </item>
-     <item alignment="Qt::AlignLeft">
-      <widget class="QLineEdit" name="pseudo"/>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_message_3">
-       <property name="text">
-        <string>Message:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="mesage"/>
-     </item>
-     <item>
-      <widget class="QPushButton" name="sentbutton">
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
-       <property name="text">
-        <string>Envoyer</string>
-       </property>
-       <property name="icon">
-        <iconset>
-         <normaloff>:/images/sent.png</normaloff>:/images/sent.png</iconset>
-       </property>
-      </widget>
-     </item>
-    </layout>
+   <item row="0" column="0">
+    <widget class="QScrollArea" name="scrollArea">
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
+     <widget class="QWidget" name="scrollAreaWidgetContents">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>392</width>
+        <height>359</height>
+       </rect>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="0" column="0">
+        <layout class="QVBoxLayout" name="messageliste"/>
+       </item>
+      </layout>
+     </widget>
+    </widget>
    </item>
   </layout>
  </widget>
