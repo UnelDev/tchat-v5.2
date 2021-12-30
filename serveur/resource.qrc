@@ -5,19 +5,16 @@
         <file>resource/image/Anantasite.png</file>
         <file>resource/image/Blue_question_mark_icon.svg.png</file>
         <file>resource/image/Check_green.png</file>
-        <file>resource/image/desktop.files.json</file>
         <file>resource/image/discord logo.png</file>
         <file>resource/image/Fichier_4.png</file>
         <file>resource/image/image0.jpg</file>
         <file>resource/image/Refresh_icon.png</file>
         <file>resource/image/send.png</file>
-        <file>resource/image/sent.png</file>
         <file>resource/image/Simpleicons_Interface_link-symbol.svg.png</file>
-        <file>resource/image/succes.png</file>
         <file>resource/image/success.png</file>
         <file>resource/image/supprimer.png</file>
-        <file>resource/image/suprimer.png</file>
         <file>resource/image/Twitter_bird_logo_2012.svg.png</file>
+        <file>resource/image/paper-clip.png</file>
     </qresource>
     <qresource prefix="/sound">
         <file>resource/sond/notifdefault.wav</file>

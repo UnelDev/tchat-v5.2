@@ -2,7 +2,6 @@
 For Ananta Project*/
 #include "widget.h"
 #include "ui_widget.h"
-
 Widget::Widget(QWidget *parent)
     : QWidget(parent),
     parametres(this),
@@ -210,14 +209,15 @@ void Widget::displayMessagelist(QString message)
         }
         QApplication::alert(this);
     }
-    QLabel *label = new QLabel(this);
-    label->setText(message);
-    ui->messageliste->addWidget(label);
+    addmessage(message);
 }
 void Widget:: addmessage(QString message){
     QLabel *label = new QLabel(this);
     label->setText(message);
     ui->messageliste->addWidget(label);
+    test.append(label);
+
+
 }
 QString Widget::returnpseudo()
 {
@@ -250,16 +250,15 @@ void Widget::processechatbot(QString command)
    }else if (command==tr("qui est tu")){
        addmessage(generatemesage(tr("Je suis le Tchat Bot crée par les développeurs de Ananta System, je suis encore très inachevé."),tr("Tchat Bot")));
    }else if (command=="clear"){
-       QLayoutItem* child;
-             while((child = ui->messageliste->takeAt(0)) != 0)
-             {
-              if(child->widget() != 0)
-              {
-               delete child->widget();
-              }
-
-              delete child;
-             }
+   QLayoutItem* child;
+     while((child = ui->messageliste->takeAt(0)) != 0)
+     {
+      if(child->widget() != 0)
+      {
+       delete child->widget();
+      }
+      delete child;
+     }
    }else if (command=="actualise"||command=="update"){
         clients->sentcommande("updating");
    }else if (command==tr("merci")){

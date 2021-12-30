@@ -44,6 +44,7 @@ private:
     QTcpSocket *socket;
     serveur *server;
     quint16 messagesize;
+    QList<QWidget*>test;
 private slots:
     QString returnpseudo();
     QString generatemesage(QString message, QString pseudo);

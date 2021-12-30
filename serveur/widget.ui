@@ -14,8 +14,8 @@
    <string>ananta systeme serveur</string>
   </property>
   <property name="windowIcon">
-   <iconset>
-    <normaloff>:/image/Ananta.png</normaloff>:/image/Ananta.png</iconset>
+   <iconset resource="resource.qrc">
+    <normaloff>:/image/resource/image/Ananta.png</normaloff>:/image/resource/image/Ananta.png</iconset>
   </property>
   <property name="windowOpacity">
    <double>1.000000000000000</double>
@@ -41,6 +41,17 @@
       </widget>
      </item>
      <item>
+      <widget class="QPushButton" name="pieceJointe">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="resource.qrc">
+         <normaloff>:/image/resource/image/paper-clip.png</normaloff>:/image/resource/image/paper-clip.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QLineEdit" name="mesage"/>
      </item>
      <item>
@@ -52,8 +63,8 @@
         <string>Envoyer</string>
        </property>
        <property name="icon">
-        <iconset>
-         <normaloff>:/images/sent.png</normaloff>:/images/sent.png</iconset>
+        <iconset resource="resource.qrc">
+         <normaloff>:/image/resource/image/send.png</normaloff>:/image/resource/image/send.png</iconset>
        </property>
       </widget>
      </item>
@@ -155,7 +166,9 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="resource.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>mesage</sender>

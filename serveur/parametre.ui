@@ -14,8 +14,8 @@
    <string>parametre</string>
   </property>
   <property name="windowIcon">
-   <iconset>
-    <normaloff>:/image/Fichier_4.png</normaloff>:/image/Fichier_4.png</iconset>
+   <iconset resource="resource.qrc">
+    <normaloff>:/image/resource/image/Fichier_4.png</normaloff>:/image/resource/image/Fichier_4.png</iconset>
   </property>
   <property name="statusTip">
    <string/>
@@ -95,6 +95,10 @@
      <property name="text">
       <string>plus d'informantion</string>
      </property>
+     <property name="icon">
+      <iconset resource="resource.qrc">
+       <normaloff>:/image/resource/image/analyse.png</normaloff>:/image/resource/image/analyse.png</iconset>
+     </property>
     </widget>
    </item>
    <item row="5" column="0">
@@ -109,8 +113,8 @@
          <string>le site</string>
         </property>
         <property name="icon">
-         <iconset>
-          <normaloff>:/image/Anantasite.png</normaloff>:/image/Anantasite.png</iconset>
+         <iconset resource="resource.qrc">
+          <normaloff>:/image/resource/image/Anantasite.png</normaloff>:/image/resource/image/Anantasite.png</iconset>
         </property>
        </widget>
       </item>
@@ -120,8 +124,8 @@
          <string>le discord (aide/bug/probleme de traduction)</string>
         </property>
         <property name="icon">
-         <iconset>
-          <normaloff>:/image/discord logo.png</normaloff>:/image/discord logo.png</iconset>
+         <iconset resource="resource.qrc">
+          <normaloff>:/image/resource/image/discord logo.png</normaloff>:/image/resource/image/discord logo.png</iconset>
         </property>
        </widget>
       </item>
@@ -131,8 +135,8 @@
          <string>le twiter</string>
         </property>
         <property name="icon">
-         <iconset>
-          <normaloff>:/image/Twitter_bird_logo_2012.svg.png</normaloff>:/image/Twitter_bird_logo_2012.svg.png</iconset>
+         <iconset resource="resource.qrc">
+          <normaloff>:/image/resource/image/Twitter_bird_logo_2012.svg.png</normaloff>:/image/resource/image/Twitter_bird_logo_2012.svg.png</iconset>
         </property>
        </widget>
       </item>
@@ -142,8 +146,8 @@
          <string>faire un don</string>
         </property>
         <property name="icon">
-         <iconset>
-          <normaloff>:/image/image0.jpg</normaloff>:/image/image0.jpg</iconset>
+         <iconset resource="resource.qrc">
+          <normaloff>:/image/resource/image/image0.jpg</normaloff>:/image/resource/image/image0.jpg</iconset>
         </property>
        </widget>
       </item>
@@ -162,8 +166,8 @@
          <string>voir mes succés</string>
         </property>
         <property name="icon">
-         <iconset>
-          <normaloff>:/image/succes.png</normaloff>:/image/succes.png</iconset>
+         <iconset resource="resource.qrc">
+          <normaloff>:/image/resource/image/success.png</normaloff>:/image/resource/image/success.png</iconset>
         </property>
        </widget>
       </item>
@@ -196,8 +200,8 @@
          <string>suprimée tout les message</string>
         </property>
         <property name="icon">
-         <iconset>
-          <normaloff>:/image/supprimer.png</normaloff>:/image/supprimer.png</iconset>
+         <iconset resource="resource.qrc">
+          <normaloff>:/image/resource/image/supprimer.png</normaloff>:/image/resource/image/supprimer.png</iconset>
         </property>
        </widget>
       </item>
@@ -270,8 +274,8 @@
          <string/>
         </property>
         <property name="icon">
-         <iconset>
-          <normaloff>:/image/Blue_question_mark_icon.svg.png</normaloff>:/image/Blue_question_mark_icon.svg.png</iconset>
+         <iconset resource="resource.qrc">
+          <normaloff>:/image/resource/image/Blue_question_mark_icon.svg.png</normaloff>:/image/resource/image/Blue_question_mark_icon.svg.png</iconset>
         </property>
         <property name="flat">
          <bool>true</bool>
@@ -297,8 +301,8 @@
          <string/>
         </property>
         <property name="icon">
-         <iconset>
-          <normaloff>:/image/Blue_question_mark_icon.svg.png</normaloff>:/image/Blue_question_mark_icon.svg.png</iconset>
+         <iconset resource="resource.qrc">
+          <normaloff>:/image/resource/image/Blue_question_mark_icon.svg.png</normaloff>:/image/resource/image/Blue_question_mark_icon.svg.png</iconset>
         </property>
         <property name="flat">
          <bool>true</bool>
@@ -317,6 +321,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="resource.qrc"/>
+ </resources>
  <connections/>
 </ui>
