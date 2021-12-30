@@ -38,9 +38,6 @@ private slots:
     void on_userdifferent30_clicked();
 
     void on_userdifferent100_clicked();
-
-    void on_server20_clicked();
-
 private:
     QSettings* settings;
     Ui::sucees *ui;

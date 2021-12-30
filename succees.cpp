@@ -28,7 +28,6 @@ sucees::sucees(QWidget *parent) :
         ui->userdifferent10->setToolTip("imposible de l'avoir vous avez tricher");
         ui->userdifferent30->setToolTip("imposible de l'avoir vous avez tricher");
         ui->userdifferent100->setToolTip("imposible de l'avoir vous avez tricher");
-        ui->server20->setToolTip("imposible de l'avoir vous avez tricher");
         ui->message10->setText("");
         ui->message100->setText("");
         ui->message1000->setText("");
@@ -36,7 +35,6 @@ sucees::sucees(QWidget *parent) :
         ui->userdifferent10->setText("");
         ui->userdifferent30->setText("");
         ui->userdifferent100->setText("");
-        ui->server20->setText("");
         ui->message10->setIcon(QIcon(":/image/suprimer.png"));
         ui->message100->setIcon(QIcon(":/image/suprimer.png"));
         ui->message1000->setIcon(QIcon(":/image/suprimer.png"));
@@ -44,7 +42,6 @@ sucees::sucees(QWidget *parent) :
         ui->userdifferent10->setIcon(QIcon(":/image/suprimer.png"));
         ui->userdifferent30->setIcon(QIcon(":/image/suprimer.png"));
         ui->userdifferent100->setIcon(QIcon(":/image/suprimer.png"));
-        ui->server20->setIcon(QIcon(":/image/suprimer.png"));
     }if(settings->value("succes/nbmessage").toInt()<0&&settings->value("succes/succes").toBool()==false){
         ui->message10->setToolTip("imposible de l'avoir vous avez desactiver les succés");
         ui->message100->setToolTip("imposible de l'avoir vous avez desactiver les succés");
@@ -53,7 +50,6 @@ sucees::sucees(QWidget *parent) :
         ui->userdifferent10->setToolTip("imposible de l'avoir vous avez desactiver les succés");
         ui->userdifferent30->setToolTip("imposible de l'avoir vous avez desactiver les succés");
         ui->userdifferent100->setToolTip("imposible de l'avoir vous avez desactiver les succés");
-        ui->server20->setToolTip("imposible de l'avoir vous avez desactiver les succés");
         ui->message10->setText("");
         ui->message100->setText("");
         ui->message1000->setText("");
@@ -61,7 +57,6 @@ sucees::sucees(QWidget *parent) :
         ui->userdifferent10->setText("");
         ui->userdifferent30->setText("");
         ui->userdifferent100->setText("");
-        ui->server20->setText("");
         ui->message10->setIcon(QIcon(":/image/suprimer.png"));
         ui->message100->setIcon(QIcon(":/image/suprimer.png"));
         ui->message1000->setIcon(QIcon(":/image/suprimer.png"));
@@ -69,7 +64,6 @@ sucees::sucees(QWidget *parent) :
         ui->userdifferent10->setIcon(QIcon(":/image/suprimer.png"));
         ui->userdifferent30->setIcon(QIcon(":/image/suprimer.png"));
         ui->userdifferent100->setIcon(QIcon(":/image/suprimer.png"));
-        ui->server20->setIcon(QIcon(":/image/suprimer.png"));
     }if(settings->value("succes/nbmessage").toInt()>=10){
         ui->message10->setToolTip("obtenus");
         ui->message10->setText("");
@@ -98,10 +92,6 @@ sucees::sucees(QWidget *parent) :
         ui->userdifferent100->setToolTip("obtenus");
         ui->userdifferent100->setText("");
         ui->userdifferent100->setIcon(QIcon(":/image/Check_green.png"));
-    }if(settings->value("succes/20server").toBool()){
-        ui->server20->setToolTip("obtenus");
-        ui->server20->setText("");
-        ui->server20->setIcon(QIcon(":/image/Check_green.png"));
     }
 
 }
@@ -191,16 +181,6 @@ void sucees::on_userdifferent100_clicked()
         QMessageBox::information(this,tr("info"),tr("vous avez reusis a avoir ce succée"));
     }else if(!settings->value("succes/succes").toBool()){
         QMessageBox::information(this,tr("info"),tr("pour avoir ce suces il faut etre conecter en meme temps que 100 utilisateur mais vous avez desactiver l'option"));
-    }
-}
-void sucees::on_server20_clicked()
-{
-    if(!settings->value("succes/20server").toBool()&&settings->value("succes/succes").toBool()){
-        QMessageBox::information(this,tr("info"),tr("pour avoir ce suces il faut s'etre conecter a 20 serveur"));
-    }else if(settings->value("succes/20server").toBool()){
-        QMessageBox::information(this,tr("info"),tr("vous avez reusis a avoir ce succée"));
-    }else if(!settings->value("succes/succes").toBool()){
-        QMessageBox::information(this,tr("info"),tr("pour avoir ce suces il faut s'etre conecter a 20 serveur mais vous avez desactiver l'option"));
     }
 }
 

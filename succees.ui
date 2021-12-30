@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>377</width>
-    <height>514</height>
+    <width>352</width>
+    <height>407</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -27,13 +27,6 @@
       <string>sucées :</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
-      <item row="9" column="0">
-       <widget class="QLabel" name="label_5">
-        <property name="text">
-         <string>amateur</string>
-        </property>
-       </widget>
-      </item>
       <item row="3" column="2">
        <widget class="QPushButton" name="message100">
         <property name="toolTip">
@@ -190,16 +183,6 @@
        <widget class="QLabel" name="label_2">
         <property name="text">
          <string>a trouver le bouton envoyer</string>
-        </property>
-       </widget>
-      </item>
-      <item row="9" column="2">
-       <widget class="QPushButton" name="server20">
-        <property name="text">
-         <string>connexion a 20 serveur</string>
-        </property>
-        <property name="flat">
-         <bool>true</bool>
         </property>
        </widget>
       </item>
