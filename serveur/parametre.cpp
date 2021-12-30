@@ -234,3 +234,4 @@ void parametre::on_checkBox_3_toggled(bool checked)
     settings->setValue("settings/SaveMessage", checked);
 }
 
+

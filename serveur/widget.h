@@ -31,6 +31,7 @@ public:
     QList<QMap<QString,QString>> saveMessage;
     Widget(QWidget *parent = nullptr);
     ~Widget();
+    void condesed();
 
 private:
     client *clients;
@@ -53,7 +54,7 @@ private slots:
     QString generatedate();
     void startTrayIcon();
     void changetransparency(Qt::ApplicationState state);
-    void condesed();
+
     void autoconnect();
     void processechatbot(QString command);
     void on_pseudo_editingFinished();

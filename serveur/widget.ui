@@ -14,7 +14,7 @@
    <string>ananta systeme serveur</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="resource.qrc">
+   <iconset>
     <normaloff>:/image/Ananta.png</normaloff>:/image/Ananta.png</iconset>
   </property>
   <property name="windowOpacity">
@@ -209,9 +209,7 @@ p, li { white-space: pre-wrap; }
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="resource.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>mesage</sender>

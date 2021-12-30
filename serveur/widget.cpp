@@ -86,6 +86,9 @@ Widget::Widget(QWidget *parent)
     QObject::connect(clients, &client::remouveClient, this, &Widget::deletClient);
     QObject::connect(clients, &client::newuser, this, &Widget::newuser);
     clients->connectto("localhost",ui->serveurport->value(),ui->pseudo->text());
+
+    QPushButton test;
+
 }
 Widget::~Widget()
 {
