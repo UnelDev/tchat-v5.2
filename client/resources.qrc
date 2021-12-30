@@ -1,0 +1,24 @@
+<RCC>
+    <qresource prefix="/image">
+        <file>resource/image/analyse.png</file>
+        <file>resource/image/Ananta.png</file>
+        <file>resource/image/Anantasite.png</file>
+        <file>resource/image/Ballot_box_icon_color.svg.png</file>
+        <file>resource/image/Blue_question_mark_icon.svg.png</file>
+        <file>resource/image/Check_green.png</file>
+        <file>resource/image/desktop.files.json</file>
+        <file>resource/image/discord logo.png</file>
+        <file>resource/image/Fichier_4.png</file>
+        <file>resource/image/image0.jpg</file>
+        <file>resource/image/Refresh_icon.png</file>
+        <file>resource/image/sent.png</file>
+        <file>resource/image/Simpleicons_Interface_link-symbol.svg.png</file>
+        <file>resource/image/success.png</file>
+        <file>resource/image/suprimer.png</file>
+        <file>resource/image/Twitter_bird_logo_2012.svg.png</file>
+    </qresource>
+    <qresource prefix="/sond">
+        <file>resource/sond/notifdefault.wav</file>
+        <file>resource/sond/Sonnerie_Ananta.wav</file>
+    </qresource>
+</RCC>
