@@ -11,7 +11,11 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>plus d'information</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="serveur/resource.qrc">
+    <normaloff>:/image/resource/image/analyse.png</normaloff>:/image/resource/image/analyse.png</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="1" column="0">
@@ -141,6 +145,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="serveur/resource.qrc"/>
+ </resources>
  <connections/>
 </ui>
