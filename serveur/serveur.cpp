@@ -39,7 +39,7 @@ int serveur::startserveur(int port)
     return m_serveur->serverPort();
 }
 //serveur
-void serveur::sentmessagetoall(const QMap<QString, QString> &message)
+void serveur::sentmessagetoall(const QMap<QString, QVariant> &message)
 {
     QByteArray pack;
     QDataStream out(&pack, QIODevice::WriteOnly);
@@ -54,7 +54,7 @@ void serveur::sentmessagetoall(const QMap<QString, QString> &message)
         clientsList[i]->getSocket()->write(pack);
     }
 }
-void serveur::sentmessageto(const QMap<QString, QString> &message, int NoUtilisateur)
+void serveur::sentmessageto(const QMap<QString, QVariant> &message, int NoUtilisateur)
 {
     QByteArray pack;
     QDataStream out(&pack, QIODevice::WriteOnly);
@@ -67,7 +67,7 @@ void serveur::sentmessageto(const QMap<QString, QString> &message, int NoUtilisa
     clientsList[NoUtilisateur]->getSocket()->write(pack);
 }
 void serveur::sentmessagetoall(const QString type, QString message, QString pseudo){
-    QMap<QString,QString> sendmap;
+    QMap<QString,QVariant> sendmap;
     sendmap["type"]=type;
     sendmap["message"]=encryptioncesar->chiffre(message);
     sendmap["pseudo"]=encryptioncesar->chiffre(pseudo);
@@ -82,7 +82,7 @@ void serveur::sentmessagetoall(const QString type, QString message, QString pseu
 }
 void serveur::sentmessageto(const QString &message, int NoUtilisateur)
 {
-    QMap<QString,QString> sendmap;
+    QMap<QString,QVariant> sendmap;
     sendmap["type"]="msg";
     sendmap["message"]=encryptioncesar->chiffre(message);
     sendmap["pseudo"]="serveur"+encryptioncesar->chiffre(psedo);
@@ -97,7 +97,7 @@ void serveur::sentmessageto(const QString &message, int NoUtilisateur)
 }
 void serveur::sentmessageto(const QString &message,QString pseudo, int NoUtilisateur)
 {
-    QMap<QString,QString> sendmap;
+    QMap<QString,QVariant> sendmap;
     sendmap["type"]="msg";
     sendmap["message"]=encryptioncesar->chiffre(message);
     sendmap["pseudo"]=encryptioncesar->chiffre(pseudo);
@@ -112,7 +112,7 @@ void serveur::sentmessageto(const QString &message,QString pseudo, int NoUtilisa
 }
 void serveur::sentcomandto(const QString &message ,int usernaime)
 {
-    QMap<QString,QString> sendmap;
+    QMap<QString,QVariant> sendmap;
     sendmap["type"]="cmd";
     sendmap["message"]=message;
     sendmap["pseudo"]="serveur"+encryptioncesar->chiffre(psedo);
@@ -128,7 +128,7 @@ void serveur::sentcomandto(const QString &message ,int usernaime)
 }
 void serveur::sentcomandto(const QString &message,QString arg ,int usernaime)
 {
-    QMap<QString,QString> sendmap;
+    QMap<QString,QVariant> sendmap;
     sendmap["type"]="cmd";
     sendmap["message"]=message;
     sendmap["arg"]=encryptioncesar->chiffre(arg);
@@ -144,7 +144,7 @@ void serveur::sentcomandto(const QString &message,QString arg ,int usernaime)
 
 }
 void serveur::sentcommande(const QString commande, QString arg){
-    QMap<QString,QString> sendmap;
+    QMap<QString,QVariant> sendmap;
     sendmap["type"]="cmd";
     sendmap["message"]=commande;
     sendmap["arg"]=encryptioncesar->chiffre(arg);
@@ -165,10 +165,10 @@ void serveur::newconect()
     QObject::connect(clientsList.last()->getSocket(), &QTcpSocket::readyRead, this, &serveur::datareceived);
     QObject::connect(clientsList.last()->getSocket(), &QTcpSocket::disconnected, this ,&serveur::disconnectclients);
 }
-void serveur::connect(const QMap<QString, QString> &connectpack, int usernaime){
-    QString username =encryptioncesar->deChiffre(connectpack["pseudo"]);
+void serveur::connect(const QMap<QString, QVariant> &connectpack, int usernaime){
+    QString username =encryptioncesar->deChiffre(connectpack["pseudo"].toString());
     clientsList[usernaime]->editpseudo(username);
-    clientsList[usernaime]->editversion(connectpack["version"]);
+    clientsList[usernaime]->editversion(connectpack["version"].toString());
     sentmessagetoall(connectpack);
     srand (time(NULL));
     int random = rand() % 4 + 1;
@@ -213,23 +213,28 @@ void serveur::datareceived()
             if(socket->bytesAvailable() < sendingClient->getmessageSize()){ //Part of the message missing
             return;
             }
-            QMap<QString, QString>message;
+            QMap<QString, QVariant>message;
             in >> message;
             sendingClient->setmessageSize(static_cast<quint16>(0));
-        if(message["type"]=="cmd"){
-            message["arg"]=encryptioncesar->deChiffre(message["arg"]);
-            message["pseudo"]=encryptioncesar->deChiffre(message["pseudo"]);
+        if(message["type"]=="cmd"){//une commende
+            message["arg"]=encryptioncesar->deChiffre(message["arg"].toString());
+            message["pseudo"]=encryptioncesar->deChiffre(message["pseudo"].toString());
             processcomand(message,index);
         }else if(message["type"]=="msg"){
                 sentmessagetoall(message);
                 if(settings->value("settings/SaveMessage").toBool()){
                     writetofile(message);
                 }
+        }else if(message["type"]=="attachment"){
+            sentmessagetoall(message);
+            if(settings->value("settings/SaveMessage").toBool()){
+                writetofile(message);
+            }
         }else if(message["type"]=="connection"){
             connect(message, index);
         }else{
-        QMessageBox::critical(nullptr, tr("erreur"), tr("un paquet de comande a été recu mais la l'idantificateur ")+ message["type"] +tr("est incompri."));
-        displayMessagelist(generatemesage(tr("un paquet de comande a été recu mais la l'idantificateur ")+ message["type"] +tr("est incompri."),tr("serveur bot")));
+        QMessageBox::critical(nullptr, tr("erreur"), tr("un paquet de comande a été recu mais la l'idantificateur ")+ message["type"].toString() +tr("est incompri."));
+        displayMessagelist(generatemesage(tr("un paquet de comande a été recu mais la l'idantificateur ")+ message["type"].toString() +tr("est incompri."),tr("serveur bot")));
     }
         sendingClient->setmessageSize(static_cast<quint16>(0));
     }
@@ -262,7 +267,7 @@ int serveur::findIndex(QTcpSocket* socket)
     }
     return index;
 }
-void serveur::writetofile(QMap<QString, QString> FluxFile)
+void serveur::writetofile(QMap<QString, QVariant> FluxFile)
 {
     saveMessage.push_back(FluxFile);
     ++NbOfMessage;
@@ -291,7 +296,7 @@ void serveur::recoverallfile()
 
    }
 }
-void serveur::processcomand(QMap<QString, QString> command, int noclient)
+void serveur::processcomand(QMap<QString, QVariant> command, int noclient)
 {
     if (command["message"]=="change_psedo") {//                                      changer psedo
         for(int i = 1; i < clientsList.size(); i++)
@@ -299,13 +304,13 @@ void serveur::processcomand(QMap<QString, QString> command, int noclient)
             if(clientsList[i]->getpseudo()==command["arg"] && i != noclient){//si c'est le meme on coupe et on envoie une erreur
                 sentcomandto("pseudoalreadyuse",noclient);
                 return;
-            }else if(clientsList[i]->getpseudo().remove(" ")==command["arg"].remove(" ") && i != noclient){//si c'est resembleaut on coupe et on envoie une erreur
+            }else if(clientsList[i]->getpseudo().remove(" ")==command["arg"].toString().remove(" ") && i != noclient){//si c'est resembleaut on coupe et on envoie une erreur
                 sentcomandto("pseudoresembling",noclient);
                 return;
             }
         }
-        sentmessagetoall("msg",clientsList[noclient]->getpseudo()+" a changer son psedo en "+ command["arg"],"Tchat Bot");
-        clientsList[noclient]->editpseudo(command["arg"]);
+        sentmessagetoall("msg",clientsList[noclient]->getpseudo()+" a changer son psedo en "+ command["arg"].toString(),"Tchat Bot");
+        clientsList[noclient]->editpseudo(command["arg"].toString());
     }else{
         QMessageBox::critical(nullptr, tr("erreur"), tr("Un paquet de commande a été reçu mais la commande est incomprise."));
     }
