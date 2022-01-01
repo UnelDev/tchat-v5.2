@@ -211,13 +211,15 @@ void Widget::displayMessagelist(QString message)
     }
     addmessage(message);
 }
-void Widget:: addmessage(QString message){
+void Widget:: addmessage(QString message)
+{
     QLabel *label = new QLabel(this);
     label->setText(message);
     ui->messageliste->addWidget(label);
     test.append(label);
-
-
+    QScrollBar *vsb;
+    vsb = ui->scrollArea->verticalScrollBar();
+    vsb->setSliderPosition(vsb->maximum());
 }
 QString Widget::returnpseudo()
 {
@@ -260,7 +262,7 @@ void Widget::processechatbot(QString command)
       delete child;
      }
    }else if (command=="actualise"||command=="update"){
-        clients->sentcommande("updating");
+        clients->sendcommande("updating");
    }else if (command==tr("merci")){
        int random = rand() % 7 + 1;
        if(random == 1){
@@ -295,7 +297,7 @@ void Widget::processechatbot(QString command)
 }
 void Widget::on_pseudo_editingFinished()
 {
-    clients->sentcommande("change_psedo",ui->pseudo->text());
+    clients->sendcommande("change_psedo",ui->pseudo->text());
 }
 QString Widget::generatemesage(QString message, QString pseudo)
 {
@@ -356,5 +358,14 @@ void Widget::on_sentbutton_clicked()
 void Widget::on_parametrebutton_clicked()
 {
     parametres.show();
+}
+
+
+void Widget::on_pieceJointe_clicked()
+{
+    auto fichier = QFileDialog::getOpenFileName(this, "Ouvrir un fichier", QString());
+    QFile file(fichier);
+    file.open(QIODevice::ReadOnly);
+
 }
 

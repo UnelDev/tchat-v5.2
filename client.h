@@ -9,6 +9,7 @@ For Ananta Project*/
 #include <QCoreApplication>
 #include <QDateTime>
 #include <QMessageBox>
+#include <QFile>
 #include <QSettings>
 #include "cesar.h"
 class client : public QObject
@@ -17,16 +18,16 @@ class client : public QObject
 public:
     client();
     void sendmessage(QString message);
-    void sentcommande(QString commande, QString arg);
+    void sendcommande(QString commande, QString arg);
     void connectto(QString ip, int port, QString newpsedo);
-    void sentcommande(const QString commande);
+    void sendcommande(const QString commande);
+    void sendFile(const QString message, const QString path);
 protected:
-    void sentdatamap(const QString type);
-    void sentdatamap(const QMap<QString,QString> sendmap);
-    void sentdatamap(const QString type, QString message, QString pseudo, QDateTime seconde, QDateTime minute, QDateTime heurs, QDateTime NoJour, QDate jour);
-    void sentdatamap(const QString type, QString message, QString pseudo);
-    void sentdatamap(const QString type, QString message);
-    //void sentcommande(const QString commande, QString arg);
+    void senddatamap(const QString type);
+    void senddatamap(const QMap<QString, QVariant> sendmap);
+    void senddatamap(const QString type, QString message, QString pseudo, QDateTime seconde, QDateTime minute, QDateTime heurs, QDateTime NoJour, QDate jour);
+    void senddatamap(const QString type, QString message, QString pseudo);
+    void senddatamap(const QString type, QString message);
 private:
     //emeteur
     void changestateconnectbutton(bool state);

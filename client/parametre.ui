@@ -14,7 +14,7 @@
    <string>parametre</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="resources.qrc">
+   <iconset>
     <normaloff>:/image/Fichier_4.png</normaloff>:/image/Fichier_4.png</iconset>
   </property>
   <property name="statusTip">
@@ -27,77 +27,6 @@
    <string/>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <widget class="QGroupBox" name="groupBox">
-     <property name="title">
-      <string>notification</string>
-     </property>
-     <layout class="QGridLayout" name="gridLayout_2">
-      <item row="1" column="0">
-       <widget class="QCheckBox" name="checkBox_2">
-        <property name="toolTip">
-         <string>permet de definire lactivation des notification visuelle</string>
-        </property>
-        <property name="whatsThis">
-         <string>permet de definire lactivation des notification visuelle</string>
-        </property>
-        <property name="accessibleDescription">
-         <string>permet de definire lactivation des notification visuelle</string>
-        </property>
-        <property name="text">
-         <string>notification visuelle</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0">
-       <widget class="QCheckBox" name="checkBox">
-        <property name="toolTip">
-         <string>permet de definire lactivation des notification sonore</string>
-        </property>
-        <property name="accessibleDescription">
-         <string>permet de definire lactivation des notification sonore</string>
-        </property>
-        <property name="text">
-         <string>notification sonore</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="2" column="0">
-    <widget class="QGroupBox" name="groupBox_5">
-     <property name="title">
-      <string>sucées</string>
-     </property>
-     <layout class="QGridLayout" name="gridLayout_6">
-      <item row="1" column="0">
-       <widget class="QPushButton" name="pushButton_3">
-        <property name="text">
-         <string>voir mes succés</string>
-        </property>
-        <property name="icon">
-         <iconset resource="resources.qrc">
-          <normaloff>:/image/success.png</normaloff>:/image/success.png</iconset>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_3">
-        <property name="text">
-         <string>nombre de message :</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
    <item row="1" column="0">
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
@@ -179,7 +108,7 @@
         </property>
         <property name="icon">
          <iconset resource="resources.qrc">
-          <normaloff>:/image/Blue_question_mark_icon.svg.png</normaloff>:/image/Blue_question_mark_icon.svg.png</iconset>
+          <normaloff>:/image/resource/image/Blue_question_mark_icon.svg.png</normaloff>:/image/resource/image/Blue_question_mark_icon.svg.png</iconset>
         </property>
         <property name="flat">
          <bool>true</bool>
@@ -199,7 +128,7 @@
         </property>
         <property name="icon">
          <iconset resource="resources.qrc">
-          <normaloff>:/image/Blue_question_mark_icon.svg.png</normaloff>:/image/Blue_question_mark_icon.svg.png</iconset>
+          <normaloff>:/image/resource/image/Blue_question_mark_icon.svg.png</normaloff>:/image/resource/image/Blue_question_mark_icon.svg.png</iconset>
         </property>
         <property name="flat">
          <bool>true</bool>
@@ -210,6 +139,88 @@
     </widget>
    </item>
    <item row="4" column="0">
+    <widget class="QPushButton" name="pushButton_4">
+     <property name="text">
+      <string>plus d'informantion</string>
+     </property>
+     <property name="icon">
+      <iconset resource="resources.qrc">
+       <normaloff>:/image/resource/image/Blue_question_mark_icon.svg.png</normaloff>:/image/resource/image/Blue_question_mark_icon.svg.png</iconset>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QGroupBox" name="groupBox_5">
+     <property name="title">
+      <string>sucées</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_6">
+      <item row="1" column="0">
+       <widget class="QPushButton" name="pushButton_3">
+        <property name="text">
+         <string>voir mes succés</string>
+        </property>
+        <property name="icon">
+         <iconset resource="resources.qrc">
+          <normaloff>:/image/resource/image/success.png</normaloff>:/image/resource/image/success.png</iconset>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>nombre de message :</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>notification</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="1" column="0">
+       <widget class="QCheckBox" name="checkBox_2">
+        <property name="toolTip">
+         <string>permet de definire lactivation des notification visuelle</string>
+        </property>
+        <property name="whatsThis">
+         <string>permet de definire lactivation des notification visuelle</string>
+        </property>
+        <property name="accessibleDescription">
+         <string>permet de definire lactivation des notification visuelle</string>
+        </property>
+        <property name="text">
+         <string>notification visuelle</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QCheckBox" name="checkBox">
+        <property name="toolTip">
+         <string>permet de definire lactivation des notification sonore</string>
+        </property>
+        <property name="accessibleDescription">
+         <string>permet de definire lactivation des notification sonore</string>
+        </property>
+        <property name="text">
+         <string>notification sonore</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="3" column="0">
     <widget class="QGroupBox" name="groupBox_4">
      <property name="title">
       <string>contact</string>
@@ -222,7 +233,7 @@
         </property>
         <property name="icon">
          <iconset resource="resources.qrc">
-          <normaloff>:/image/Anantasite.png</normaloff>:/image/Anantasite.png</iconset>
+          <normaloff>:/image/resource/image/Anantasite.png</normaloff>:/image/resource/image/Anantasite.png</iconset>
         </property>
        </widget>
       </item>
@@ -233,7 +244,7 @@
         </property>
         <property name="icon">
          <iconset resource="resources.qrc">
-          <normaloff>:/image/discord logo.png</normaloff>:/image/discord logo.png</iconset>
+          <normaloff>:/image/resource/image/discord logo.png</normaloff>:/image/resource/image/discord logo.png</iconset>
         </property>
        </widget>
       </item>
@@ -244,7 +255,7 @@
         </property>
         <property name="icon">
          <iconset resource="resources.qrc">
-          <normaloff>:/image/Twitter_bird_logo_2012.svg.png</normaloff>:/image/Twitter_bird_logo_2012.svg.png</iconset>
+          <normaloff>:/image/resource/image/Twitter_bird_logo_2012.svg.png</normaloff>:/image/resource/image/Twitter_bird_logo_2012.svg.png</iconset>
         </property>
        </widget>
       </item>
@@ -255,64 +266,7 @@
         </property>
         <property name="icon">
          <iconset resource="resources.qrc">
-          <normaloff>:/image/image0.jpg</normaloff>:/image/image0.jpg</iconset>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="5" column="0">
-    <widget class="QPushButton" name="pushButton_4">
-     <property name="text">
-      <string>plus d'informantion</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0">
-    <widget class="QGroupBox" name="groupBox_3">
-     <property name="title">
-      <string>chifremment</string>
-     </property>
-     <layout class="QGridLayout" name="gridLayout_4">
-      <item row="0" column="1">
-       <widget class="QComboBox" name="levelofsecure">
-        <item>
-         <property name="text">
-          <string>bas</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>aucun</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_4">
-        <property name="text">
-         <string>niveaux de chifremment :</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2">
-       <widget class="QPushButton" name="pushButton_5">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="icon">
-         <iconset resource="resources.qrc">
-          <normaloff>:/image/Blue_question_mark_icon.svg.png</normaloff>:/image/Blue_question_mark_icon.svg.png</iconset>
-        </property>
-        <property name="flat">
-         <bool>true</bool>
+          <normaloff>:/image/resource/image/Ballot_box_icon_color.svg.png</normaloff>:/image/resource/image/Ballot_box_icon_color.svg.png</iconset>
         </property>
        </widget>
       </item>

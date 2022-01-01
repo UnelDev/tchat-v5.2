@@ -41,6 +41,8 @@ private slots:
 
     void on_sentbuton_clicked();
 
+    void on_parametrebuton_2_clicked();
+
 private:
     QString returnpseudo();
     QString generatemesage(QString message, QString pseudo);
@@ -52,9 +54,7 @@ private:
     void condesed();
     void helpcondesed();
     void autoconnect();
-    void on_parametrebutton_clicked();
     void processechatbot(QString command);
-    void on_parametrebuton_2_clicked();
     void on_pseudo_editingFinished();
     void client_processechatbot(QString command);
     void client_generatemesage();

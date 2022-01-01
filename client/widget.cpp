@@ -124,10 +124,6 @@ void Widget::deletClient(QString nameOfClient){
         QMessageBox::critical(nullptr, tr("Suppression de client"), tr("Le client vient d'être supprimé."));
     }
 }
-void Widget::on_parametrebuton_2_clicked()
-{
-    parametres.show();
-}
 void Widget::changetransparency(Qt::ApplicationState state){
     if(state == Qt::ApplicationInactive&&condenser==true&&settings->value("settings/client/activeTransparnece").toBool()){
         this->setWindowOpacity(settings->value("settings/transparency").toFloat());
@@ -348,3 +344,9 @@ void Widget::on_sentbuton_clicked()
     }
     ui->mesage->clear();
 }
+
+void Widget::on_parametrebuton_2_clicked()
+{
+    parametres.show();
+}
+

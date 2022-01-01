@@ -32,7 +32,7 @@ void client::changestateconnectbutton(bool state){ emit client::changestateconne
 void client::newclient(QString newClientName){ emit client::newuser(newClientName); }
 void client::displayconnectlabel(QString newText){ emit client::changeTextConnect(newText);}
 //deccesseurs
-void client::sendmessage(QString message){ sentdatamap("msg",message); }//a faire
+void client::sendmessage(QString message){ senddatamap("msg",message); }
 
 void client::connectto(QString ip, int port, QString newpsedo)
 {
@@ -46,7 +46,7 @@ void client::connectto(QString ip, int port, QString newpsedo)
 void client::connected()
 {
     QString textmessage = generatemesage(tr("Connexion établie!"), tr("Tchat Bot"));
-    sentdatamap("connection");
+    senddatamap("connection");
     displayMessagelist(textmessage);
     changestateconnectbutton(true);
     displayconnectlabel(tr("<font color=\"#70AD47\">Connecté</font>"));
@@ -158,7 +158,7 @@ void client::socketerror(QAbstractSocket::SocketError erreur)
     }
 }
 // optionelle
-void client::sentdatamap(const QMap<QString,QString> sendmap)
+void client::senddatamap(const QMap<QString,QVariant> sendmap)
 {
     QByteArray paquet;
     QDataStream out(&paquet, QIODevice::WriteOnly);
@@ -169,8 +169,8 @@ void client::sentdatamap(const QMap<QString,QString> sendmap)
     out << (quint16) (paquet.size() - sizeof(quint16));
     socket->write(paquet); // On envoie le paquet
 }
-void client::sentdatamap(const QString type){
-    QMap<QString,QString> sendmap;
+void client::senddatamap(const QString type){
+    QMap<QString,QVariant> sendmap;
     sendmap["type"]=type;
     sendmap["pseudo"]=encryptioncesar->chiffre(psedo);
     sendmap["version"]=QCoreApplication::applicationVersion();
@@ -181,11 +181,11 @@ void client::sentdatamap(const QString type){
     sendmap["shippingday"]=QDateTime::currentDateTime().toString("dddd");
     sendmap["shippingmonth"]=QDateTime::currentDateTime().toString("MMMM");
     sendmap["shippingyears"]=QDateTime::currentDateTime().toString("yyyy");
-    sentdatamap(sendmap);
+    senddatamap(sendmap);
 
 }
-void client::sentdatamap(const QString type, QString message, QString pseudo, QDateTime seconde, QDateTime minute, QDateTime heures, QDateTime NoJour, QDate jour){
-    QMap<QString,QString> sendmap;
+void client::senddatamap(const QString type, QString message, QString pseudo, QDateTime seconde, QDateTime minute, QDateTime heures, QDateTime NoJour, QDate jour){
+    QMap<QString,QVariant> sendmap;
     sendmap["type"]=type;
     sendmap["message"]=encryptioncesar->chiffre(message);
     sendmap["pseudo"]=encryptioncesar->chiffre(pseudo);
@@ -195,10 +195,10 @@ void client::sentdatamap(const QString type, QString message, QString pseudo, QD
     sendmap["sendingtime"]=heures.toString();
     sendmap["sendingdate"]=NoJour.toString();
     sendmap["shippingday"]=jour.toString();
-    sentdatamap(sendmap);
+    senddatamap(sendmap);
 }
-void client::sentdatamap(const QString type, QString message, QString pseudo){
-    QMap<QString,QString> sendmap;
+void client::senddatamap(const QString type, QString message, QString pseudo){
+    QMap<QString,QVariant> sendmap;
     sendmap["type"]=type;
     sendmap["message"]=encryptioncesar->chiffre(message);
     sendmap["pseudo"]=encryptioncesar->chiffre(pseudo);
@@ -210,10 +210,10 @@ void client::sentdatamap(const QString type, QString message, QString pseudo){
     sendmap["shippingday"]=QDateTime::currentDateTime().toString("dddd");
     sendmap["shippingmonth"]=QDateTime::currentDateTime().toString("MMMM");
     sendmap["shippingyears"]=QDateTime::currentDateTime().toString("yyyy");
-    sentdatamap(sendmap);
+    senddatamap(sendmap);
 }
-void client::sentdatamap(const QString type, QString message){
-    QMap<QString,QString> sendmap;
+void client::senddatamap(const QString type, QString message){
+    QMap<QString,QVariant> sendmap;
     sendmap["type"]=type;
     sendmap["message"]=encryptioncesar->chiffre(message);
     sendmap["pseudo"]=encryptioncesar->chiffre(psedo);
@@ -225,10 +225,10 @@ void client::sentdatamap(const QString type, QString message){
     sendmap["shippingday"]=QDateTime::currentDateTime().toString("dddd");
     sendmap["shippingmonth"]=QDateTime::currentDateTime().toString("MMMM");
     sendmap["shippingyears"]=QDateTime::currentDateTime().toString("yyyy");
-    sentdatamap(sendmap);
+    senddatamap(sendmap);
 }
-void client::sentcommande(const QString commande){
-    QMap<QString,QString> sendmap;
+void client::sendcommande(const QString commande){
+    QMap<QString,QVariant> sendmap;
     sendmap["type"]="cmd";
     sendmap["message"]=commande;
     sendmap["pseudo"]=encryptioncesar->chiffre(psedo);
@@ -240,10 +240,10 @@ void client::sentcommande(const QString commande){
     sendmap["shippingday"]=QDateTime::currentDateTime().toString("dddd");
     sendmap["shippingmonth"]=QDateTime::currentDateTime().toString("MMMM");
     sendmap["shippingyears"]=QDateTime::currentDateTime().toString("yyyy");
-    sentdatamap(sendmap);
+    senddatamap(sendmap);
 }
-void client::sentcommande(const QString commande, QString arg){
-    QMap<QString,QString> sendmap;
+void client::sendcommande(const QString commande, QString arg){
+    QMap<QString,QVariant> sendmap;
     sendmap["type"]="cmd";
     sendmap["message"]=commande;
     sendmap["arg"]=encryptioncesar->chiffre(arg);
@@ -256,7 +256,26 @@ void client::sentcommande(const QString commande, QString arg){
     sendmap["shippingday"]=QDateTime::currentDateTime().toString("ddd");
     sendmap["shippingmonth"]=QDateTime::currentDateTime().toString("MMMM");
     sendmap["shippingyears"]=QDateTime::currentDateTime().toString("yyyy");;
-    sentdatamap(sendmap);
+    senddatamap(sendmap);
+}
+void client::sendFile(const QString message, const QString path){
+    QFile file(path);
+    if(!file.open(QIODevice::ReadOnly)){ return; }//on test louverture du ficher
+     QByteArray bytes = file.readAll();//on serialise le fichier
+    QMap<QString,QVariant> sendmap;//creation du descritif
+    sendmap["type"]="attachment";
+    sendmap["message"]=encryptioncesar->chiffre(message);
+    sendmap["pseudo"]=encryptioncesar->chiffre(psedo);
+    sendmap["version"]=QCoreApplication::applicationVersion();;
+    sendmap["secondofsending"]=QDateTime::currentDateTime().toString("ss");;
+    sendmap["minuteofsending"]=QDateTime::currentDateTime().toString("m");;
+    sendmap["sendingtime"]=QDateTime::currentDateTime().toString("hh");
+    sendmap["sendingdate"]=QDateTime::currentDateTime().toString("d");
+    sendmap["shippingday"]=QDateTime::currentDateTime().toString("ddd");
+    sendmap["shippingmonth"]=QDateTime::currentDateTime().toString("MMMM");
+    sendmap["shippingyears"]=QDateTime::currentDateTime().toString("yyyy");
+    sendmap["attachment"]=bytes;
+    senddatamap(sendmap);
 }
 void client::datareceived()
 {
@@ -306,9 +325,9 @@ void client::processthemessage(QMap<QString,QString> message)
 void client::processcomand(QMap<QString, QString> commend)
 {
     if (commend["message"] == "pseudo?"){
-        sentcommande("pseudo_", psedo);
+        sendcommande("pseudo_", psedo);
     }else if (commend["message"]=="version?"){
-        sentcommande("version",QCoreApplication::applicationVersion());
+        sendcommande("version",QCoreApplication::applicationVersion());
     }else if (commend["message"]=="pseudoanonymousinvalid"){
         QMessageBox::critical(nullptr, tr("Erreur"), tr("Il vous faut un pseudo pour vous connecter (Anonymous est interdit)."));
     }else if(commend["message"]=="pseudoalreadyuse"){
