@@ -28,6 +28,7 @@ client::client()
 //emeteur
 void client::deleteclient(QString nameOfClient){ emit client::remouveClient(nameOfClient);}
 void client::displayMessagelist(QString newMessage){ emit client::display(newMessage); }
+void client::DisplayFile(const QString comment, const QString NameOfFile){ emit client::newFileAndComent(comment,NameOfFile);}
 void client::changestateconnectbutton(bool state){ emit client::changestateconnect(state); }
 void client::newclient(QString newClientName){ emit client::newuser(newClientName); }
 void client::displayconnectlabel(QString newText){ emit client::changeTextConnect(newText);}
@@ -58,106 +59,6 @@ void client::disconnect()
     displayMessagelist(textmessage);
     changestateconnectbutton(true);
 }
-void client::socketerror(QAbstractSocket::SocketError erreur)
-{
-    displayconnectlabel(tr("<font color=\"#ff0000\">Déconnecté</font>"));
-    switch(erreur) // On affiche un message diff?rent selon l'erreur qu'on nous indique
-    {
-        case QAbstractSocket::HostNotFoundError:
-            displayMessagelist(generatemesage(QObject::tr("Erreur: Le serveur n'a pas pu être trouvé. Vérifiez l'adresse et le pin."),tr("System Tchat Bot")));
-            changestateconnectbutton(true);
-        break;
-
-        case QAbstractSocket::ConnectionRefusedError:
-            displayMessagelist(generatemesage(QObject::tr("Erreur: Le serveur a refusé la connexion. Vérifiez si le programme \"serveur\" a bien été lancé. Vérifiez aussi l'adresse et le pin."),tr("System Tchat Bot")));
-            changestateconnectbutton(true);
-        break;
-
-        case QAbstractSocket::RemoteHostClosedError:
-            displayMessagelist(generatemesage(QObject::tr("Erreur: Le serveur a coupé la connexion."),tr("System Tchat Bot")));
-            changestateconnectbutton(true);
-        break;
-
-        case QAbstractSocket::SocketAccessError:
-            displayMessagelist(generatemesage(QObject::tr("Erreur: L'opération a échoué car l'application ne dispose pas des privilèges requis."),tr("System Tchat Bot")));
-            changestateconnectbutton(true);
-        break;
-        case QAbstractSocket::SocketResourceError:
-            displayMessagelist(generatemesage(QObject::tr("Erreur: Le système local a manqué de ressources."),tr("System Tchat Bot")));
-            changestateconnectbutton(true);
-        break;
-
-        case QAbstractSocket::SocketTimeoutError:
-            displayMessagelist(generatemesage(QObject::tr("Erreur: L'opération a expirée."),tr("System Tchat Bot")));
-            changestateconnectbutton(true);
-        break;
-
-        case QAbstractSocket::DatagramTooLargeError:
-            displayMessagelist(generatemesage(QObject::tr("Erreur: Le datagramme était plus grand que la limite du système d'exploitation (qui peut être aussi basse que 8192 octets)."),tr("System Tchat Bot")));
-            changestateconnectbutton(true);
-        break;
-        case QAbstractSocket::NetworkError:
-            displayMessagelist(generatemesage(QObject::tr("Erreur: Une erreur s'est produite avec le réseau ."),tr("System Tchat Bot")));
-            changestateconnectbutton(true);
-        break;
-
-        case QAbstractSocket::UnsupportedSocketOperationError:
-            displayMessagelist(generatemesage(QObject::tr("Erreur: L'opération de socket demandée n'est pas prise en charge par le système d'exploitation."),tr("System Tchat Bot")));
-            changestateconnectbutton(true);
-        break;
-
-        case QAbstractSocket::ProxyAuthenticationRequiredError:
-            displayMessagelist(generatemesage(QObject::tr("Erreur: Le proxy requiert une authentification."),tr("System Tchat Bot")));
-            changestateconnectbutton(true);
-        break;
-
-        case QAbstractSocket::ProxyConnectionRefusedError:
-            displayMessagelist(generatemesage(QObject::tr("Erreur: Impossible de contacter le serveur proxy car la connexion à celui-ci a été refusée."),tr("System Tchat Bot")));
-            changestateconnectbutton(true);
-        break;
-
-        case QAbstractSocket::ProxyConnectionClosedError:
-            displayMessagelist(generatemesage(QObject::tr("Erreur: La connexion au serveur proxy a été fermée de manière inattendue."),tr("System Tchat Bot")));
-            changestateconnectbutton(true);
-        break;
-
-        case QAbstractSocket::ProxyConnectionTimeoutError:
-            displayMessagelist(generatemesage(QObject::tr("Erreur: La connexion au serveur proxy a expiré ou le serveur proxy a cessé de répondre lors de la phase d'authentification."),tr("System Tchat Bot")));
-            changestateconnectbutton(true);
-        break;
-
-        case QAbstractSocket::ProxyNotFoundError:
-            displayMessagelist(generatemesage(QObject::tr("Erreur: Le proxy est introuvable."),tr("System Tchat Bot")));
-            changestateconnectbutton(true);
-        break;
-
-        case QAbstractSocket::ProxyProtocolError:
-            displayMessagelist(generatemesage(QObject::tr("Erreur: La connexion avec le serveur proxy a échouée, car la réponse de celui-ci n'a pas pu être comprise."),tr("System Tchat Bot")));
-            changestateconnectbutton(true);
-        break;
-
-        case QAbstractSocket::OperationError:
-            displayMessagelist(generatemesage(QObject::tr("Erreur: Une opération a été tentée alors que le socket était dans un état qui ne l'autorisait pas."),tr("System Tchat Bot")));
-            changestateconnectbutton(true);
-        break;
-
-        case QAbstractSocket::TemporaryError:
-            displayMessagelist(generatemesage(QObject::tr("Erreur: Une erreur temporaire s'est produite (Réssayer dans un moment.)."),tr("System Tchat Bot")));
-            changestateconnectbutton(true);
-        break;
-
-        case QAbstractSocket::UnknownSocketError:
-            displayMessagelist(generatemesage(QObject::tr("Erreur: Une erreur non identifiée s'est produite."),tr("System Tchat Bot")));
-            changestateconnectbutton(true);
-        break;
-
-    default:
-            displayMessagelist(generatemesage(QObject::tr("Erreur : ") + socket->errorString(),tr("System Tchat Bot")));
-            changestateconnectbutton(true);
-        break;
-    }
-}
-// optionelle
 void client::senddatamap(const QMap<QString,QVariant> sendmap)
 {
     QByteArray paquet;
@@ -258,13 +159,18 @@ void client::sendcommande(const QString commande, QString arg){
     sendmap["shippingyears"]=QDateTime::currentDateTime().toString("yyyy");;
     senddatamap(sendmap);
 }
-void client::sendFile(const QString message, const QString path){
+void client::sendFile(const QString message, const QString path, const QString NameOfFile="No Name"){
     QFile file(path);
     if(!file.open(QIODevice::ReadOnly)){ return; }//on test louverture du ficher
      QByteArray bytes = file.readAll();//on serialise le fichier
     QMap<QString,QVariant> sendmap;//creation du descritif
     sendmap["type"]="attachment";
     sendmap["message"]=encryptioncesar->chiffre(message);
+    if(NameOfFile=="No Name"){
+         sendmap["nameOfFile"]=encryptioncesar->chiffre(NameOfFile.split(QDir::separator()).last());//on enevoie le nom du fichier
+    }else{
+        sendmap["nameOfFile"]=encryptioncesar->chiffre(NameOfFile);
+    }
     sendmap["pseudo"]=encryptioncesar->chiffre(psedo);
     sendmap["version"]=QCoreApplication::applicationVersion();;
     sendmap["secondofsending"]=QDateTime::currentDateTime().toString("ss");;
@@ -290,25 +196,25 @@ void client::datareceived()
         if (socket->bytesAvailable() < messagesize)
             return;
         // Si on arrive jusqu'? cette ligne, on peut récupérer le message entier
-        QMap<QString,QString> messageRecu;
+        QMap<QString,QVariant> messageRecu;
         in >> messageRecu;
         processthemessage(messageRecu);
         // On remet la taille du message ? 0 pour pouvoir recevoir de futurs messages
         messagesize = 0;
     }
 }
-void client::processthemessage(QMap<QString,QString> message)
+void client::processthemessage(QMap<QString,QVariant> message)
 {
     if(message["type"]=="cmd"){
-        message["pseudo"]=encryptioncesar->deChiffre(message["pseudo"]);
-        message["arg"]=encryptioncesar->deChiffre(message["arg"]);
+        message["pseudo"]=encryptioncesar->deChiffre(message["pseudo"].toString());
+        message["arg"]=encryptioncesar->deChiffre(message["arg"].toString());
         processcomand(message);
     }else if(message["type"]=="msg"){
-        message["pseudo"]=encryptioncesar->deChiffre(message["pseudo"]);
-        message["message"]=encryptioncesar->deChiffre(message["message"]);
+        message["pseudo"]=encryptioncesar->deChiffre(message["pseudo"].toString());
+        message["message"]=encryptioncesar->deChiffre(message["message"].toString());
         displayMessagelist(generatemesage(message));
     }else if(message["type"]=="connection"){
-        newclient(encryptioncesar->deChiffre(message["pseudo"]));
+        newclient(encryptioncesar->deChiffre(message["pseudo"].toString()));
         ++nbuser;
         if(nbuser==10){
             settings->setValue("succes/10userSimultaneously", true);
@@ -317,12 +223,16 @@ void client::processthemessage(QMap<QString,QString> message)
         }else if(nbuser==100){
             settings->setValue("succes/100userSimultaneously", true);
         }
+    }else if(message["type"]=="attachment"){
+        message["pseudo"]=encryptioncesar->deChiffre(message["pseudo"].toString());
+        message["message"]=encryptioncesar->deChiffre(message["message"].toString());
+        DisplayFile(generatemesage(message),message["nameOfFile"].toString());
     }else{
-        QMessageBox::critical(nullptr,tr("Erreur"), tr("Un paquet a été recu mais l'indentificateur : ") + message["type"] + tr(" est inconnu."));
+        QMessageBox::critical(nullptr,tr("Erreur"), tr("Un paquet a été recu mais l'indentificateur : ") + message["type"].toString() + tr(" est inconnu."));
     }
 
 }
-void client::processcomand(QMap<QString, QString> commend)
+void client::processcomand(QMap<QString, QVariant> commend)
 {
     if (commend["message"] == "pseudo?"){
         sendcommande("pseudo_", psedo);
@@ -335,9 +245,9 @@ void client::processcomand(QMap<QString, QString> commend)
     }else if(commend["message"]=="pseudoresembling"){
         QMessageBox::critical(nullptr, tr("Erreur"), tr("Un autre client porte déjà un pseudo ressemblant. Veuillez changer de pseudo pour vous connecter."));
     }else if (commend["message"]=="update_") {
-        displayMessagelist(commend["arg"]);
+        displayMessagelist(commend["arg"].toString());
     }else if (commend["message"]=="isconnected"){
-        newclient(commend["arg"]);
+        newclient(commend["arg"].toString());
         ++nbuser;
         if(nbuser==10){
             settings->setValue("succes/10userSimultaneously", true);
@@ -347,10 +257,10 @@ void client::processcomand(QMap<QString, QString> commend)
             settings->setValue("succes/100userSimultaneously", true);
         }
     }else if(commend["message"]=="disconnected"){
-        deleteclient(commend["arg"]);
+        deleteclient(commend["arg"].toString());
         --nbuser;
     }else{
-        QMessageBox::critical(nullptr, tr("Erreur"), tr("Un paquet de comande a été reçu mais la commande est incomprise. ")+commend["message"]);
+        QMessageBox::critical(nullptr, tr("Erreur"), tr("Un paquet de comande a été reçu mais la commande est incomprise. ")+commend["message"].toString());
     }
 }
 QString client::generatedate()
@@ -360,9 +270,9 @@ QString client::generatedate()
     QDateTime::fromString(heures, "hh:mm:ss");
     return ("<span style=\"font-size: 10px\">"  +   tr("le ")    +   Date    +"</span> <span style=\"font-size: 10px\">"+   tr("à") +   heures +"</span><br/>");
 }
-QString client::generatedate(QMap<QString, QString> date)
+QString client::generatedate(QMap<QString, QVariant> date)
 {
-        return("<span style=\"font-size: 10px\">"+ tr(" Le ","dans la generationde message")+date["shippingday"]+" "+date["sendingdate"]+" "+date["shippingmonth"]+" "+date["shippingyears"] +"</span> <span style=\"font-size: 10px\">"+tr( " à ","dans la generationde message")+date["sendingtime"]+" : "+date["minuteofsending"]+tr(" </span><br/>"));
+        return("<span style=\"font-size: 10px\">"+ tr(" Le ","dans la generationde message")+date["shippingday"].toString()+" "+date["sendingdate"].toString()+" "+date["shippingmonth"].toString()+" "+date["shippingyears"].toString() +"</span> <span style=\"font-size: 10px\">"+tr( " à ","dans la generationde message")+date["sendingtime"].toString()+" : "+date["minuteofsending"].toString()+tr(" </span><br/>"));
 }
 QString client::generatemesage(QString message, QString pseudo)
 {
@@ -371,10 +281,108 @@ QString client::generatemesage(QString message, QString pseudo)
     }
     return(tr("<span style=\"font-size: 12px; font-weight: bold;\">")+pseudo+tr("</span>")+generatedate()+tr("<span style=\"font-size: 14px; \">")+message+tr("</span><br/><br/>"));
 }
-QString client::generatemesage(QMap<QString, QString> message){
+QString client::generatemesage(QMap<QString, QVariant> message){
     if(message["pseudo"] == "" ||message["pseudo"] == " "){
         message["pseudo"] = "anonymous";
     }
-    return(tr("<span style=\"font-size: 12px; font-weight: bold;\">")+message["pseudo"]+tr("</span>")+generatedate(message)+tr("<span style=\"font-size: 14px; \">")+message["message"]+tr("</span><br/><br/>"));
+    return(tr("<span style=\"font-size: 12px; font-weight: bold;\">")+message["pseudo"].toString()+tr("</span>")+generatedate(message)+tr("<span style=\"font-size: 14px; \">")+message["message"].toString()+tr("</span><br/><br/>"));
 }
+void client::socketerror(QAbstractSocket::SocketError erreur)
+{
+    displayconnectlabel(tr("<font color=\"#ff0000\">Déconnecté</font>"));
+    switch(erreur) // On affiche un message diff?rent selon l'erreur qu'on nous indique
+    {
+        case QAbstractSocket::HostNotFoundError:
+            displayMessagelist(generatemesage(QObject::tr("Erreur: Le serveur n'a pas pu être trouvé. Vérifiez l'adresse et le pin."),tr("System Tchat Bot")));
+            changestateconnectbutton(true);
+        break;
 
+        case QAbstractSocket::ConnectionRefusedError:
+            displayMessagelist(generatemesage(QObject::tr("Erreur: Le serveur a refusé la connexion. Vérifiez si le programme \"serveur\" a bien été lancé. Vérifiez aussi l'adresse et le pin."),tr("System Tchat Bot")));
+            changestateconnectbutton(true);
+        break;
+
+        case QAbstractSocket::RemoteHostClosedError:
+            displayMessagelist(generatemesage(QObject::tr("Erreur: Le serveur a coupé la connexion."),tr("System Tchat Bot")));
+            changestateconnectbutton(true);
+        break;
+
+        case QAbstractSocket::SocketAccessError:
+            displayMessagelist(generatemesage(QObject::tr("Erreur: L'opération a échoué car l'application ne dispose pas des privilèges requis."),tr("System Tchat Bot")));
+            changestateconnectbutton(true);
+        break;
+        case QAbstractSocket::SocketResourceError:
+            displayMessagelist(generatemesage(QObject::tr("Erreur: Le système local a manqué de ressources."),tr("System Tchat Bot")));
+            changestateconnectbutton(true);
+        break;
+
+        case QAbstractSocket::SocketTimeoutError:
+            displayMessagelist(generatemesage(QObject::tr("Erreur: L'opération a expirée."),tr("System Tchat Bot")));
+            changestateconnectbutton(true);
+        break;
+
+        case QAbstractSocket::DatagramTooLargeError:
+            displayMessagelist(generatemesage(QObject::tr("Erreur: Le datagramme était plus grand que la limite du système d'exploitation (qui peut être aussi basse que 8192 octets)."),tr("System Tchat Bot")));
+            changestateconnectbutton(true);
+        break;
+        case QAbstractSocket::NetworkError:
+            displayMessagelist(generatemesage(QObject::tr("Erreur: Une erreur s'est produite avec le réseau ."),tr("System Tchat Bot")));
+            changestateconnectbutton(true);
+        break;
+
+        case QAbstractSocket::UnsupportedSocketOperationError:
+            displayMessagelist(generatemesage(QObject::tr("Erreur: L'opération de socket demandée n'est pas prise en charge par le système d'exploitation."),tr("System Tchat Bot")));
+            changestateconnectbutton(true);
+        break;
+
+        case QAbstractSocket::ProxyAuthenticationRequiredError:
+            displayMessagelist(generatemesage(QObject::tr("Erreur: Le proxy requiert une authentification."),tr("System Tchat Bot")));
+            changestateconnectbutton(true);
+        break;
+
+        case QAbstractSocket::ProxyConnectionRefusedError:
+            displayMessagelist(generatemesage(QObject::tr("Erreur: Impossible de contacter le serveur proxy car la connexion à celui-ci a été refusée."),tr("System Tchat Bot")));
+            changestateconnectbutton(true);
+        break;
+
+        case QAbstractSocket::ProxyConnectionClosedError:
+            displayMessagelist(generatemesage(QObject::tr("Erreur: La connexion au serveur proxy a été fermée de manière inattendue."),tr("System Tchat Bot")));
+            changestateconnectbutton(true);
+        break;
+
+        case QAbstractSocket::ProxyConnectionTimeoutError:
+            displayMessagelist(generatemesage(QObject::tr("Erreur: La connexion au serveur proxy a expiré ou le serveur proxy a cessé de répondre lors de la phase d'authentification."),tr("System Tchat Bot")));
+            changestateconnectbutton(true);
+        break;
+
+        case QAbstractSocket::ProxyNotFoundError:
+            displayMessagelist(generatemesage(QObject::tr("Erreur: Le proxy est introuvable."),tr("System Tchat Bot")));
+            changestateconnectbutton(true);
+        break;
+
+        case QAbstractSocket::ProxyProtocolError:
+            displayMessagelist(generatemesage(QObject::tr("Erreur: La connexion avec le serveur proxy a échouée, car la réponse de celui-ci n'a pas pu être comprise."),tr("System Tchat Bot")));
+            changestateconnectbutton(true);
+        break;
+
+        case QAbstractSocket::OperationError:
+            displayMessagelist(generatemesage(QObject::tr("Erreur: Une opération a été tentée alors que le socket était dans un état qui ne l'autorisait pas."),tr("System Tchat Bot")));
+            changestateconnectbutton(true);
+        break;
+
+        case QAbstractSocket::TemporaryError:
+            displayMessagelist(generatemesage(QObject::tr("Erreur: Une erreur temporaire s'est produite (Réssayer dans un moment.)."),tr("System Tchat Bot")));
+            changestateconnectbutton(true);
+        break;
+
+        case QAbstractSocket::UnknownSocketError:
+            displayMessagelist(generatemesage(QObject::tr("Erreur: Une erreur non identifiée s'est produite."),tr("System Tchat Bot")));
+            changestateconnectbutton(true);
+        break;
+
+    default:
+            displayMessagelist(generatemesage(QObject::tr("Erreur : ") + socket->errorString(),tr("System Tchat Bot")));
+            changestateconnectbutton(true);
+        break;
+    }
+}

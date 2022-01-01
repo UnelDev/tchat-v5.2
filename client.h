@@ -11,6 +11,7 @@ For Ananta Project*/
 #include <QMessageBox>
 #include <QFile>
 #include <QSettings>
+#include <QDir>
 #include "cesar.h"
 class client : public QObject
 {
@@ -21,7 +22,7 @@ public:
     void sendcommande(QString commande, QString arg);
     void connectto(QString ip, int port, QString newpsedo);
     void sendcommande(const QString commande);
-    void sendFile(const QString message, const QString path);
+    void sendFile(const QString message, const QString path, const QString NameOfFile);
 protected:
     void senddatamap(const QString type);
     void senddatamap(const QMap<QString, QVariant> sendmap);
@@ -32,6 +33,7 @@ private:
     //emeteur
     void changestateconnectbutton(bool state);
     void displayMessagelist(QString newMessage);
+    void DisplayFile(const QString comment, const QString NameOfFile);
     void displayconnectlabel(QString newText);
     void newclient(QString newClientName);
     void deleteclient(QString nameOfClient);
@@ -40,12 +42,12 @@ private:
     void disconnect();
     void socketerror(QAbstractSocket::SocketError error);
     void datareceived();
-    void processthemessage(QMap<QString,QString> message);
-    void processcomand(QMap<QString, QString> commend);
+    void processthemessage(QMap<QString, QVariant> message);
+    void processcomand(QMap<QString, QVariant> commend);
     QString generatedate();
-    QString generatedate(QMap<QString, QString> date);
+    QString generatedate(QMap<QString, QVariant> date);
     QString generatemesage(QString message, QString pseudo);
-    QString generatemesage(QMap<QString, QString> message);
+    QString generatemesage(QMap<QString, QVariant> message);
 
     QTcpSocket *socket;
     cesar *encryptioncesar;
@@ -57,6 +59,7 @@ private:
 signals:
     void newmessage();
     void display(QString message);
+    void newFileAndComent(const QString Message, const QString NameOfFile);
     void changestateconnect(bool state);
     void changeTextConnect(QString newtext);
     void newuser(QString newClientName);
