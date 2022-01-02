@@ -53,7 +53,7 @@ private:
     cesar *encryptioncesar;
     QSettings* settings;
     QString psedo;
-
+    QList<QFile> listOfFile;
     quint16 messagesize;
     int nbuser;
 signals:

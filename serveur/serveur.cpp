@@ -289,6 +289,7 @@ void serveur::recoverallfile()
        paquet = fichier.readAll();// Lecture entier de notre fichier en octet
        QDataStream out(paquet);
        out>>saveMessage;
+
    }
    else
    {

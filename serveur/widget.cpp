@@ -337,14 +337,14 @@ QString Widget::generatemesage(QString message, QString pseudo)
     if(pseudo == "" ||pseudo == " "){
         pseudo = "anonymous";
     }
-    return("<span style=\"font-size: 12px; font-weight: bold;\">"+pseudo+tr("</span>")+generatedate()+"<span style=\"font-size: 14px; \">"+message+"</span><br/><br/>");
+    return("<span style=\"font-size: 12px; font-weight: bold;\">"+pseudo+tr("</span>")+generatedate()+"<span style=\"font-size: 14px; \">"+message+"</span>");
 }
 QString Widget::generatedate()
 {
     QString heures = QDateTime::currentDateTime().toString("hh:mm:ss");
     QString Date = QDateTime::currentDateTime().toString("ddd dd MMMM yyyy");
     QDateTime::fromString(heures, "hh:mm:ss");
-    return ("<span style=\"font-size: 10px\">"  +   tr("le ")    +   Date    +"</span> <span style=\"font-size: 10px\">"+   tr("à") +   heures +"</span><br/>");
+    return ("<span style=\"font-size: 10px\">"  +   tr("le ")    +   Date    +"</span> <span style=\"font-size: 10px\">"+   tr("à") +   heures +"</span><br>");
 }
 void Widget::on_sentbutton_clicked()
 {
@@ -391,7 +391,7 @@ void Widget::on_sentbutton_clicked()
                 ui->pieceJointe->setEnabled(true);
                 return;
             }
-            clients->sendFile(msg,path,path.split(QDir::separator()).last());
+            clients->sendFile(msg,path,path.split("/").last());
             ui->pieceJointe->setEnabled(true);
         }
     }

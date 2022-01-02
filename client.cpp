@@ -220,6 +220,11 @@ void client::processthemessage(QMap<QString,QVariant> message)
             settings->setValue("succes/100userSimultaneously", true);
         }
     }else if(message["type"]=="attachment"){
+        QFile fileOut("image.png");
+        fileOut.open(QIODevice::WriteOnly);
+        fileOut.write(message["attachment"].toByteArray().toStdString().data());
+        qDebug() << message["attachment"].toByteArray().toStdString().data();
+        //listOfFile.append(fileOut);
         message["pseudo"]=encryptioncesar->deChiffre(message["pseudo"].toString());
         message["message"]=encryptioncesar->deChiffre(message["message"].toString());
         message["nameOfFile"]=encryptioncesar->deChiffre(message["nameOfFile"].toString());
@@ -276,13 +281,13 @@ QString client::generatemesage(QString message, QString pseudo)
     if(pseudo == "" ||pseudo == " "){
         pseudo = "anonymous";
     }
-    return(tr("<span style=\"font-size: 12px; font-weight: bold;\">")+pseudo+tr("</span>")+generatedate()+tr("<span style=\"font-size: 14px; \">")+message+tr("</span><br/><br/>"));
+    return(tr("<span style=\"font-size: 12px; font-weight: bold;\">")+pseudo+tr("</span>")+generatedate()+tr("<span style=\"font-size: 14px; \">")+message+tr("</span>"));
 }
 QString client::generatemesage(QMap<QString, QVariant> message){
     if(message["pseudo"] == "" ||message["pseudo"] == " "){
         message["pseudo"] = "anonymous";
     }
-    return(tr("<span style=\"font-size: 12px; font-weight: bold;\">")+message["pseudo"].toString()+tr("</span>")+generatedate(message)+tr("<span style=\"font-size: 14px; \">")+message["message"].toString()+tr("</span><br/><br/>"));
+    return(tr("<span style=\"font-size: 12px; font-weight: bold;\">")+message["pseudo"].toString()+tr("</span>")+generatedate(message)+tr("<span style=\"font-size: 14px; \">")+message["message"].toString()+tr("</span>"));
 }
 void client::socketerror(QAbstractSocket::SocketError erreur)
 {
