@@ -159,18 +159,14 @@ void client::sendcommande(const QString commande, QString arg){
     sendmap["shippingyears"]=QDateTime::currentDateTime().toString("yyyy");;
     senddatamap(sendmap);
 }
-void client::sendFile(const QString message, const QString path, const QString NameOfFile="No Name"){
+void client::sendFile(const QString message, const QString path, const QString NameOfFile){
     QFile file(path);
     if(!file.open(QIODevice::ReadOnly)){ return; }//on test louverture du ficher
      QByteArray bytes = file.readAll();//on serialise le fichier
     QMap<QString,QVariant> sendmap;//creation du descritif
     sendmap["type"]="attachment";
     sendmap["message"]=encryptioncesar->chiffre(message);
-    if(NameOfFile=="No Name"){
-         sendmap["nameOfFile"]=encryptioncesar->chiffre(NameOfFile.split(QDir::separator()).last());//on enevoie le nom du fichier
-    }else{
-        sendmap["nameOfFile"]=encryptioncesar->chiffre(NameOfFile);
-    }
+    sendmap["nameOfFile"]=encryptioncesar->chiffre(NameOfFile);
     sendmap["pseudo"]=encryptioncesar->chiffre(psedo);
     sendmap["version"]=QCoreApplication::applicationVersion();;
     sendmap["secondofsending"]=QDateTime::currentDateTime().toString("ss");;
@@ -226,6 +222,7 @@ void client::processthemessage(QMap<QString,QVariant> message)
     }else if(message["type"]=="attachment"){
         message["pseudo"]=encryptioncesar->deChiffre(message["pseudo"].toString());
         message["message"]=encryptioncesar->deChiffre(message["message"].toString());
+        message["nameOfFile"]=encryptioncesar->deChiffre(message["nameOfFile"].toString());
         DisplayFile(generatemesage(message),message["nameOfFile"].toString());
     }else{
         QMessageBox::critical(nullptr,tr("Erreur"), tr("Un paquet a été recu mais l'indentificateur : ") + message["type"].toString() + tr(" est inconnu."));

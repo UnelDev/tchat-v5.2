@@ -84,6 +84,7 @@ Widget::Widget(QWidget *parent)
     QObject::connect(clients, &client::display, this, &Widget::displayMessagelist);
     QObject::connect(clients, &client::remouveClient, this, &Widget::deletClient);
     QObject::connect(clients, &client::newuser, this, &Widget::newuser);
+    QObject::connect(clients, &client::newFileAndComent, this , &Widget::displayFileOnMessageList);
     clients->connectto("localhost",ui->serveurport->value(),ui->pseudo->text());
 }
 Widget::~Widget()
@@ -211,15 +212,47 @@ void Widget::displayMessagelist(QString message)
     }
     addmessage(message);
 }
-void Widget:: addmessage(QString message)
+void Widget::displayFileOnMessageList(const QString comment, const QString NameOfFile){
+    if(settings->value("settings/SoundNotification").toBool())
+    {
+        if(!QApplication::activeWindow()){
+            QApplication::beep();
+        }
+    }
+    if(settings->value("settings/visualNotification").toBool())
+    {
+        if(!QApplication::activeWindow()){
+            auto text = QTextDocumentFragment::fromHtml(comment);
+            sticon->showMessage("",text.toPlainText(),QSystemTrayIcon::Information,2000);
+        }
+        QApplication::alert(this);
+    }
+    QLabel *label = new QLabel(this);//creation du label pour le message
+    label->setText(comment);
+    ui->messageliste->addWidget(label);
+
+    QPushButton *PushButton = new QPushButton(this);//creation du bouton pour le telechargement
+    PushButton->setText(tr("telecharger: ","dans le bouton de telechargement")+NameOfFile);
+
+    QVBoxLayout *vlayout = new QVBoxLayout(this);//creation du layout pour metre en forme tout
+    vlayout->addWidget(label);
+    vlayout->addWidget(PushButton);
+    vlayout->setSpacing(2);
+
+    ui->messageliste->addLayout(vlayout);//on lajoute a l'ui
+
+    QScrollBar *vsb;
+    vsb = ui->scrollArea->verticalScrollBar();
+    vsb->setSliderPosition(vsb->maximum());
+}
+void Widget::addmessage(QString message)
 {
     QLabel *label = new QLabel(this);
     label->setText(message);
     ui->messageliste->addWidget(label);
-    test.append(label);
     QScrollBar *vsb;
     vsb = ui->scrollArea->verticalScrollBar();
-    vsb->setSliderPosition(vsb->maximum());
+    vsb->setSliderPosition(vsb->maximum()+1);//teste pour resoudre le bug
 }
 QString Widget::returnpseudo()
 {
@@ -304,7 +337,7 @@ QString Widget::generatemesage(QString message, QString pseudo)
     if(pseudo == "" ||pseudo == " "){
         pseudo = "anonymous";
     }
-    return(tr("<span style=\"font-size: 12px; font-weight: bold;\">")+pseudo+tr("</span>")+generatedate()+tr("<span style=\"font-size: 14px; \">")+message+tr("</span><br/><br/>"));
+    return("<span style=\"font-size: 12px; font-weight: bold;\">"+pseudo+tr("</span>")+generatedate()+"<span style=\"font-size: 14px; \">"+message+"</span><br/><br/>");
 }
 QString Widget::generatedate()
 {
@@ -351,7 +384,16 @@ void Widget::on_sentbutton_clicked()
         message.remove(tr("ananta system"));
        processechatbot(message);
     }else{
-        clients->sendmessage(msg);
+        if(ui->pieceJointe->isEnabled()){
+            clients->sendmessage(msg);
+        }else{
+            if(path==""){
+                ui->pieceJointe->setEnabled(true);
+                return;
+            }
+            clients->sendFile(msg,path,path.split(QDir::separator()).last());
+            ui->pieceJointe->setEnabled(true);
+        }
     }
     ui->mesage->clear();
 }
@@ -359,13 +401,12 @@ void Widget::on_parametrebutton_clicked()
 {
     parametres.show();
 }
-
-
 void Widget::on_pieceJointe_clicked()
 {
-    auto fichier = QFileDialog::getOpenFileName(this, "Ouvrir un fichier", QString());
-    QFile file(fichier);
-    file.open(QIODevice::ReadOnly);
-
+    auto fichier = QFileDialog::getOpenFileName(this, tr("Ouvrir un fichier","dans les upload de fichier"), QString());
+    QFile file(fichier);//on crée le fichier
+    if(!file.open(QIODevice::ReadOnly)){ displayMessagelist(generatemesage(tr("le fichier ne peut pas etre lu sans doute une erreur d'autorisation","dans les upload de fichier"),tr(" Syteme Tchat Bot"))); }//on test louverture du ficher
+    ui->pieceJointe->setEnabled(false);//on empeche d'avoir plusieur pice jointe
+    path = fichier;
 }
 

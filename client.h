@@ -33,10 +33,10 @@ private:
     //emeteur
     void changestateconnectbutton(bool state);
     void displayMessagelist(QString newMessage);
-    void DisplayFile(const QString comment, const QString NameOfFile);
     void displayconnectlabel(QString newText);
     void newclient(QString newClientName);
     void deleteclient(QString nameOfClient);
+    void DisplayFile(const QString comment, const QString NameOfFile);
     //fonction
     void connected();
     void disconnect();

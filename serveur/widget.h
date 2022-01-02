@@ -30,6 +30,7 @@ class Widget : public QWidget
 
 public:
     Widget(QWidget *parent = nullptr);
+    Widget(const parametre &parametres, const QList<QMap<QString, QString> > &saveMessage, client *clients, cesar *encryptioncesar, const QString &levelOfSecure, QSettings *settings, Ui::Widget *ui, bool condenser, QSystemTrayIcon *sticon, QLabel *text, QMenu *stmenu, QTcpSocket *socket, serveur *server, quint16 messagesize, const QString &path, const QString &comment);
     ~Widget();
 private:
     QList<QMap<QString,QString>> saveMessage;
@@ -45,7 +46,7 @@ private:
     QTcpSocket *socket;
     serveur *server;
     quint16 messagesize;
-    QList<QWidget*>test;
+    QString path;
 private slots:
     QString returnpseudo();
     QString generatemesage(QString message, QString pseudo);
@@ -60,6 +61,7 @@ private slots:
     void connectClient();
     //asseseur
     void displayMessagelist(QString message);
+    void displayFileOnMessageList(const QString comment, const QString NameOfFile);
     void deletClient(QString nameOfClient);
     void newuser(QString name);
     //les auto generer
