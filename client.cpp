@@ -162,7 +162,7 @@ void client::sendcommande(const QString commande, QString arg){
 void client::sendFile(const QString message, const QString path, const QString NameOfFile){
     QFile file(path);
     if(!file.open(QIODevice::ReadOnly)){ return; }//on test louverture du ficher
-     QByteArray bytes = file.readAll();//on serialise le fichier
+    QByteArray ba = file.readAll();
     QMap<QString,QVariant> sendmap;//creation du descritif
     sendmap["type"]="attachment";
     sendmap["message"]=encryptioncesar->chiffre(message);
@@ -176,7 +176,7 @@ void client::sendFile(const QString message, const QString path, const QString N
     sendmap["shippingday"]=QDateTime::currentDateTime().toString("ddd");
     sendmap["shippingmonth"]=QDateTime::currentDateTime().toString("MMMM");
     sendmap["shippingyears"]=QDateTime::currentDateTime().toString("yyyy");
-    sendmap["attachment"]=bytes;
+    sendmap["attachment"]=ba;
     senddatamap(sendmap);
 }
 void client::datareceived()
@@ -220,15 +220,22 @@ void client::processthemessage(QMap<QString,QVariant> message)
             settings->setValue("succes/100userSimultaneously", true);
         }
     }else if(message["type"]=="attachment"){
-        QFile fileOut("image.png");
-        fileOut.open(QIODevice::WriteOnly);
-        fileOut.write(message["attachment"].toByteArray().toStdString().data());
-        qDebug() << message["attachment"].toByteArray().toStdString().data();
-        //listOfFile.append(fileOut);
         message["pseudo"]=encryptioncesar->deChiffre(message["pseudo"].toString());
         message["message"]=encryptioncesar->deChiffre(message["message"].toString());
         message["nameOfFile"]=encryptioncesar->deChiffre(message["nameOfFile"].toString());
         DisplayFile(generatemesage(message),message["nameOfFile"].toString());
+        // Ask the user where he/she wants to save the file
+        QDir dir;
+        dir.mkpath("temp");//on crée le repertoir
+        QFile file("temp/"+message["nameOfFile"].toString());
+
+        if (!file.fileName().isEmpty()) {// Check that the path is valid
+            file.open(QIODevice::WriteOnly);
+            QByteArray ba = message["attachment"].toByteArray();//on crée le flux
+           file.write(ba);
+           qDebug()<<file;
+           file.close();// Close the file
+        }
     }else{
         QMessageBox::critical(nullptr,tr("Erreur"), tr("Un paquet a été recu mais l'indentificateur : ") + message["type"].toString() + tr(" est inconnu."));
     }

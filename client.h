@@ -9,7 +9,6 @@ For Ananta Project*/
 #include <QCoreApplication>
 #include <QDateTime>
 #include <QMessageBox>
-#include <QFile>
 #include <QSettings>
 #include <QDir>
 #include "cesar.h"
@@ -53,7 +52,6 @@ private:
     cesar *encryptioncesar;
     QSettings* settings;
     QString psedo;
-    QList<QFile> listOfFile;
     quint16 messagesize;
     int nbuser;
 signals:

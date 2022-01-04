@@ -110,7 +110,7 @@ void serveur::sentmessageto(const QString &message,QString pseudo, int NoUtilisa
     sendmap["shippingyears"]=QDateTime::currentDateTime().toString("yyyy");
     sentmessageto(sendmap,NoUtilisateur);
 }
-void serveur::sentcomandto(const QString &message ,int usernaime)
+void serveur::sentcomandto(const QVariant &message ,int usernaime)
 {
     QMap<QString,QVariant> sendmap;
     sendmap["type"]="cmd";
@@ -126,7 +126,7 @@ void serveur::sentcomandto(const QString &message ,int usernaime)
     sentmessageto(sendmap,usernaime);
 
 }
-void serveur::sentcomandto(const QString &message,QString arg ,int usernaime)
+void serveur::sentcomandto(const QVariant &message,QString arg ,int usernaime)
 {
     QMap<QString,QVariant> sendmap;
     sendmap["type"]="cmd";
@@ -226,6 +226,11 @@ void serveur::datareceived()
                     writetofile(message);
                 }
         }else if(message["type"]=="attachment"){
+            //message["idOfFile"]=Listfile.size();
+            /*QFile fileOut(message["nameOfFile"].toString());
+            fileOut.open(QIODevice::WriteOnly);
+            fileOut.write(message["attachment"].toByteArray().toStdString().data());
+            qDebug() << message["attachment"].toByteArray().toStdString().data();*/
             sentmessagetoall(message);
             if(settings->value("settings/SaveMessage").toBool()){
                 writetofile(message);
@@ -299,7 +304,7 @@ void serveur::recoverallfile()
 }
 void serveur::processcomand(QMap<QString, QVariant> command, int noclient)
 {
-    if (command["message"]=="change_psedo") {//                                      changer psedo
+    if (command["message"]=="change_psedo") {// changer psedo
         for(int i = 1; i < clientsList.size(); i++)
         {
             if(clientsList[i]->getpseudo()==command["arg"] && i != noclient){//si c'est le meme on coupe et on envoie une erreur
@@ -312,7 +317,9 @@ void serveur::processcomand(QMap<QString, QVariant> command, int noclient)
         }
         sentmessagetoall("msg",clientsList[noclient]->getpseudo()+" a changer son psedo en "+ command["arg"].toString(),"Tchat Bot");
         clientsList[noclient]->editpseudo(command["arg"].toString());
-    }else{
+    /*}else if(command["message"]=="file?") {
+        sentcomandto(Listfile[command["arg"].toInt()],noclient);
+    */}else{
         QMessageBox::critical(nullptr, tr("erreur"), tr("Un paquet de commande a été reçu mais la commande est incomprise."));
     }
 }

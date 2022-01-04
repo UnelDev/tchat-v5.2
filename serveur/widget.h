@@ -46,7 +46,7 @@ private:
     QTcpSocket *socket;
     serveur *server;
     quint16 messagesize;
-    QString path;
+    QString m_path;
 private slots:
     QString returnpseudo();
     QString generatemesage(QString message, QString pseudo);
@@ -59,6 +59,7 @@ private slots:
     void processechatbot(QString command);
     void on_pseudo_editingFinished();
     void connectClient();
+    void openfile();
     //asseseur
     void displayMessagelist(QString message);
     void displayFileOnMessageList(const QString comment, const QString NameOfFile);

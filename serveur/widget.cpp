@@ -146,7 +146,6 @@ void Widget::newuser(QString name){
 void Widget::deletClient(QString nameOfClient){
     if(ui->clientlist->findItems(nameOfClient,Qt::MatchCaseSensitive).isEmpty()){
         ui->clientlist->removeItemWidget(ui->clientlist->findItems(nameOfClient,Qt::MatchCaseSensitive)[1]); //on suprime le nom specifier
-        QMessageBox::critical(nullptr, tr("Suppression de client"), tr("Le client vient d'être supprimé."));
     }
 }
 void Widget::changetransparency(Qt::ApplicationState state){
@@ -233,6 +232,7 @@ void Widget::displayFileOnMessageList(const QString comment, const QString NameO
 
     QPushButton *PushButton = new QPushButton(this);//creation du bouton pour le telechargement
     PushButton->setText(tr("telecharger: ","dans le bouton de telechargement")+NameOfFile);
+    connect(PushButton,&QPushButton::clicked,this, &Widget::openfile);
 
     QVBoxLayout *vlayout = new QVBoxLayout(this);//creation du layout pour metre en forme tout
     vlayout->addWidget(label);
@@ -244,6 +244,20 @@ void Widget::displayFileOnMessageList(const QString comment, const QString NameO
     QScrollBar *vsb;
     vsb = ui->scrollArea->verticalScrollBar();
     vsb->setSliderPosition(vsb->maximum());
+}
+void Widget::openfile(){
+    QPushButton *PushButton = qobject_cast<QPushButton*>(sender());
+    PushButton->setText(PushButton->text().remove(tr("telecharger: ","dans le bouton de telechargement")));
+    QString extention{PushButton->text().split(".").last()};
+    QString path = QFileDialog::getSaveFileName(nullptr,tr("choisir le nom du fichier"))+"."+extention;
+    if(!path.isEmpty()){
+        QFile file("temp/"+PushButton->text());
+        file.copy(path);
+
+        //"temp/"+PushButton->text()
+
+    }
+    qDebug()<<PushButton->text();
 }
 void Widget::addmessage(QString message)
 {
@@ -387,11 +401,11 @@ void Widget::on_sentbutton_clicked()
         if(ui->pieceJointe->isEnabled()){
             clients->sendmessage(msg);
         }else{
-            if(path==""){
+            if(m_path==""){
                 ui->pieceJointe->setEnabled(true);
                 return;
             }
-            clients->sendFile(msg,path,path.split("/").last());
+            clients->sendFile(msg,m_path,m_path.split("/").last());
             ui->pieceJointe->setEnabled(true);
         }
     }
@@ -407,6 +421,6 @@ void Widget::on_pieceJointe_clicked()
     QFile file(fichier);//on crée le fichier
     if(!file.open(QIODevice::ReadOnly)){ displayMessagelist(generatemesage(tr("le fichier ne peut pas etre lu sans doute une erreur d'autorisation","dans les upload de fichier"),tr(" Syteme Tchat Bot"))); }//on test louverture du ficher
     ui->pieceJointe->setEnabled(false);//on empeche d'avoir plusieur pice jointe
-    path = fichier;
+    m_path = fichier;
 }
 

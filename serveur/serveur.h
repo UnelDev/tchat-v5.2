@@ -25,8 +25,8 @@ class serveur : public QObject
     void sentmessagetoall(const QString type, QString message, QString pseudo);
     void sentmessageto(const QString &message, int NoUtilisateur);
     void sentmessageto(const QString &message,QString pseudo, int NoUtilisateur);
-    void sentcomandto(const QString &message ,int usernaime);
-    void sentcomandto(const QString &message,QString arg ,int usernaime);
+    void sentcomandto(const QVariant &message ,int usernaime);
+    void sentcomandto(const QVariant &message,QString arg ,int usernaime);
     void sentcommande(const QString commande, QString arg);
     void newconect();
     void connect(const QMap<QString, QVariant> &connectpack, int usernaime);
