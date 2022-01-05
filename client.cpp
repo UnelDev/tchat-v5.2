@@ -25,6 +25,11 @@ client::client()
     connect(socket, &QTcpSocket::errorOccurred, this, &client::socketerror);
 
 }
+client::~client(){
+    delete settings;
+    delete socket;
+    delete encryptioncesar;
+}
 //emeteur
 void client::deleteclient(QString nameOfClient){ emit client::remouveClient(nameOfClient);}
 void client::displayMessagelist(QString newMessage){ emit client::display(newMessage); }

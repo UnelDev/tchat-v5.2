@@ -17,6 +17,7 @@ class client : public QObject
     Q_OBJECT
 public:
     client();
+    ~client();
     void sendmessage(QString message);
     void sendcommande(QString commande, QString arg);
     void connectto(QString ip, int port, QString newpsedo);
