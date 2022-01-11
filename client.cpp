@@ -25,6 +25,11 @@ client::client()
     connect(socket, &QTcpSocket::errorOccurred, this, &client::socketerror);
 
 }
+client::~client(){
+    delete settings;
+    delete socket;
+    delete encryptioncesar;
+}
 //emeteur
 void client::deleteclient(QString nameOfClient){ emit client::remouveClient(nameOfClient);}
 void client::displayMessagelist(QString newMessage){ emit client::display(newMessage); }
@@ -64,10 +69,10 @@ void client::senddatamap(const QMap<QString,QVariant> sendmap)
     QByteArray paquet;
     QDataStream out(&paquet, QIODevice::WriteOnly);
 
-    out << (quint16) 0;
+    out << (int) 0;
     out << sendmap;
     out.device()->seek(0);
-    out << (quint16) (paquet.size() - sizeof(quint16));
+    out << (/*quint16*/int) (paquet.size() - sizeof(quint16));
     socket->write(paquet); // On envoie le paquet
 }
 void client::senddatamap(const QString type){
@@ -185,7 +190,7 @@ void client::datareceived()
     while (1) {
         if (messagesize == 0)
         {
-            if (socket->bytesAvailable() < (int)sizeof(quint16))
+            if (socket->bytesAvailable() < (int)sizeof(int))
                  return;
             in >> messagesize;
         }
@@ -224,11 +229,18 @@ void client::processthemessage(QMap<QString,QVariant> message)
         message["message"]=encryptioncesar->deChiffre(message["message"].toString());
         message["nameOfFile"]=encryptioncesar->deChiffre(message["nameOfFile"].toString());
         DisplayFile(generatemesage(message),message["nameOfFile"].toString());
+
+
+
+        sendcommande("file?",message["nameOfFile"].toString());
+    }else if(message["type"]=="attachmentFile"){
+         message["pseudo"]=encryptioncesar->deChiffre(message["pseudo"].toString());
+        message["message"]=encryptioncesar->deChiffre(message["message"].toString());
+        message["nameOfFile"]=encryptioncesar->deChiffre(message["nameOfFile"].toString());
         // Ask the user where he/she wants to save the file
         QDir dir;
         dir.mkpath("temp");//on crée le repertoir
         QFile file("temp/"+message["nameOfFile"].toString());
-
         if (!file.fileName().isEmpty()) {// Check that the path is valid
             file.open(QIODevice::WriteOnly);
             QByteArray ba = message["attachment"].toByteArray();//on crée le flux
