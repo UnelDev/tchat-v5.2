@@ -89,12 +89,13 @@ Widget::Widget(QWidget *parent)
 }
 Widget::~Widget()
 {
+    delete clients;
     delete ui;
     delete sticon;
     delete stmenu;
     delete server;
     delete settings;
-    delete clients;
+
 }
 void Widget::autoconnect(){
     QFile fichier(settings->value("launcher/AutoConectServeurPosition").toString()); //on ouvre le fichier de preconexion
@@ -125,7 +126,7 @@ void Widget::startTrayIcon(){
     stmenu->addAction(condense);
     condense->setCheckable(true);
     sticon->setContextMenu(stmenu); // On assigne le menu contextuel à l'icône de notification
-    QIcon icon(":/image/Ananta.png");
+    QIcon icon(":/image/resource/image/Ananta.png");
     sticon->setIcon(icon); // On assigne une image à notre icône
     sticon->show(); // On affiche l'icône
     connect(actTexte1, SIGNAL(triggered()), qApp, SLOT(quit()));
@@ -149,45 +150,41 @@ void Widget::deletClient(QString nameOfClient){
     }
 }
 void Widget::changetransparency(Qt::ApplicationState state){
-    if(state == Qt::ApplicationInactive&&condenser==true&&settings->value("settings/client/activeTransparnece").toBool()){
+    if(state == Qt::ApplicationInactive&&condenser==true&&settings->value("settings/server/activeTransparnece").toBool()){
         this->setWindowOpacity(settings->value("settings/transparency").toFloat());
     }else if(state == Qt::ApplicationActive){
         this->setWindowOpacity(1);
     }
 }
 void Widget::condesed(){
-    if (socket->state()){
-        if (condenser == false)
-        {
-            ui->serveurip->setVisible(false);
-            ui->pseudo->setVisible(false);
-            ui->label_4->setVisible(false);
-            ui->label_5->setVisible(false);
-            ui->serveurport->setVisible(false);
-            ui->clientlist->setVisible(false);
-            if(settings->value("settings/client/activeTransparnece").toBool()){
-                this->setWindowFlags(Qt::WindowStaysOnTopHint);
-            }
-            this->show();
-            condenser = true;
-            resize(610,89);
-        }else if (condenser == true){
-            //ui->label->setVisible(true);
-            ui->serveurip->setVisible(true);
-            ui->pseudo->setVisible(true);
-            ui->label_4->setVisible(true);
-            ui->label_5->setVisible(true);
-            ui->serveurport->setVisible(true);
-            ui->clientlist->setVisible(true);
-            this->setWindowFlags(Qt::Window);
-            condenser = false;
-            this->show();
-        }else{
-            QMessageBox::critical(this,tr("bool condesed"),tr("erreur un bool ne pet pas avoir tois etat signalez le dans: parametre  puis discord"));
+    if (condenser == false)
+    {
+        ui->serveurip->setVisible(false);
+        ui->pseudo->setVisible(false);
+        ui->label_4->setVisible(false);
+        ui->label_5->setVisible(false);
+        ui->serveurport->setVisible(false);
+        ui->clientlist->setVisible(false);
+        ui->parametrebutton->setVisible(false);
+        if(settings->value("settings/server/activeTransparnece").toBool()){
+            this->setWindowFlags(Qt::WindowStaysOnTopHint);
         }
+        this->show();
+        condenser = true;
+        resize(610,89);
+    }else if (condenser == true){
+        ui->parametrebutton->setVisible(true);
+        ui->serveurip->setVisible(true);
+        ui->pseudo->setVisible(true);
+        ui->label_4->setVisible(true);
+        ui->label_5->setVisible(true);
+        ui->serveurport->setVisible(true);
+        ui->clientlist->setVisible(true);
+        this->setWindowFlags(Qt::Window);
+        condenser = false;
+        this->show();
     }else{
-        QMessageBox::information(this,tr("passage en mode condensée"),tr("vous ne pouvez passer l'app en mode condensée que une fois connecter"));
-
+        QMessageBox::critical(this,tr("bool condesed"),tr("erreur un bool ne pet pas avoir tois etat signalez le dans: parametre  puis discord"));
     }
 }
 void helpcondesed(){
@@ -429,4 +426,3 @@ void Widget::on_pieceJointe_clicked()
     ui->pieceJointe->setEnabled(false);//on empeche d'avoir plusieur pice jointe
     m_path = fichier;
 }
-
