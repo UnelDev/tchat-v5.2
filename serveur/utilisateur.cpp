@@ -31,11 +31,11 @@ QTcpSocket* utilisateur::getSocket()
     return socket;
 }
 
-void utilisateur::setmessageSize(quint16 size)
+void utilisateur::setmessageSize(int size)
 {
     messageSize = size;
 }
-quint16 utilisateur::getmessageSize()
+int utilisateur::getmessageSize()
 {
     return messageSize;
 }

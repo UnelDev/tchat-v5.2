@@ -55,12 +55,12 @@ void client::connected()
     senddatamap("connection");
     displayMessagelist(textmessage);
     changestateconnectbutton(true);
-    displayconnectlabel(tr("<font color=\"#70AD47\">Connecté</font>"));
+    displayconnectlabel("<font color=\"#70AD47\">"+tr("Connecté" "lors de la connexion a un serveur")+"</font>");
 }
 void client::disconnect()
 {
     QString textmessage = generatemesage(tr("Déconnecté du serveur"),tr("Tchat Bot"));
-    displayconnectlabel(tr("<font color=\"#ff0000\">Déconnecté</font>"));
+    displayconnectlabel("<font color=\"#ff0000\">"+tr("Déconnecté", "lors de la déconnexion a un serveur")+"</font>");
     displayMessagelist(textmessage);
     changestateconnectbutton(true);
 }
@@ -72,7 +72,7 @@ void client::senddatamap(const QMap<QString,QVariant> sendmap)
     out << (int) 0;
     out << sendmap;
     out.device()->seek(0);
-    out << (/*quint16*/int) (paquet.size() - sizeof(quint16));
+    out << (int) (paquet.size() - sizeof(int));
     socket->write(paquet); // On envoie le paquet
 }
 void client::senddatamap(const QString type){

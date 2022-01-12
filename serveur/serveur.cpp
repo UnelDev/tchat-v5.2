@@ -44,10 +44,10 @@ void serveur::sentmessagetoall(const QMap<QString, QVariant> &message)
     QByteArray pack;
     QDataStream out(&pack, QIODevice::WriteOnly);
 
-    out << (quint16) 0; // On écrit 0 au début du paquet pour réserver la place pour écrire la taille
+    out << (int) 0; // On écrit 0 au début du paquet pour réserver la place pour écrire la taille
     out << message; // On ajoute le message à la suite
     out.device()->seek(0); // On se replace au début du paquet
-    out << (quint16) (pack.size() - sizeof(quint16)); // On écrase le 0 qu'on avait réservé par la longueur du message
+    out << (int) (pack.size() - sizeof(int)); // On écrase le 0 qu'on avait réservé par la longueur du message
     //Sending
     for(int i = 0; i < clientsList.size(); i++)
     {
@@ -59,10 +59,10 @@ void serveur::sentmessageto(const QMap<QString, QVariant> &message, int NoUtilis
     QByteArray pack;
     QDataStream out(&pack, QIODevice::WriteOnly);
 
-    out << (quint16) 0; // On écrit 0 au début du paquet pour réserver la place pour écrire la taille
+    out << (int) 0; // On écrit 0 au début du paquet pour réserver la place pour écrire la taille
     out << message; // On ajoute le message à la suite
     out.device()->seek(0); // On se replace au début du paquet
-    out << (quint16) (pack.size() - sizeof(quint16)); // On écrase le 0 qu'on avait réservé par la longueur du message
+    out << (int) (pack.size() - sizeof(int)); // On écrase le 0 qu'on avait réservé par la longueur du message
     //Sending
     clientsList[NoUtilisateur]->getSocket()->write(pack);
 }
@@ -221,10 +221,10 @@ void serveur::datareceived()
       QDataStream in(socket);
         while(1){
             if(sendingClient->getmessageSize() == 0) { //Try to catch
-                if(socket->bytesAvailable() < static_cast<int>(sizeof(quint16))){
+                if(socket->bytesAvailable() < static_cast<int>(sizeof(int))){
                     return;
                 }
-                quint16 messageSize;
+                int messageSize;
                 in >> messageSize;
                 sendingClient->setmessageSize(messageSize);
             }
@@ -233,7 +233,7 @@ void serveur::datareceived()
             }
             QMap<QString, QVariant>message;
             in >> message;
-            sendingClient->setmessageSize(static_cast<quint16>(0));
+            sendingClient->setmessageSize(static_cast<int>(0));
         if(message["type"]=="cmd"){//une commende
             message["arg"]=encryptioncesar->deChiffre(message["arg"].toString());
             message["pseudo"]=encryptioncesar->deChiffre(message["pseudo"].toString());
@@ -267,7 +267,7 @@ void serveur::datareceived()
         QMessageBox::critical(nullptr, tr("erreur"), tr("un paquet de comande a été recu mais la l'idantificateur ")+ message["type"].toString() +tr("est incompri."));
         displayMessagelist(generatemesage(tr("un paquet de comande a été recu mais la l'idantificateur ")+ message["type"].toString() +tr("est incompri."),tr("serveur bot")));
     }
-        sendingClient->setmessageSize(static_cast<quint16>(0));
+        sendingClient->setmessageSize(static_cast<int>(0));
     }
 }
 void serveur::disconnectclients()
