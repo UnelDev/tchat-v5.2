@@ -23,6 +23,7 @@ public:
     void connectto(QString ip, int port, QString newpsedo);
     void sendcommande(const QString commande);
     void sendFile(const QString message, const QString path, const QString NameOfFile);
+    QString getPsedo();
 protected:
     void senddatamap(const QString type);
     void senddatamap(const QMap<QString, QVariant> sendmap);

@@ -187,6 +187,9 @@ void client::sendFile(const QString message, const QString path, const QString N
     sendmap["attachment"]=ba;
     senddatamap(sendmap);
 }
+QString client::getPsedo(){
+    return psedo;
+}
 void client::datareceived()
 {
     QDataStream in(socket);
