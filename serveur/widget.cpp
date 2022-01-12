@@ -417,9 +417,15 @@ void Widget::on_parametrebutton_clicked()
 }
 void Widget::on_pieceJointe_clicked()
 {
-    auto fichier = QFileDialog::getOpenFileName(this, tr("Ouvrir un fichier","dans les upload de fichier"), QString());
+     const auto fichier = QFileDialog::getOpenFileName(this, tr("Ouvrir un fichier","dans les upload de fichier"), QString());
     QFile file(fichier);//on crée le fichier
-    if(!file.open(QIODevice::ReadOnly)){ displayMessagelist(generatemesage(tr("le fichier ne peut pas etre lu sans doute une erreur d'autorisation","dans les upload de fichier"),tr(" Syteme Tchat Bot"))); }//on test louverture du ficher
+    if(!file.open(QIODevice::ReadOnly)){
+        QMessageBox::critical(this,tr("erreur de permision","dans les upload de fichier"),tr("le fichier ne peut pas etre lu sans doute une erreur d'autorisation","dans les upload de fichier"));
+    }//on test louverture du ficher
+    if(file.size()>256901120){//si c'est superieur a 250mb
+        QMessageBox::critical(this,tr("fichier trop lourd","dans les upload de fichier"),tr("le fichier est trop gros il faut qu'il fasse moin que 250mB","dans les upload de fichier"));
+        return;
+    }
     ui->pieceJointe->setEnabled(false);//on empeche d'avoir plusieur pice jointe
     m_path = fichier;
 }

@@ -73,7 +73,10 @@ void client::senddatamap(const QMap<QString,QVariant> sendmap)
     out << sendmap;
     out.device()->seek(0);
     out << (int) (paquet.size() - sizeof(int));
-    socket->write(paquet); // On envoie le paquet
+    int sentzise = socket->write(paquet); // On envoie le paquet
+    if(sentzise == -1){
+      QMessageBox::critical(nullptr, tr("Erreur d'envoie","quand un fichier est trop lourd"), tr("le packet n'a pas pue etre corectemment ecrit dans le socket, le fichier doit etre trop lourd","quand un fichier est trop lourd"));
+    }
 }
 void client::senddatamap(const QString type){
     QMap<QString,QVariant> sendmap;
