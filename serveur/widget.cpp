@@ -405,7 +405,8 @@ void Widget::on_sentbutton_clicked()
                 return;
             }
             clients->sendFile(msg,m_path,m_path.split("/").last());
-            ui->pieceJointe->setEnabled(true);
+            ui->pieceJointe->setIcon(QIcon(":/image/resource/image/paper-clip.png"));
+            m_path="";
         }
     }
     ui->mesage->clear();
@@ -416,16 +417,21 @@ void Widget::on_parametrebutton_clicked()
 }
 void Widget::on_pieceJointe_clicked()
 {
-     const auto fichier = QFileDialog::getOpenFileName(this, tr("Ouvrir un fichier","dans les upload de fichier"), QString());
-    QFile file(fichier);//on crée le fichier
-    if(!file.open(QIODevice::ReadOnly)){
-        QMessageBox::critical(nullptr,tr("erreur de permision","dans les upload de fichier"),tr("le fichier ne peut pas etre lu sans doute une erreur d'autorisation","dans les upload de fichier"));
-    }//on test louverture du ficher
-    if(file.size()>256901120){//si c'est superieur a 250mb
-        QMessageBox::critical(nullptr,tr("fichier trop lourd","dans les upload de fichier"),tr("le fichier est trop gros il faut qu'il fasse moin que 250mB","dans les upload de fichier"));
-        return;
+    if(m_path==""){
+        const auto fichier = QFileDialog::getOpenFileName(this, tr("Ouvrir un fichier","dans les upload de fichier"), QString());
+        QFile file(fichier);//on crée le fichier
+        if(!file.open(QIODevice::ReadOnly)){
+            QMessageBox::critical(nullptr,tr("erreur de permision","dans les upload de fichier"),tr("le fichier ne peut pas etre lu sans doute une erreur d'autorisation","dans les upload de fichier"));
+            return;
+        }//on test louverture du ficher
+        if(file.size()>256901120){//si c'est superieur a 250mb
+            QMessageBox::critical(nullptr,tr("fichier trop lourd","dans les upload de fichier"),tr("le fichier est trop gros il faut qu'il fasse moin que 250mB","dans les upload de fichier"));
+            return;
+        }
+        ui->pieceJointe->setIcon(QIcon(":/image/resource/image/supression.png"));
+        m_path = fichier;
+    }else{
+        m_path="";
+        ui->pieceJointe->setIcon(QIcon(":/image/resource/image/paper-clip.png"));
     }
-    ui->pieceJointe->setEnabled(false);//on empeche d'avoir plusieur pice jointe
-    m_path = fichier;
-
 }

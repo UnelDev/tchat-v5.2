@@ -49,6 +49,9 @@
         <iconset resource="resource.qrc">
          <normaloff>:/image/resource/image/paper-clip.png</normaloff>:/image/resource/image/paper-clip.png</iconset>
        </property>
+       <property name="flat">
+        <bool>true</bool>
+       </property>
       </widget>
      </item>
      <item>
@@ -153,7 +156,7 @@
         <x>0</x>
         <y>0</y>
         <width>392</width>
-        <height>359</height>
+        <height>357</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
