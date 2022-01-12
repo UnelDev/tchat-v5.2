@@ -44,10 +44,10 @@ void serveur::sentmessagetoall(const QMap<QString, QVariant> &message)
     QByteArray pack;
     QDataStream out(&pack, QIODevice::WriteOnly);
 
-    out << (quint16) 0; // On écrit 0 au début du paquet pour réserver la place pour écrire la taille
+    out << (int) 0; // On écrit 0 au début du paquet pour réserver la place pour écrire la taille
     out << message; // On ajoute le message à la suite
     out.device()->seek(0); // On se replace au début du paquet
-    out << (quint16) (pack.size() - sizeof(quint16)); // On écrase le 0 qu'on avait réservé par la longueur du message
+    out << (int) (pack.size() - sizeof(int)); // On écrase le 0 qu'on avait réservé par la longueur du message
     //Sending
     for(int i = 0; i < clientsList.size(); i++)
     {
@@ -59,10 +59,10 @@ void serveur::sentmessageto(const QMap<QString, QVariant> &message, int NoUtilis
     QByteArray pack;
     QDataStream out(&pack, QIODevice::WriteOnly);
 
-    out << (quint16) 0; // On écrit 0 au début du paquet pour réserver la place pour écrire la taille
+    out << (int) 0; // On écrit 0 au début du paquet pour réserver la place pour écrire la taille
     out << message; // On ajoute le message à la suite
     out.device()->seek(0); // On se replace au début du paquet
-    out << (quint16) (pack.size() - sizeof(quint16)); // On écrase le 0 qu'on avait réservé par la longueur du message
+    out << (int) (pack.size() - sizeof(int)); // On écrase le 0 qu'on avait réservé par la longueur du message
     //Sending
     clientsList[NoUtilisateur]->getSocket()->write(pack);
 }
@@ -109,6 +109,24 @@ void serveur::sentmessageto(const QString &message,QString pseudo, int NoUtilisa
     sendmap["shippingmonth"]=QDateTime::currentDateTime().toString("MMMM");
     sendmap["shippingyears"]=QDateTime::currentDateTime().toString("yyyy");
     sentmessageto(sendmap,NoUtilisateur);
+}
+void serveur::sendFileto(const QString path, const QString NameOfFile, const int NoUtilisateur){
+    QFile file(path);
+    if(!file.open(QIODevice::ReadOnly)){ return; }//on test louverture du ficher
+    QByteArray ba = file.readAll();
+    QMap<QString,QVariant> sendmap;//creation du descritif
+    sendmap["type"]="attachmentFile";
+    sendmap["nameOfFile"]=encryptioncesar->chiffre(NameOfFile);
+    sendmap["version"]=QCoreApplication::applicationVersion();;
+    sendmap["secondofsending"]=QDateTime::currentDateTime().toString("ss");;
+    sendmap["minuteofsending"]=QDateTime::currentDateTime().toString("m");;
+    sendmap["sendingtime"]=QDateTime::currentDateTime().toString("hh");
+    sendmap["sendingdate"]=QDateTime::currentDateTime().toString("d");
+    sendmap["shippingday"]=QDateTime::currentDateTime().toString("ddd");
+    sendmap["shippingmonth"]=QDateTime::currentDateTime().toString("MMMM");
+    sendmap["shippingyears"]=QDateTime::currentDateTime().toString("yyyy");
+    sendmap["attachment"]=ba;
+    sentmessageto(sendmap, NoUtilisateur);
 }
 void serveur::sentcomandto(const QVariant &message ,int usernaime)
 {
@@ -203,10 +221,10 @@ void serveur::datareceived()
       QDataStream in(socket);
         while(1){
             if(sendingClient->getmessageSize() == 0) { //Try to catch
-                if(socket->bytesAvailable() < static_cast<int>(sizeof(quint16))){
+                if(socket->bytesAvailable() < static_cast<int>(sizeof(int))){
                     return;
                 }
-                quint16 messageSize;
+                int messageSize;
                 in >> messageSize;
                 sendingClient->setmessageSize(messageSize);
             }
@@ -215,7 +233,7 @@ void serveur::datareceived()
             }
             QMap<QString, QVariant>message;
             in >> message;
-            sendingClient->setmessageSize(static_cast<quint16>(0));
+            sendingClient->setmessageSize(static_cast<int>(0));
         if(message["type"]=="cmd"){//une commende
             message["arg"]=encryptioncesar->deChiffre(message["arg"].toString());
             message["pseudo"]=encryptioncesar->deChiffre(message["pseudo"].toString());
@@ -226,22 +244,30 @@ void serveur::datareceived()
                     writetofile(message);
                 }
         }else if(message["type"]=="attachment"){
-            //message["idOfFile"]=Listfile.size();
-            /*QFile fileOut(message["nameOfFile"].toString());
-            fileOut.open(QIODevice::WriteOnly);
-            fileOut.write(message["attachment"].toByteArray().toStdString().data());
-            qDebug() << message["attachment"].toByteArray().toStdString().data();*/
             sentmessagetoall(message);
-            if(settings->value("settings/SaveMessage").toBool()){
-                writetofile(message);
+            message["pseudo"]=encryptioncesar->deChiffre(message["pseudo"].toString());
+            message["message"]=encryptioncesar->deChiffre(message["message"].toString());
+            message["nameOfFile"]=encryptioncesar->deChiffre(message["nameOfFile"].toString());
+            // Ask the user where he/she wants to save the file
+            QDir dir;
+            dir.mkpath("temp");//on crée le repertoir
+            QFile file("temp/"+message["nameOfFile"].toString());
+
+            if (!file.fileName().isEmpty()) {// Check that the path is valid
+                file.open(QIODevice::WriteOnly);
+                QByteArray ba = message["attachment"].toByteArray();//on crée le flux
+               file.write(ba);
+               qDebug()<<file;
+               file.close();// Close the file
             }
+            message["attachment"] = "";//on renitialise la case pour que ca ne prenne pas de la place
         }else if(message["type"]=="connection"){
             connect(message, index);
         }else{
         QMessageBox::critical(nullptr, tr("erreur"), tr("un paquet de comande a été recu mais la l'idantificateur ")+ message["type"].toString() +tr("est incompri."));
         displayMessagelist(generatemesage(tr("un paquet de comande a été recu mais la l'idantificateur ")+ message["type"].toString() +tr("est incompri."),tr("serveur bot")));
     }
-        sendingClient->setmessageSize(static_cast<quint16>(0));
+        sendingClient->setmessageSize(static_cast<int>(0));
     }
 }
 void serveur::disconnectclients()
@@ -317,9 +343,9 @@ void serveur::processcomand(QMap<QString, QVariant> command, int noclient)
         }
         sentmessagetoall("msg",clientsList[noclient]->getpseudo()+" a changer son psedo en "+ command["arg"].toString(),"Tchat Bot");
         clientsList[noclient]->editpseudo(command["arg"].toString());
-    /*}else if(command["message"]=="file?") {
-        sentcomandto(Listfile[command["arg"].toInt()],noclient);
-    */}else{
+    }else if(command["message"]=="file?") {
+        sendFileto(command["arg"].toString(),command["nameOfFile"].toString(),noclient);
+    }else{
         QMessageBox::critical(nullptr, tr("erreur"), tr("Un paquet de commande a été reçu mais la commande est incomprise."));
     }
 }

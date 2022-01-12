@@ -53,7 +53,7 @@ private:
     cesar *encryptioncesar;
     QSettings* settings;
     QString psedo;
-    quint16 messagesize;
+    int messagesize;
     int nbuser;
 signals:
     void newmessage();

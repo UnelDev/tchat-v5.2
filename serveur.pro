@@ -9,33 +9,33 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    serveur\main.cpp \
-    serveur\serveur.cpp \
+    serveur/main.cpp \
+    serveur/serveur.cpp \
     succees.cpp \
-    serveur\utilisateur.cpp \
-    serveur\widget.cpp \
-    serveur\parametre.cpp \
+    serveur/utilisateur.cpp \
+    serveur/widget.cpp \
+    serveur/parametre.cpp \
     moreinformation.cpp \
     cesar.cpp \
     client.cpp
 HEADERS += \
-    serveur\serveur.h \
+    serveur/serveur.h \
     succees.h \
-    serveur\utilisateur.h \
-    serveur\widget.h \
-    serveur\parametre.h \
+    serveur/utilisateur.h \
+    serveur/widget.h \
+    serveur/parametre.h \
     moreinformation.h \
     cesar.h \
     client.h
 FORMS += \
     succees.ui \
-    serveur\widget.ui \
-    serveur\parametre.ui \
+    serveur/widget.ui \
+    serveur/parametre.ui \
     moreinformation.ui
 
 TRANSLATIONS += \
-    serveur\serveur_fr_FR.ts
-    serveur\serveur_an_AN.ts
+    serveur/serveur_fr_FR.ts
+    serveur/serveur_an_AN.ts
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -43,4 +43,4 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 RESOURCES += \
-    serveur\resource.qrc
+    serveur/resource.qrc

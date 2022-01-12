@@ -55,12 +55,12 @@ void client::connected()
     senddatamap("connection");
     displayMessagelist(textmessage);
     changestateconnectbutton(true);
-    displayconnectlabel(tr("<font color=\"#70AD47\">Connecté</font>"));
+    displayconnectlabel("<font color=\"#70AD47\">"+tr("Connecté" "lors de la connexion a un serveur")+"</font>");
 }
 void client::disconnect()
 {
     QString textmessage = generatemesage(tr("Déconnecté du serveur"),tr("Tchat Bot"));
-    displayconnectlabel(tr("<font color=\"#ff0000\">Déconnecté</font>"));
+    displayconnectlabel("<font color=\"#ff0000\">"+tr("Déconnecté", "lors de la déconnexion a un serveur")+"</font>");
     displayMessagelist(textmessage);
     changestateconnectbutton(true);
 }
@@ -69,11 +69,14 @@ void client::senddatamap(const QMap<QString,QVariant> sendmap)
     QByteArray paquet;
     QDataStream out(&paquet, QIODevice::WriteOnly);
 
-    out << (quint16) 0;
+    out << (int) 0;
     out << sendmap;
     out.device()->seek(0);
-    out << (quint16) (paquet.size() - sizeof(quint16));
-    socket->write(paquet); // On envoie le paquet
+    out << (int) (paquet.size() - sizeof(int));
+    int sentzise = socket->write(paquet); // On envoie le paquet
+    if(sentzise == -1){
+      QMessageBox::critical(nullptr, tr("Erreur d'envoie","quand un fichier est trop lourd"), tr("le packet n'a pas pue etre corectemment ecrit dans le socket, le fichier doit etre trop lourd","quand un fichier est trop lourd"));
+    }
 }
 void client::senddatamap(const QString type){
     QMap<QString,QVariant> sendmap;
@@ -190,7 +193,7 @@ void client::datareceived()
     while (1) {
         if (messagesize == 0)
         {
-            if (socket->bytesAvailable() < (int)sizeof(quint16))
+            if (socket->bytesAvailable() < (int)sizeof(int))
                  return;
             in >> messagesize;
         }
@@ -229,11 +232,18 @@ void client::processthemessage(QMap<QString,QVariant> message)
         message["message"]=encryptioncesar->deChiffre(message["message"].toString());
         message["nameOfFile"]=encryptioncesar->deChiffre(message["nameOfFile"].toString());
         DisplayFile(generatemesage(message),message["nameOfFile"].toString());
+
+
+
+        sendcommande("file?",message["nameOfFile"].toString());
+    }else if(message["type"]=="attachmentFile"){
+         message["pseudo"]=encryptioncesar->deChiffre(message["pseudo"].toString());
+        message["message"]=encryptioncesar->deChiffre(message["message"].toString());
+        message["nameOfFile"]=encryptioncesar->deChiffre(message["nameOfFile"].toString());
         // Ask the user where he/she wants to save the file
         QDir dir;
         dir.mkpath("temp");//on crée le repertoir
         QFile file("temp/"+message["nameOfFile"].toString());
-
         if (!file.fileName().isEmpty()) {// Check that the path is valid
             file.open(QIODevice::WriteOnly);
             QByteArray ba = message["attachment"].toByteArray();//on crée le flux
