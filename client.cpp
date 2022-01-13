@@ -218,6 +218,7 @@ void client::processthemessage(QMap<QString,QVariant> message)
     if(message["type"]=="cmd"){
         message["pseudo"]=encryptioncesar->deChiffre(message["pseudo"].toString());
         message["arg"]=encryptioncesar->deChiffre(message["arg"].toString());
+        message["arg2"]=encryptioncesar->deChiffre(message["arg2"].toString());
         processcomand(message);
     }else if(message["type"]=="msg"){
         message["pseudo"]=encryptioncesar->deChiffre(message["pseudo"].toString());
@@ -289,6 +290,10 @@ void client::processcomand(QMap<QString, QVariant> commend)
     }else if(commend["message"]=="disconnected"){
         deleteclient(commend["arg"].toString());
         --nbuser;
+    }else if(commend["message"]=="changePsedo"){
+        displayMessagelist(commend["arg"].toString()+ tr(" a changer son psedo en : ","lors d'un changement de nom utilisateur")+commend["arg2"].toString());
+        deleteclient(commend["arg"].toString());
+        newclient(commend["arg2"].toString());
     }else{
         QMessageBox::critical(nullptr, tr("Erreur"), tr("Un paquet de comande a été reçu mais la commande est incomprise. ")+commend["message"].toString());
     }

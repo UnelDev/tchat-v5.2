@@ -33,6 +33,7 @@ class serveur : public QObject
     void sentcomandto(const QVariant &message ,int usernaime);
     void sentcomandto(const QVariant &message,QString arg ,int usernaime);
     void sentcommande(const QString commande, QString arg);
+    void sentcommande(const QString commande,const QString arg,const QString arg2);
     void newconect();
     void connect(const QMap<QString, QVariant> &connectpack, int usernaime);
     void datareceived();

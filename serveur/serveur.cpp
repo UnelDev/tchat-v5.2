@@ -176,6 +176,22 @@ void serveur::sentcommande(const QString commande, QString arg){
     sendmap["shippingyears"]=QDateTime::currentDateTime().toString("yyyy");
     sentmessagetoall(sendmap);
 }
+void serveur::sentcommande(const QString commande,const QString arg,const QString arg2){
+    QMap<QString,QVariant> sendmap;
+    sendmap["type"]="cmd";
+    sendmap["message"]=commande;
+    sendmap["arg"]=encryptioncesar->chiffre(arg);
+    sendmap["arg2"]=encryptioncesar->chiffre(arg2);
+    sendmap["pseudo"]="serveur"+encryptioncesar->chiffre(psedo);
+    sendmap["secondofsending"]=QDateTime::currentDateTime().toString("ss");;
+    sendmap["minuteofsending"]=QDateTime::currentDateTime().toString("mm");;
+    sendmap["sendingtime"]=QDateTime::currentDateTime().toString("hh");
+    sendmap["sendingdate"]=QDateTime::currentDateTime().toString("d");
+    sendmap["shippingday"]=QDateTime::currentDateTime().toString("dddd");
+    sendmap["shippingmonth"]=QDateTime::currentDateTime().toString("MMMM");
+    sendmap["shippingyears"]=QDateTime::currentDateTime().toString("yyyy");
+    sentmessagetoall(sendmap);
+}
 void serveur::newconect()
 {
     utilisateur* newClient = new utilisateur(m_serveur->nextPendingConnection());
@@ -341,6 +357,7 @@ void serveur::processcomand(QMap<QString, QVariant> command, int noclient)
                 return;
             }
         }
+        sentcommande("changePsedo",clientsList[noclient]->getpseudo(),command["arg"].toString());
         sentmessagetoall("msg",clientsList[noclient]->getpseudo()+" a changer son psedo en "+ command["arg"].toString(),"Tchat Bot");
         clientsList[noclient]->editpseudo(command["arg"].toString());
     }else if(command["message"]=="file?") {

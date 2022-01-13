@@ -150,8 +150,9 @@ void Widget::newuser(QString name){
     ui->clientlist->addItem(name);
 }
 void Widget::deletClient(QString nameOfClient){
-    if(ui->clientlist->findItems(nameOfClient,Qt::MatchCaseSensitive).isEmpty()){
-        ui->clientlist->removeItemWidget(ui->clientlist->findItems(nameOfClient,Qt::MatchCaseSensitive)[1]); //on suprime le nom specifier
+    ui->clientlist->removeItemWidget(ui->clientlist->findItems(nameOfClient,Qt::MatchFixedString).last());
+    if(ui->clientlist->findItems(nameOfClient,Qt::MatchFixedString).isEmpty()){
+        ui->clientlist->removeItemWidget(ui->clientlist->findItems(nameOfClient,Qt::MatchFixedString)[1]); //on suprime le nom specifier
     }
 }
 void Widget::changetransparency(Qt::ApplicationState state){
