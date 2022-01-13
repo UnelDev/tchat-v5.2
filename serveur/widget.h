@@ -33,6 +33,7 @@ public:
     ~Widget();
 private:
     QList<QMap<QString,QString>> saveMessage;
+    QList<QString> listeClient;
     client *clients;
     cesar *encryptioncesar;
     QString levelOfSecure;

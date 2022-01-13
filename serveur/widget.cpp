@@ -147,13 +147,13 @@ void Widget::connectClient()
     ui->clientlist->clear();
 }
 void Widget::newuser(QString name){
+    listeClient.append(name);
     ui->clientlist->addItem(name);
 }
 void Widget::deletClient(QString nameOfClient){
-    ui->clientlist->removeItemWidget(ui->clientlist->findItems(nameOfClient,Qt::MatchFixedString).last());
-    if(ui->clientlist->findItems(nameOfClient,Qt::MatchFixedString).isEmpty()){
-        ui->clientlist->removeItemWidget(ui->clientlist->findItems(nameOfClient,Qt::MatchFixedString)[1]); //on suprime le nom specifier
-    }
+    listeClient.removeOne(nameOfClient);
+    ui->clientlist->clear();
+    ui->clientlist->addItems(listeClient);
 }
 void Widget::changetransparency(Qt::ApplicationState state){
     if(state == Qt::ApplicationInactive&&condenser==true&&settings->value("settings/server/activeTransparnece").toBool()){
