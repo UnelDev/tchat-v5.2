@@ -10,6 +10,8 @@
 #include <QCoreApplication>
 #include <QSettings>
 #include <QDir>
+#include <QFileDialog>
+#include <QNetworkInterface>
 #include "utilisateur.h"
 #include "cesar.h"
 
@@ -19,6 +21,7 @@ class serveur : public QObject
     public:
     serveur();
     int startserveur(int port);
+    void recap();
     private:
     void displayMessagelist(QString message);
     void sentmessagetoall(const QMap<QString, QVariant> &message);

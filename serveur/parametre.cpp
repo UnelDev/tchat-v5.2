@@ -235,3 +235,5 @@ void parametre::on_checkBox_3_toggled(bool checked)
 }
 
 
+void parametre::on_recap_clicked() {emit parametre::recapClicked();}
+

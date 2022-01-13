@@ -63,6 +63,7 @@ private slots:
     void displayFileOnMessageList(const QString comment, const QString NameOfFile);
     void deletClient(QString nameOfClient);
     void newuser(QString name);
+    void recap();
     //les auto generer
     void on_sentbutton_clicked();
     void on_parametrebutton_clicked();

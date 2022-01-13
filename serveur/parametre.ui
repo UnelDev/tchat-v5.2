@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>369</width>
-    <height>697</height>
+    <width>407</width>
+    <height>774</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -187,13 +187,6 @@
       <string>serveur</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_4">
-      <item row="0" column="0">
-       <widget class="QCheckBox" name="checkBox_3">
-        <property name="text">
-         <string>sauvgardée les message</string>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="0">
        <widget class="QPushButton" name="pushButton_5">
         <property name="text">
@@ -202,6 +195,24 @@
         <property name="icon">
          <iconset resource="resource.qrc">
           <normaloff>:/image/resource/image/supprimer.png</normaloff>:/image/resource/image/supprimer.png</iconset>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QCheckBox" name="checkBox_3">
+        <property name="text">
+         <string>sauvgardée les message</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QPushButton" name="recap">
+        <property name="text">
+         <string>recapitulatif</string>
+        </property>
+        <property name="icon">
+         <iconset resource="resource.qrc">
+          <normaloff>:/image/resource/image/analyse.png</normaloff>:/image/resource/image/analyse.png</iconset>
         </property>
        </widget>
       </item>

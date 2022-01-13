@@ -354,9 +354,35 @@ QString serveur::generatedate()
     QString heures = QDateTime::currentDateTime().toString(" hh:mm:ss ");
     QString Date = QDateTime::currentDateTime().toString(" dd MM yyyy ");
     QDateTime::fromString(heures, " hh:mm:ss ");
-    return(tr("<span style=\"font-size: 10px\"> Le ")+Date+tr("</span> <span style=\"font-size: 10px\">à ")+heures+tr(" </span><br/>"));
+    return("<span style=\"font-size: 10px\">"+tr(" Le ")+Date+"</span> <span style=\"font-size: 10px\">"+tr(" à ")+heures+" </span><br/>");
 }
 QString serveur::generatemesage(QString message, QString pseudo)
 {
-    return(tr("<span style=\"font-size: 12px; color:#000000; font-weight: bold;\">")+pseudo+tr("</span>")+generatedate()+tr("<span style=\"font-size: 14px; color:#2F2F2F\">")+message+tr("</span><br/><br/>"));
+    return("<span style=\"font-size: 12px; color:#000000; font-weight: bold;\">"+pseudo+"</span>"+generatedate()+"<span style=\"font-size: 14px; color:#2F2F2F\">"+message+"</span><br/><br/>");
+}
+void serveur::recap(){
+    const auto fichier = QFileDialog::getOpenFileName(nullptr, tr("ou enregister le recapitulatif ?","dans les recapitulatif de serveur"), QString());
+    QFile file(fichier);//on crée le fichier
+    if(!file.open(QIODevice::WriteOnly | QIODevice::Text)){
+        QMessageBox::critical(nullptr,tr("erreur de permision","dans les ouverture de fichier"),tr("le fichier ne peut pas etre lu sans doute une erreur d'autorisation","dans les ouverture de fichier"));
+        return;
+    }
+    QTextStream out(&file);
+    out << tr("-----------------generate-by-Ananta-System-5.2-----------------","dans la generation de recapitulatif")<< Qt::endl;
+    out << tr("Le serveur a été démarré sur le port ","dans la generation de recapitulatif")+"<strong>" + QString::number(m_serveur->serverPort()) + "</strong>."<< Qt::endl;
+    out << tr("la derniere erreur a été : ","dans la generation de recapitulatif")<<m_serveur->errorString()<<tr(" avec le code d'erreur :","dans la generation de recapitulatif")<<m_serveur->serverError()<< Qt::endl;
+    out << tr("il y a une connection en atente : ","dans la generation de recapitulatif")<<m_serveur->hasPendingConnections()<< Qt::endl;
+    out << tr("le serveur ecoute les connexion : ","dans la generation de recapitulatif")<<m_serveur->isListening()<< Qt::endl;
+    out << tr("le nombre max de connexion en atente est : ","dans la generation de recapitulatif")<<m_serveur->maxPendingConnections()<< Qt::endl;
+    out << tr("l'adresse du serveur : ","dans la generation de recapitulatif")<<" scolpeID :"<<m_serveur->serverAddress().scopeId()<<" to string : "<<m_serveur->serverAddress().toString()<< Qt::endl;
+    out << tr("vos ip sont ","dans la generation de recapitulatif")<< Qt::endl;
+    {//on met des crocher pour deconstruire la liste a la fin
+       QList<QHostAddress> listes;
+       listes = QNetworkInterface::allAddresses();
+       for(int i = 0; i< listes.size(); i++)
+       {
+       out << (listes.at(i).toString()) << Qt::endl;
+       }
+    }
+    out << tr("-----------------generate-by-Ananta-System-5.2-----------------","dans la generation de recapitulatif")<< Qt::endl;
 }

@@ -86,6 +86,8 @@ Widget::Widget(QWidget *parent)
     QObject::connect(clients, &client::newuser, this, &Widget::newuser);
     QObject::connect(clients, &client::newFileAndComent, this , &Widget::displayFileOnMessageList);
     clients->connectto("localhost",ui->serveurport->value(),ui->pseudo->text());
+    //parametre
+    QObject::connect(&parametres, &parametre::recapClicked, this, &Widget::recap);
 }
 Widget::~Widget()
 {
@@ -131,6 +133,9 @@ void Widget::startTrayIcon(){
     sticon->show(); // On affiche l'icône
     connect(actTexte1, SIGNAL(triggered()), qApp, SLOT(quit()));
     connect(condense,&QAction::triggered,this, &Widget::condesed);
+}
+void Widget::recap(){
+    server->recap();
 }
 void Widget::connectClient()
 {
@@ -418,10 +423,10 @@ void Widget::on_parametrebutton_clicked()
 void Widget::on_pieceJointe_clicked()
 {
     if(m_path==""){
-        const auto fichier = QFileDialog::getOpenFileName(this, tr("Ouvrir un fichier","dans les upload de fichier"), QString());
+        const auto fichier = QFileDialog::getOpenFileName(nullptr, tr("Ouvrir un fichier","dans les upload de fichier"), QString());
         QFile file(fichier);//on crée le fichier
         if(!file.open(QIODevice::ReadOnly)){
-            QMessageBox::critical(nullptr,tr("erreur de permision","dans les upload de fichier"),tr("le fichier ne peut pas etre lu sans doute une erreur d'autorisation","dans les upload de fichier"));
+            QMessageBox::critical(nullptr,tr("erreur de permision","dans les ouverture de fichier"),tr("le fichier ne peut pas etre lu sans doute une erreur d'autorisation","dans les ouverture de fichier"));
             return;
         }//on test louverture du ficher
         if(file.size()>256901120){//si c'est superieur a 250mb

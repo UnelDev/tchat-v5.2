@@ -49,13 +49,16 @@ private slots:
     void on_pushButton_2_clicked();
     void on_pushButton_5_clicked();
     void on_checkBox_3_toggled(bool checked);
-
+    void on_recap_clicked();
 private:
     Ui::parametre *ui;
     QPalette whitehultra();
     QPalette darkmodeUltra();
     QPalette darkmode();
     QPalette whitemode();
+signals:
+
+    void recapClicked();
 };
 
 #endif // PARAMETRE_H
