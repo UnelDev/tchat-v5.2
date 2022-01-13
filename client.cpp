@@ -190,6 +190,9 @@ void client::sendFile(const QString message, const QString path, const QString N
 QString client::getPsedo(){
     return psedo;
 }
+void client::editPsedo(QString newpsedo){
+    psedo=newpsedo;
+}
 void client::datareceived()
 {
     QDataStream in(socket);

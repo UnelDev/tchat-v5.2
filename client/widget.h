@@ -21,6 +21,7 @@ ANANTA SYSTEME  tchat 4.0.-1
 #include <QSettings>
 #include <QStyleFactory>
 #include <QNetworkInterface>
+#include <QScrollBar>
 #include "parametre.h"
 #include "cesar.h"
 #include "client.h"
@@ -38,10 +39,11 @@ public:
     parametre parametres;
 private slots:
     void on_conectbuton_clicked();
-
     void on_sentbuton_clicked();
-
     void on_parametrebuton_2_clicked();
+    void addmessage(QString message);
+    void openfile();
+    void on_pieceJointe_clicked();
 
 private:
     QString returnpseudo();
@@ -60,11 +62,13 @@ private:
     void client_generatemesage();
     //asseseur
     void displayMessagelist(QString message);
+    void displayFileOnMessageList(const QString comment, const QString NameOfFile);
     void changestateconnectbutton(bool state);
     void displayconnectlabel(QString text);
     void deletClient(QString nameOfClient);
     void newuser(QString name);
-
+    //variable
+    QString m_path;
     QString encryption;
     client *clients;
     QSettings* settings;

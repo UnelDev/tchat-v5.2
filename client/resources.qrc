@@ -17,6 +17,7 @@
         <file>resource/image/suprimer.png</file>
         <file>resource/image/Twitter_bird_logo_2012.svg.png</file>
         <file>resource/image/paper-clip.png</file>
+        <file>resource/image/supression.png</file>
     </qresource>
     <qresource prefix="/sond">
         <file>resource/sond/notifdefault.wav</file>

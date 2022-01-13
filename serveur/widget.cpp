@@ -242,10 +242,11 @@ void Widget::displayFileOnMessageList(const QString comment, const QString NameO
     vlayout->setSpacing(2);
 
     ui->messageliste->addLayout(vlayout);//on lajoute a l'ui
+    QScrollBar *scrollBar = new QScrollBar;
+    scrollBar->setMaximum(ui->scrollArea->verticalScrollBar()->maximum());
+    ui->scrollArea->setVerticalScrollBar(scrollBar);
+    scrollBar->setValue(scrollBar->maximum());
 
-    QScrollBar *vsb;
-    vsb = ui->scrollArea->verticalScrollBar();
-    vsb->setSliderPosition(vsb->maximum());
 }
 void Widget::openfile(){
     QPushButton *PushButton = qobject_cast<QPushButton*>(sender());
@@ -263,12 +264,21 @@ void Widget::openfile(){
 }
 void Widget::addmessage(QString message)
 {
+    /*QLabel *label = new QLabel(this);
+    label->setText(message);
+    ui->messageliste->addWidget(label);
+    QLabel *test = new QLabel(this);
+    ui->messageliste->addWidget(test);
+    QScrollBar *vsb;
+    vsb = ui->scrollArea->verticalScrollBar();
+    vsb->setSliderPosition(vsb->maximum()+vsb->pageStep());//teste pour resoudre le bug*/
     QLabel *label = new QLabel(this);
     label->setText(message);
     ui->messageliste->addWidget(label);
-    QScrollBar *vsb;
-    vsb = ui->scrollArea->verticalScrollBar();
-    vsb->setSliderPosition(vsb->maximum()+1);//teste pour resoudre le bug
+
+    // On fait un setValue une fois qu'on a tout ajouté
+    auto *vsb = ui->scrollArea->verticalScrollBar();
+    vsb ->setValue(vsb->maximum());
 }
 QString Widget::returnpseudo()
 {
@@ -348,6 +358,7 @@ void Widget::on_pseudo_editingFinished()
 {
     if(clients->getPsedo()!=ui->pseudo->text()){//eviter d'envoyer un message qui sert a rien
         clients->sendcommande("change_psedo",ui->pseudo->text());
+        clients->editPsedo(ui->pseudo->text());
     }
 }
 QString Widget::generatemesage(QString message, QString pseudo)
