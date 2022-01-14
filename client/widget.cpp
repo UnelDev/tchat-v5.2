@@ -12,7 +12,7 @@ Widget::Widget(QWidget *parent)
     QCoreApplication::setOrganizationName("ananta system");
     QCoreApplication::setOrganizationDomain("https://anantasystem.com/");
     QCoreApplication::setApplicationName("tchat");
-    QCoreApplication::setApplicationVersion("0.5.2.2");
+    QCoreApplication::setApplicationVersion("5.2");
     //registre et verification
     settings = new QSettings("settings.ini", QSettings::IniFormat);
     if(!settings->contains("succes/nbmessage")){
@@ -333,10 +333,6 @@ void Widget::processechatbot(QString command)
       displayMessagelist(generatemesage(tr("Je suis desolé, mais je n'ai pas compris votre demande, vérifiez l'orthographe."),tr("Tchat Bot")));
   }
 }
-void Widget::on_pseudo_editingFinished()
-{
-    clients->sendcommande("change_psedo",ui->pseudo->text());
-}
 QString Widget::generatemesage(QString message, QString pseudo)
 {
     if(pseudo == "" ||pseudo == " "){
@@ -401,18 +397,13 @@ void Widget::on_sentbuton_clicked()
     }else if(message.startsWith(tr("ananta system"))){
         message.remove(tr("ananta system"));
        processechatbot(message);
-    }else{
-        if(ui->pieceJointe->isEnabled()){
-            clients->sendmessage(msg);
-        }else{
-            if(m_path==""){
-                ui->pieceJointe->setEnabled(true);
-                return;
-            }
-            clients->sendFile(msg,m_path,m_path.split("/").last());
-            ui->pieceJointe->setIcon(QIcon(":/image/resource/image/paper-clip.png"));
-            m_path="";
-        }
+    }else if (m_path!=""){
+        clients->sendFile(msg,m_path,m_path.split("/").last());
+        ui->pieceJointe->setIcon(QIcon(":/image/resource/image/paper-clip.png"));
+        m_path="";
+    }else if(m_path==""){
+        clients->sendmessage(msg);
+        ui->pieceJointe->setEnabled(true);
     }
     ui->mesage->clear();
 }
@@ -441,3 +432,12 @@ void Widget::on_pieceJointe_clicked()
         ui->pieceJointe->setIcon(QIcon(":/image/resource/image/paper-clip.png"));
     }
 }
+
+void Widget::on_pseudo_editingFinished()
+{
+    if(clients->getPsedo()!=ui->pseudo->text()){//eviter d'envoyer un message qui sert a rien
+        clients->sendcommande("change_psedo",ui->pseudo->text());
+        clients->editPsedo(ui->pseudo->text());
+    }
+}
+

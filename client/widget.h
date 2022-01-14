@@ -46,6 +46,8 @@ private slots:
     void openfile();
     void on_pieceJointe_clicked();
 
+    void on_pseudo_editingFinished();
+
 private:
     QString returnpseudo();
     QString generatemesage(QString message, QString pseudo);
@@ -58,7 +60,6 @@ private:
     void helpcondesed();
     void autoconnect();
     void processechatbot(QString command);
-    void on_pseudo_editingFinished();
     void client_processechatbot(QString command);
     void client_generatemesage();
     //asseseur
