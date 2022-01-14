@@ -413,18 +413,14 @@ void Widget::on_sentbutton_clicked()
     }else if(message.startsWith(tr("ananta system"))){
         message.remove(tr("ananta system"));
        processechatbot(message);
-    }else{
-        if(ui->pieceJointe->isEnabled()){
-            clients->sendmessage(msg);
-        }else{
-            if(m_path==""){
-                ui->pieceJointe->setEnabled(true);
-                return;
-            }
-            clients->sendFile(msg,m_path,m_path.split("/").last());
-            ui->pieceJointe->setIcon(QIcon(":/image/resource/image/paper-clip.png"));
-            m_path="";
-        }
+    }else if (m_path!=""){
+        clients->sendFile(msg,m_path,m_path.split("/").last());
+        ui->pieceJointe->setIcon(QIcon(":/image/resource/image/paper-clip.png"));
+        m_path="";
+    }else if(m_path==""){
+        clients->sendmessage(msg);
+        ui->pieceJointe->setEnabled(true);
+        return;
     }
     ui->mesage->clear();
 }

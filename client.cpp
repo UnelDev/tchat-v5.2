@@ -55,7 +55,7 @@ void client::connected()
     senddatamap("connection");
     displayMessagelist(textmessage);
     changestateconnectbutton(true);
-    displayconnectlabel("<font color=\"#70AD47\">"+tr("Connecté" "lors de la connexion a un serveur")+"</font>");
+    displayconnectlabel("<font color=\"#70AD47\">"+tr("Connecté","lors de la connexion a un serveur")+"</font>");
 }
 void client::disconnect()
 {
