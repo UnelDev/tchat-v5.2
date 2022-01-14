@@ -420,7 +420,6 @@ void Widget::on_sentbutton_clicked()
     }else if(m_path==""){
         clients->sendmessage(msg);
         ui->pieceJointe->setEnabled(true);
-        return;
     }
     ui->mesage->clear();
 }
