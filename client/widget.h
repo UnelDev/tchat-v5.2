@@ -36,6 +36,7 @@ public:
     Widget(QWidget *parent = nullptr);
     ~Widget();
     QList<QMap<QString,QString>> saveMessage;
+    QList<QString> listeClient;
     parametre parametres;
 private slots:
     void on_conectbuton_clicked();

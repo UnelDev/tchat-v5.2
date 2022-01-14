@@ -116,13 +116,13 @@ void Widget::startTrayIcon(){
     connect(condense,&QAction::triggered,this, &Widget::condesed);
 }
 void Widget::newuser(QString name){
+    listeClient.append(name);
     ui->clientlist->addItem(name);
 }
 void Widget::deletClient(QString nameOfClient){
-    if(ui->clientlist->findItems(nameOfClient,Qt::MatchCaseSensitive).isEmpty()){
-        ui->clientlist->removeItemWidget(ui->clientlist->findItems(nameOfClient,Qt::MatchCaseSensitive)[1]); //on suprime le nom specifier
-        QMessageBox::critical(nullptr, tr("Suppression de client"), tr("Le client vient d'être supprimé."));
-    }
+    listeClient.removeOne(nameOfClient);
+    ui->clientlist->clear();
+    ui->clientlist->addItems(listeClient);
 }
 void Widget::changetransparency(Qt::ApplicationState state){
     if(state == Qt::ApplicationInactive&&condenser==true&&settings->value("settings/client/activeTransparnece").toBool()){
