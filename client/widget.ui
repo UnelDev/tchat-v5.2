@@ -20,8 +20,8 @@
    <string>Ananta systeme client</string>
   </property>
   <property name="windowIcon">
-   <iconset>
-    <normaloff>:/image/Ananta.png</normaloff>:/image/Ananta.png</iconset>
+   <iconset resource="../serveur/resource.qrc">
+    <normaloff>:/image/resource/image/Anantasite.png</normaloff>:/image/resource/image/Anantasite.png</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
@@ -165,7 +165,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="resources.qrc">
+        <iconset resource="../serveur/resource.qrc">
          <normaloff>:/image/resource/image/paper-clip.png</normaloff>:/image/resource/image/paper-clip.png</iconset>
        </property>
        <property name="flat">
@@ -194,9 +194,7 @@
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="resources.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>mesage</sender>

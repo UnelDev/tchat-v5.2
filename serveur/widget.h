@@ -69,5 +69,6 @@ private slots:
     void on_sentbutton_clicked();
     void on_parametrebutton_clicked();
     void on_pieceJointe_clicked();
+
 };
 #endif // WIDGET_H
