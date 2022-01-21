@@ -21,7 +21,29 @@
    <double>1.000000000000000</double>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="2" column="0" colspan="2">
+   <item row="1" column="0">
+    <widget class="QScrollArea" name="scrollArea">
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
+     <widget class="QWidget" name="scrollAreaWidgetContents">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>392</width>
+        <height>334</height>
+       </rect>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="0" column="0">
+        <layout class="QVBoxLayout" name="messageliste"/>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item row="3" column="0" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
       <widget class="QLabel" name="label_psedo">
@@ -73,7 +95,14 @@
      </item>
     </layout>
    </item>
-   <item row="0" column="1">
+   <item row="0" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:10pt; color:#daa520;&quot;&gt;une erreur par exemple : ca marche pas par ce que ... &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1" rowspan="2">
     <layout class="QGridLayout" name="gridLayout_4">
      <item row="1" column="1">
       <widget class="QLineEdit" name="serveurip">
@@ -144,28 +173,6 @@
       </widget>
      </item>
     </layout>
-   </item>
-   <item row="0" column="0">
-    <widget class="QScrollArea" name="scrollArea">
-     <property name="widgetResizable">
-      <bool>true</bool>
-     </property>
-     <widget class="QWidget" name="scrollAreaWidgetContents">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>392</width>
-        <height>357</height>
-       </rect>
-      </property>
-      <layout class="QGridLayout" name="gridLayout_2">
-       <item row="0" column="0">
-        <layout class="QVBoxLayout" name="messageliste"/>
-       </item>
-      </layout>
-     </widget>
-    </widget>
    </item>
   </layout>
  </widget>

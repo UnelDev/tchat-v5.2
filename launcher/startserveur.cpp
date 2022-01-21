@@ -81,7 +81,7 @@ bool startserveur::verify(){
     QTcpServer serveurTest;
     if (!serveurTest.listen(QHostAddress::Any, ui->port->value())){//demarage sur le port choisi pour tester louverture
         ui->erorLabel->setVisible(true);
-        ui->erorLabel->setText(tr("erreur le pin ","avec le n° deriere ")+QString::number(ui->port->value())+ tr(" est deja utiliser choisiser en un autre","dans l'alete du port"));
+        ui->erorLabel->setText("<font color=#DAA520>"+ tr("erreur le pin ","avec le n° deriere ")+QString::number(ui->port->value())+ tr(" est deja utiliser choisiser en un autre","dans l'alete du port")+"</font>");
         this->adjustSize();
         serveurTest.close();
         serveurTest.deleteLater();
