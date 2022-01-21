@@ -97,6 +97,7 @@ Widget::~Widget()
     delete stmenu;
     delete server;
     delete settings;
+    multiprocess.waitForFinished();
 
 }
 void Widget::autoconnect(){
@@ -212,6 +213,7 @@ void Widget::displayMessagelist(QString message)
         }
         QApplication::alert(this);
     }
+
     addmessage(message);
 }
 void Widget::displayFileOnMessageList(const QString comment, const QString NameOfFile){
@@ -243,13 +245,14 @@ void Widget::displayFileOnMessageList(const QString comment, const QString NameO
     vlayout->setSpacing(2);
 
     ui->messageliste->addLayout(vlayout);//on lajoute a l'ui
-
+    updateScroll();
+}
+void Widget::updateScroll(){
     QTime dieTime= QTime::currentTime().addMSecs(50);
         while (QTime::currentTime() < dieTime)
             QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
     auto *vsb = ui->scrollArea->verticalScrollBar();
     vsb ->setValue(vsb->maximum());
-
 }
 void Widget::openfile(){
     QPushButton *PushButton = qobject_cast<QPushButton*>(sender());
@@ -268,25 +271,16 @@ void Widget::openfile(){
 void Widget::addmessage(QString message)
 {
     qDebug() << "actuelle"<<ui->scrollArea->verticalScrollBar()->value();
-    /*QLabel *label = new QLabel(this);
-    label->setText(message);
-    ui->messageliste->addWidget(label);
-    QLabel *test = new QLabel(this);
-    ui->messageliste->addWidget(test);
-    QScrollBar *vsb;
-    vsb = ui->scrollArea->verticalScrollBar();
-    vsb->setSliderPosition(vsb->maximum()+vsb->pageStep());//teste pour resoudre le bug*/
 
     QLabel *label = new QLabel(this);
     label->setText(message);
     ui->messageliste->addWidget(label);
+    //updateScroll();
+     multiprocess  = QtConcurrent::run(this,&Widget::updateScroll);
+    //auto future = QtConcurrent::run(updateScroll,"1");
+    //std::async(this, &Widget::updateScroll);
+   //auto test= std::async(std::launch::async,[&](){updateScroll();});
 
-
-    QTime dieTime= QTime::currentTime().addMSecs(50);
-        while (QTime::currentTime() < dieTime)
-            QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
-    auto *vsb = ui->scrollArea->verticalScrollBar();
-    vsb ->setValue(vsb->maximum());
 }
 QString Widget::returnpseudo()
 {

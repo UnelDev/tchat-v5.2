@@ -8,16 +8,14 @@
 #include <QMenu>
 #include <QTextDocumentFragment>
 #include <QNetworkInterface>
-#include <QSound>
-#include "serveur.h"
-#include "client.h"
-
 #include <QScrollBar>
-#include <QAbstractSocket>
-#include <QTcpSocket>
 #include <QDateTime>
 #include "parametre.h"
-#include "cesar.h"
+#include "serveur.h"
+#include "client.h"
+#include <QCoreApplication>
+#include <qtconcurrentrun.h>
+#include <QThread>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Widget; }
@@ -46,6 +44,9 @@ private:
     QTcpSocket *socket;
     serveur *server;
     QString m_path;
+
+
+    QFuture<void> multiprocess;
 private slots:
     QString returnpseudo();
     QString generatemesage(QString message, QString pseudo);
@@ -59,6 +60,7 @@ private slots:
     void on_pseudo_editingFinished();
     void connectClient();
     void openfile();
+    void updateScroll();
     //asseseur
     void displayMessagelist(QString message);
     void displayFileOnMessageList(const QString comment, const QString NameOfFile);
