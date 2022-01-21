@@ -88,6 +88,10 @@ Widget::Widget(QWidget *parent)
     clients->connectto("localhost",ui->serveurport->value(),ui->pseudo->text());
     //parametre
     QObject::connect(&parametres, &parametre::recapClicked, this, &Widget::recap);
+    auto *areaScrollBar = ui->scrollArea->verticalScrollBar();  // Je recupère un pointeur sur la ScrollBar
+    QObject::connect(areaScrollBar,&QAbstractSlider::rangeChanged, [this]() {
+           ui->scrollArea->verticalScrollBar()->setValue(ui->scrollArea->verticalScrollBar()->maximum());
+        });
 }
 Widget::~Widget()
 {
@@ -245,7 +249,6 @@ void Widget::displayFileOnMessageList(const QString comment, const QString NameO
     vlayout->setSpacing(2);
 
     ui->messageliste->addLayout(vlayout);//on lajoute a l'ui
-    updateScroll();
 }
 void Widget::updateScroll(){
     QTime dieTime= QTime::currentTime().addMSecs(50);
@@ -262,9 +265,6 @@ void Widget::openfile(){
     if(!path.isEmpty()){
         QFile file("temp/"+PushButton->text());
         file.copy(path);
-
-        //"temp/"+PushButton->text()
-
     }
     qDebug()<<PushButton->text();
 }
@@ -275,11 +275,6 @@ void Widget::addmessage(QString message)
     QLabel *label = new QLabel(this);
     label->setText(message);
     ui->messageliste->addWidget(label);
-    //updateScroll();
-     multiprocess  = QtConcurrent::run(this,&Widget::updateScroll);
-    //auto future = QtConcurrent::run(updateScroll,"1");
-    //std::async(this, &Widget::updateScroll);
-   //auto test= std::async(std::launch::async,[&](){updateScroll();});
 
 }
 QString Widget::returnpseudo()
