@@ -94,20 +94,6 @@ bool startserveur::verify(){
         return true;
     }
 }
-void startserveur::autocomplete(){
-    QTcpServer serveurTest;
-    if (!serveurTest.listen(QHostAddress::Any)) // Démarrage du serveur sur toutes les IP disponibles
-    {
-        // Si le serveur n'a pas été démarré correctement
-        ui->erorLabel->setText(tr("Le serveur n'a pas pu être démarré. Raison :")+"<br/> " + serveurTest.errorString()+" <br/>");
-    }else{
-        ui->erorLabel->setText(tr("atention le port a éte changer automatiquemment"));
-    }
-    ui->port->setValue(serveurTest.serverPort());
-    this->adjustSize();
-    serveurTest.close();
-    serveurTest.deleteLater();
-}
 void startserveur::on_port_valueChanged(int arg1)
 {
     verify();

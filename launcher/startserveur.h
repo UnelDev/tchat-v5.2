@@ -27,7 +27,6 @@ private slots:
     void on_checkBox_toggled(bool checked);
     bool verify();
     void on_pushButton_clicked();
-    void autocomplete();
     void on_port_valueChanged(int arg1);
 
 private:
