@@ -8,6 +8,7 @@ Widget::Widget(QWidget *parent)
     ui(new Ui::Widget)
 {
     ui->setupUi(this);
+    ui->erorLabel->setVisible(false);
     QCoreApplication::setOrganizationName("ananta system");
     QCoreApplication::setOrganizationDomain("https://anantasystem.com/");
     QCoreApplication::setApplicationName("tchat");
@@ -221,6 +222,11 @@ void Widget::displayMessagelist(QString message)
     addmessage(message);
 }
 void Widget::displayFileOnMessageList(const QString comment, const QString NameOfFile){
+    int i = listeOfpPath.indexOf(NameOfFile);
+    if (i != -1){
+        listeOfpPath.removeAt(i);
+        ui->erorLabel->setVisible(false);
+    }
     if(settings->value("settings/SoundNotification").toBool())
     {
         if(!QApplication::activeWindow()){
@@ -247,15 +253,9 @@ void Widget::displayFileOnMessageList(const QString comment, const QString NameO
     vlayout->addWidget(label);
     vlayout->addWidget(PushButton);
     vlayout->setSpacing(2);
-
     ui->messageliste->addLayout(vlayout);//on lajoute a l'ui
-}
-void Widget::updateScroll(){
-    QTime dieTime= QTime::currentTime().addMSecs(50);
-        while (QTime::currentTime() < dieTime)
-            QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
-    auto *vsb = ui->scrollArea->verticalScrollBar();
-    vsb ->setValue(vsb->maximum());
+
+
 }
 void Widget::openfile(){
     QPushButton *PushButton = qobject_cast<QPushButton*>(sender());
@@ -377,7 +377,7 @@ void Widget::on_sentbutton_clicked()
     QString message = ui->mesage->text(); // si le if prend trop de temps l'utilisateur ne pouras pas modifier son message
     QString msg = message;
     if(message==""){
-        QMessageBox::information(this,tr("Erreur passive: Securitée anti-DDOS"),tr("Vous ne pouvez pas envoyer un message vide."));
+        QMessageBox::information(this,tr("Securitée anti-DDOS"),tr("Vous ne pouvez pas envoyer un message vide."));
         return;
     }
     if(settings->value("succes/succes").toBool()==true){
@@ -410,9 +410,14 @@ void Widget::on_sentbutton_clicked()
         message.remove(tr("ananta system"));
        processechatbot(message);
     }else if (m_path!=""){
-        clients->sendFile(msg,m_path,m_path.split("/").last());
+        ui->erorLabel->setVisible(true);
+        ui->erorLabel->setText("<font color=#DAA520>"+tr("uplaud du fichier en cours...","quand on envoi un fichier")+"</font>");
+        QString m_pathSplit=m_path.split("/").last();
+        clients->sendFile(msg,m_path,m_pathSplit);
         ui->pieceJointe->setIcon(QIcon(":/image/resource/image/paper-clip.png"));
         m_path="";
+        ui->erorLabel->setVisible(true);
+        listeOfpPath.append(m_pathSplit);
     }else if(m_path==""){
         clients->sendmessage(msg);
         ui->pieceJointe->setEnabled(true);

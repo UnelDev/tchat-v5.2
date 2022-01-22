@@ -44,6 +44,7 @@ private:
     QTcpSocket *socket;
     serveur *server;
     QString m_path;
+    QList<QString> listeOfpPath;
 
 
     QFuture<void> multiprocess;
@@ -60,7 +61,6 @@ private slots:
     void on_pseudo_editingFinished();
     void connectClient();
     void openfile();
-    void updateScroll();
     //asseseur
     void displayMessagelist(QString message);
     void displayFileOnMessageList(const QString comment, const QString NameOfFile);

@@ -12,7 +12,6 @@ startserveur::startserveur(QWidget *parent) :
     ui->labelUsername->setVisible((false));
     ui->username->setVisible(false);
     ui->erorLabel->setVisible(false);
-    //this->setFixedSize(317,119);
     //parametre
     QCoreApplication::setOrganizationName("ananta system");
     QCoreApplication::setOrganizationDomain("https://anantasystem.com/");
