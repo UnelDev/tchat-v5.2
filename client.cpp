@@ -37,6 +37,7 @@ void client::DisplayFile(const QString comment, const QString NameOfFile){ emit 
 void client::changestateconnectbutton(bool state){ emit client::changestateconnect(state); }
 void client::newclient(QString newClientName){ emit client::newuser(newClientName); }
 void client::displayconnectlabel(QString newText){ emit client::changeTextConnect(newText);}
+void client::externalCmd(const QString cmd){ emit client::externalOrder(cmd);}
 //deccesseurs
 void client::sendmessage(QString message){ senddatamap("msg",message); }
 
@@ -287,6 +288,8 @@ void client::processcomand(QMap<QString, QVariant> commend)
         }else if(nbuser==100){
             settings->setValue("succes/100userSimultaneously", true);
         }
+    }else if (commend["message"]=="clear"){
+        externalCmd("clear");
     }else if(commend["message"]=="disconnected"){
         deleteclient(commend["arg"].toString());
         --nbuser;

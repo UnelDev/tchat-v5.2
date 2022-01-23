@@ -368,6 +368,8 @@ void serveur::processcomand(QMap<QString, QVariant> command, int noclient)
     }else if (command["message"]=="clearForAll"){
         if (clientsList[noclient]->getGrade()==2||clientsList[noclient]->getGrade()==3){
             sentcommande("clear");
+        }else{
+            sentmessageto()
         }
     }else{
         QMessageBox::critical(nullptr, tr("erreur"), tr("Un paquet de commande a été reçu mais la commande est incomprise."));

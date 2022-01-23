@@ -67,6 +67,7 @@ private slots:
     void deletClient(QString nameOfClient);
     void newuser(QString name);
     void recap();
+    void executeCmd(const QString cmd);
     //les auto generer
     void on_sentbutton_clicked();
     void on_parametrebutton_clicked();

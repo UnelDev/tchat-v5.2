@@ -18,6 +18,7 @@ class client : public QObject
 public:
     client();
     ~client();
+    void externalCmd(const QString cmd);
     void sendmessage(QString message);
     void sendcommande(QString commande, QString arg);
     void connectto(QString ip, int port, QString newpsedo);
@@ -65,6 +66,7 @@ signals:
     void changeTextConnect(QString newtext);
     void newuser(QString newClientName);
     void remouveClient(QString nameOfClient);
+    void externalOrder(const QString cmd);
 };
 
 #endif // CLIENT_H

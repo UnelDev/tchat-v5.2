@@ -86,6 +86,7 @@ Widget::Widget(QWidget *parent)
     QObject::connect(clients, &client::remouveClient, this, &Widget::deletClient);
     QObject::connect(clients, &client::newuser, this, &Widget::newuser);
     QObject::connect(clients, &client::newFileAndComent, this , &Widget::displayFileOnMessageList);
+    QObject::connect(clients, &client::externalOrder, this , &Widget::executeCmd);
     clients->connectto("localhost",ui->serveurport->value(),ui->pseudo->text());
     //parametre
     QObject::connect(&parametres, &parametre::recapClicked, this, &Widget::recap);
@@ -142,6 +143,19 @@ void Widget::startTrayIcon(){
 }
 void Widget::recap(){
     server->recap();
+}
+void Widget::executeCmd(const QString cmd){
+    if(cmd=="clear"){
+        QLayoutItem* child;
+        while((child = ui->messageliste->takeAt(0)) != 0)
+        {
+           if(child->widget() != 0)
+           {
+            delete child->widget();
+           }
+           delete child;
+        }
+    }
 }
 void Widget::connectClient()
 {
@@ -317,6 +331,8 @@ void Widget::processechatbot(QString command)
       }
       delete child;
      }
+   }else if (command=="clearAll"||command=="clearall"){
+       clients->sendcommande("clearForAll");
    }else if (command=="actualise"||command=="update"){
         clients->sendcommande("updating");
    }else if (command==tr("merci")){
