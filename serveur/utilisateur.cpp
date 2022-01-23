@@ -8,6 +8,7 @@ utilisateur::utilisateur()
     socket = new QTcpSocket;
     messageSize = 0;
     vertion = "0";
+    m_grade = 0;
 }
 utilisateur::utilisateur(QTcpSocket* socketToServer)
 {
@@ -15,6 +16,7 @@ utilisateur::utilisateur(QTcpSocket* socketToServer)
     socket = socketToServer;
     messageSize = 0;
     vertion = "0";
+    m_grade = 0;
 }
 utilisateur::utilisateur(QString pseudo, QTcpSocket* socket)
 {
@@ -22,6 +24,7 @@ utilisateur::utilisateur(QString pseudo, QTcpSocket* socket)
     this->socket = socket;
     messageSize = 0;
     vertion = "0";
+    m_grade = 0;
 }
 utilisateur::~utilisateur(){
     delete socket;
@@ -35,10 +38,19 @@ void utilisateur::setmessageSize(int size)
 {
     messageSize = size;
 }
+void utilisateur::promote(int grade){
+    if(grade == 0|| grade ==1 || grade ==2){
+      m_grade = grade;
+    }
+}
 int utilisateur::getmessageSize()
 {
     return messageSize;
 }
+int utilisateur::getGrade(){
+    return m_grade;
+}
+
 QString utilisateur::getpseudo()
 {
     return pseudo;

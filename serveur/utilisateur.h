@@ -9,24 +9,28 @@ class utilisateur: public QObject
 {
 public:
     utilisateur();
+    ~utilisateur();
     utilisateur(QString pseudo, QTcpSocket* socket);
     utilisateur(QTcpSocket* socket);
     void editpseudo(QString newpseudo);
     void editversion(QString newvertion);
     void setmessageSize(int size);
+    void promote(int grade);
+    void demote(int grande = 0);
     QTcpSocket* getSocket();
     int getmessageSize();
+    int getGrade();
     QString getpseudo();
     QString getversion();
-    bool isconnecteed();
     QString safe();
+    bool isconnecteed();
     bool highSafe();
     bool medumSafeOrSuperior();
     bool lowSafeOrSuperior();
-    ~utilisateur();
 private:
     QString vertion;
     QString pseudo;
+    int m_grade;// peut etre 0 : utilisateur, 1 admin, 2host
     QTcpSocket* socket;
     int messageSize;
 };
