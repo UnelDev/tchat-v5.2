@@ -35,9 +35,8 @@ class Widget :public QWidget
 public:
     Widget(QWidget *parent = nullptr);
     ~Widget();
-    QList<QMap<QString,QString>> saveMessage;
-    QList<QString> listeClient;
     parametre parametres;
+
 private slots:
     void on_conectbuton_clicked();
     void on_sentbuton_clicked();
@@ -45,7 +44,6 @@ private slots:
     void addmessage(QString message);
     void openfile();
     void on_pieceJointe_clicked();
-
     void on_pseudo_editingFinished();
 
 private:
@@ -69,6 +67,7 @@ private:
     void displayconnectlabel(QString text);
     void deletClient(QString nameOfClient);
     void newuser(QString name);
+    void executeCmd(const QString cmd);
     //variable
     QString m_path;
     QString encryption;
@@ -80,5 +79,8 @@ private:
     QLabel *text;
     QMenu *stmenu;
     QTcpSocket *socket;
+    QList<QMap<QString,QString>> saveMessage;
+    QList<QString> listeClient;
+    QList<QString> listeOfpPath;
 };
 #endif // WIDGET_H

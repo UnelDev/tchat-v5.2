@@ -426,13 +426,13 @@ void Widget::on_sentbutton_clicked()
         message.remove(tr("ananta system"));
        processechatbot(message);
     }else if (m_path!=""){
+        m_path="";
         ui->erorLabel->setVisible(true);
         ui->erorLabel->setText("<font color=#DAA520>"+tr("uplaud du fichier en cours...","quand on envoi un fichier")+"</font>");
         QString m_pathSplit=m_path.split("/").last();
         clients->sendFile(msg,m_path,m_pathSplit);
         ui->pieceJointe->setIcon(QIcon(":/image/resource/image/paper-clip.png"));
-        m_path="";
-        ui->erorLabel->setVisible(true);
+
         listeOfpPath.append(m_pathSplit);
     }else if(m_path==""){
         clients->sendmessage(msg);
