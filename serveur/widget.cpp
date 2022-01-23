@@ -155,6 +155,8 @@ void Widget::executeCmd(const QString cmd){
            }
            delete child;
         }
+    }else{
+        addmessage(tr("erreur une commende emise par le serveur n'a pas été comprise","dans la reseption des commende externe"));
     }
 }
 void Widget::connectClient()
@@ -284,8 +286,6 @@ void Widget::openfile(){
 }
 void Widget::addmessage(QString message)
 {
-    qDebug() << "actuelle"<<ui->scrollArea->verticalScrollBar()->value();
-
     QLabel *label = new QLabel(this);
     label->setText(message);
     ui->messageliste->addWidget(label);
