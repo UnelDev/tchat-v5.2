@@ -29,6 +29,26 @@ void parametre::checklanguage(){
         language.setValue("langageName/1","francais");
         language.setValue("pathOfFrancais","/franscais");
         language.setValue("CurrentLangage","francais");
+        if(!settings->value("settings/erortrad").toBool()){
+                QMessageBox msgBox;
+                msgBox.setText(tr("ops se message ne doit pas saficher si il saficher c'st qu'il y a pas de traduction disponble, contacter nous sur le discord ou reinsatalez le tchat","dans les chargemment des trad"));
+                msgBox.setStandardButtons(QMessageBox::Ok |QMessageBox::Help);
+                msgBox.setDefaultButton(QMessageBox::Ok);
+                QCheckBox *checkBox = new QCheckBox(tr("ne plus aficher"));
+                msgBox.setCheckBox(checkBox);
+                int ret = msgBox.exec();
+                auto check_box_status = checkBox->isChecked();
+                settings->setValue("settings/erortrad", check_box_status);
+                switch (ret) {
+                  case QMessageBox::Ok:
+                      //on fait rien
+                      break;
+                  case QMessageBox::Help:
+                    QMessageBox::warning(this,tr("information"),tr("le fichier d'auto conexion a pas été trouvée. vous avez sans doute pas lancée le launcher"));
+                  default:
+                      break;//ne rien faire
+                }
+            }
         QMessageBox::warning(nullptr,tr("erreur de traduction"),tr("ops se message ne doit pas saficher si il saficher c'st qu'il y a pas de traduction disponble, contacter nous sur le discord ou reinsatalez le tchat","dans les chargemment des trad"));
     }
     ui->language->clear();
