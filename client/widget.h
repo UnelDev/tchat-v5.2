@@ -22,6 +22,7 @@ ANANTA SYSTEME  tchat 4.0.-1
 #include <QStyleFactory>
 #include <QNetworkInterface>
 #include <QScrollBar>
+#include <QCheckBox>
 #include "parametre.h"
 #include "cesar.h"
 #include "client.h"

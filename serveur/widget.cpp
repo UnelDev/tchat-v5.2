@@ -76,7 +76,7 @@ Widget::Widget(QWidget *parent)
     if (port!=0){
         if (port != ui->serveurport->value()){
             ui->serveurport->setValue(port);
-            QMessageBox::information(nullptr,tr("erreur au lancement", "lancemment du serveur"),tr(&"le serveur n'a pa pue etre lancer sur le port demadée il a donc été lancer sur le port : "[port],"lancemment du serveur"));
+            QMessageBox::information(nullptr,tr("erreur au lancement", "lancemment du serveur"),tr("le serveur n'a pa pue etre lancer sur le port demadée il a donc été lancer sur le port : ","lancemment du serveur")+QString::number(port));
         }
     }else{
         QMessageBox::information(nullptr,tr("erreur au lancement", "lancemment du serveur"),tr("imposible de lancer le serveur","lancemment du serveur"));
@@ -115,9 +115,25 @@ void Widget::autoconnect(){
         flux.readLine();// sert a sauter une ligne caron ne repli pas lip dans le serveur
         ui->serveurport->setValue(flux.readLine().toInt());
         ui->pseudo->setText(flux.readLine());
-    }
-    else
-    {
+    }else if(!settings->value("settings/erorFileConect").toBool()){
+        QMessageBox msgBox;
+        msgBox.setText(tr("erreur imposible de lire le fichier de conexion... il faut rentrer les info manullement !"));
+        msgBox.setStandardButtons(QMessageBox::Ok |QMessageBox::Help);
+        msgBox.setDefaultButton(QMessageBox::Ok);
+        QCheckBox *checkBox = new QCheckBox(tr("ne plus aficher"));
+        msgBox.setCheckBox(checkBox);
+        int ret = msgBox.exec();
+        auto check_box_status = checkBox->isChecked();
+        settings->setValue("settings/erorFileConect", check_box_status);
+        switch (ret) {
+          case QMessageBox::Ok:
+              //on fait rien
+              break;
+          case QMessageBox::Help:
+            QMessageBox::warning(this,tr("information"),tr("le fichier d'auto conexion a pas été trouvée. vous avez sans doute pas lancée le launcher"));
+          default:
+              break;//ne rien faire
+        }
         ui->serveurport->setValue(2048);
         QString name = qgetenv("USER");
         if (name.isEmpty())

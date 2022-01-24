@@ -10,6 +10,7 @@
 #include <QNetworkInterface>
 #include <QScrollBar>
 #include <QDateTime>
+#include <QCheckBox>
 #include "parametre.h"
 #include "serveur.h"
 #include "client.h"

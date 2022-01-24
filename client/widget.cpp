@@ -99,10 +99,30 @@ void Widget::autoconnect(){
         ui->serveurport->setValue(flux.readLine().toInt());
         ui->pseudo->setText(flux.readLine());
         ui->conectbuton->click();
-    }
-    else
-    {
-        QMessageBox::critical(nullptr, "erreur de lecture de fichier","erreur imposible de lire le fichier de conexion... il faut rentrer les info manullement !");
+    }else if(!settings->value("settings/erorFileConect").toBool()){
+        QMessageBox msgBox;
+        msgBox.setText(tr("erreur imposible de lire le fichier de conexion... il faut rentrer les info manullement !"));
+        msgBox.setStandardButtons(QMessageBox::Ok |QMessageBox::Help);
+        msgBox.setDefaultButton(QMessageBox::Ok);
+        QCheckBox *checkBox = new QCheckBox(tr("ne plus aficher"));
+        msgBox.setCheckBox(checkBox);
+        int ret = msgBox.exec();
+        auto check_box_status = checkBox->isChecked();
+        settings->setValue("settings/erorFileConect", check_box_status);
+        switch (ret) {
+          case QMessageBox::Ok:
+              //on fait rien
+              break;
+          case QMessageBox::Help:
+            QMessageBox::warning(this,tr("information"),tr("le fichier d'auto conexion a pas été trouvée. vous avez sans doute pas lancée le launcher"));
+          default:
+              break;//ne rien faire
+        }
+        ui->serveurport->setValue(2048);
+        QString name = qgetenv("USER");
+        if (name.isEmpty())
+            name = qgetenv("USERNAME");
+        ui->pseudo->setText(name);
     }
 }
 void Widget::startTrayIcon(){
@@ -116,7 +136,7 @@ void Widget::startTrayIcon(){
     stmenu->addAction(condense);
     condense->setCheckable(true);
     sticon->setContextMenu(stmenu); // On assigne le menu contextuel à l'icône de notification
-    QIcon icon(":/image/Ananta.png");
+    QIcon icon(":/image/resource/image/Ananta.png");
     sticon->setIcon(icon); // On assigne une image à notre icône
     sticon->show(); // On affiche l'icône
     connect(actTexte1, SIGNAL(triggered()), qApp, SLOT(quit()));
