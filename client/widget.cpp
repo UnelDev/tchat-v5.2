@@ -56,6 +56,8 @@ Widget::Widget(QWidget *parent)
    condenser = false;
    //variable
    encryption = settings->value("settings/encryption").toString();
+   lastMessageIsText=false;
+   lastText=0;
    //apel fonction pour racourcire le constructeur
    startTrayIcon();
    {
@@ -240,6 +242,7 @@ void Widget::displayFileOnMessageList(const QString comment, const QString NameO
     QLabel *label = new QLabel(this);//creation du label pour le message
     label->setText(comment);
     ui->messageliste->addWidget(label);
+    label->setTextInteractionFlags(Qt::TextSelectableByMouse|Qt::TextSelectableByKeyboard|Qt::LinksAccessibleByMouse|Qt::LinksAccessibleByKeyboard);
 
     QPushButton *PushButton = new QPushButton(this);//creation du bouton pour le telechargement
     PushButton->setText(tr("telecharger: ","dans le bouton de telechargement")+NameOfFile);
@@ -251,6 +254,8 @@ void Widget::displayFileOnMessageList(const QString comment, const QString NameO
     vlayout->setSpacing(2);
 
     ui->messageliste->addLayout(vlayout);//on lajoute a l'ui
+    lastMessageIsText=false;
+    lastText=0;
 
 }
 void Widget::openfile(){
@@ -267,11 +272,20 @@ void Widget::openfile(){
     }
     qDebug()<<PushButton->text();
 }
-void Widget::addmessage(QString message)
-{
-    QLabel *label = new QLabel(this);
-    label->setText(message);
-    ui->messageliste->addWidget(label);
+void Widget::addmessage(QString message){
+    if(!lastMessageIsText){//le dernier message n'est pas du texte
+        QLabel *label = new QLabel(this);
+        label->setText(message);
+        label->setTextInteractionFlags(Qt::TextSelectableByMouse|Qt::TextSelectableByKeyboard|Qt::LinksAccessibleByMouse|Qt::LinksAccessibleByKeyboard);
+        label->setWordWrap(true);
+        ui->messageliste->addWidget(label);
+        lastText=label;
+        lastMessageIsText=true;
+    }else{//le dernier message est du texte
+        //QString text =lastText->text()
+        lastText->setText(lastText->text()+"<br><br>"+message);
+        ui->messageliste->addWidget(lastText);
+    }
 }
 void Widget::changestateconnectbutton(bool state)
 {
