@@ -58,6 +58,8 @@ Widget::Widget(QWidget *parent)
     //variable simple
     levelOfSecure=settings->value("settings/level of secure").toString();
     condenser = false;
+    lastMessageIsText=false;
+    lastText=0;
     //remplissage des information
     QString ip;
     foreach (const QHostAddress &address, QNetworkInterface::allAddresses()) {
@@ -261,6 +263,7 @@ void Widget::displayFileOnMessageList(const QString comment, const QString NameO
     }
     QLabel *label = new QLabel(this);//creation du label pour le message
     label->setText(comment);
+    label->setTextInteractionFlags(Qt::TextSelectableByMouse|Qt::TextSelectableByKeyboard|Qt::LinksAccessibleByMouse|Qt::LinksAccessibleByKeyboard);
     ui->messageliste->addWidget(label);
 
     QPushButton *PushButton = new QPushButton(this);//creation du bouton pour le telechargement
@@ -273,6 +276,8 @@ void Widget::displayFileOnMessageList(const QString comment, const QString NameO
     vlayout->setSpacing(2);
     ui->messageliste->addLayout(vlayout);//on lajoute a l'ui
 
+    lastMessageIsText=false;
+    lastText=0;
 
 }
 void Widget::openfile(){
@@ -286,11 +291,21 @@ void Widget::openfile(){
     }
     qDebug()<<PushButton->text();
 }
-void Widget::addmessage(QString message)
-{
-    QLabel *label = new QLabel(this);
-    label->setText(message);
-    ui->messageliste->addWidget(label);
+void Widget::addmessage(QString message){
+    if(!lastMessageIsText){//le dernier message n'est pas du texte
+        QLabel *label = new QLabel(this);
+        label->setText(message);
+        label->setTextInteractionFlags(Qt::TextSelectableByMouse|Qt::TextSelectableByKeyboard|Qt::LinksAccessibleByMouse|Qt::LinksAccessibleByKeyboard);
+        label->setWordWrap(true);
+        ui->messageliste->addWidget(label);
+        lastText=label;
+        lastMessageIsText=true;
+    }else{//le dernier message est du texte
+        //QString text =lastText->text()
+        lastText->setText(lastText->text()+"<br><br>"+message);
+        ui->messageliste->addWidget(lastText);
+    }
+
 
 }
 QString Widget::returnpseudo()
@@ -434,14 +449,13 @@ void Widget::on_sentbutton_clicked()
     }else if(message.startsWith(tr("ananta system"))){
         message.remove(tr("ananta system"));
        processechatbot(message);
-    }else if (m_path!=""){
-        m_path="";
+    }else if (m_path!=""){ 
         ui->erorLabel->setVisible(true);
         ui->erorLabel->setText("<font color=#DAA520>"+tr("uplaud du fichier en cours...","quand on envoi un fichier")+"</font>");
         QString m_pathSplit=m_path.split("/").last();
         clients->sendFile(msg,m_path,m_pathSplit);
         ui->pieceJointe->setIcon(QIcon(":/image/resource/image/paper-clip.png"));
-
+        m_path="";
         listeOfpPath.append(m_pathSplit);
     }else if(m_path==""){
         clients->sendmessage(msg);

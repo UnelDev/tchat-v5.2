@@ -72,7 +72,7 @@ QPalette parametre::darkmode(){
     darkPalette.setColor(QPalette::ButtonText, Qt::white);
     darkPalette.setColor(QPalette::BrightText, Qt::red);
     darkPalette.setColor(QPalette::Link, QColor(42, 130, 218));
-    darkPalette.setColor(QPalette::Highlight, QColor(42, 130, 218));
+    darkPalette.setColor(QPalette::Highlight, QColor(0, 120, 215));
     darkPalette.setColor(QPalette::HighlightedText, Qt::black);
 
     qApp->setPalette(darkPalette);
@@ -92,7 +92,7 @@ QPalette parametre::whitemode(){
     darkPalette.setColor(QPalette::ButtonText, Qt::black);
     darkPalette.setColor(QPalette::BrightText, Qt::red);
     darkPalette.setColor(QPalette::Link, QColor(59, 62, 178));
-    //darkPalette.setColor(QPalette::Highlight, QColor(0, 0, 255));
+    darkPalette.setColor(QPalette::Highlight, QColor(0, 120, 215));
     darkPalette.setColor(QPalette::HighlightedText, Qt::black);
     qApp->setPalette(darkPalette);
     qApp->setStyleSheet("QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid white; }");
@@ -112,7 +112,7 @@ QPalette parametre::darkmodeUltra(){
     darkPalette.setColor(QPalette::ButtonText, Qt::white);
     darkPalette.setColor(QPalette::BrightText, Qt::red);
     darkPalette.setColor(QPalette::Link, QColor(42, 130, 218));
-    darkPalette.setColor(QPalette::Highlight, QColor(42, 130, 218));
+    darkPalette.setColor(QPalette::Highlight, QColor(0, 120, 215));
     darkPalette.setColor(QPalette::HighlightedText, Qt::black);
 
     qApp->setPalette(darkPalette);
@@ -132,7 +132,7 @@ QPalette parametre::whitehultra(){
     darkPalette.setColor(QPalette::ButtonText, Qt::black);
     darkPalette.setColor(QPalette::BrightText, Qt::red);
     darkPalette.setColor(QPalette::Link, QColor(59, 62, 178));
-    darkPalette.setColor(QPalette::Highlight, QColor(0, 0, 255));
+    darkPalette.setColor(QPalette::Highlight, QColor(0, 120, 215));
     darkPalette.setColor(QPalette::HighlightedText, Qt::black);
     qApp->setPalette(darkPalette);
     qApp->setStyleSheet("QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid white; }");

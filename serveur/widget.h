@@ -37,8 +37,10 @@ private:
     QSettings* settings;
     Ui::Widget *ui;
     bool condenser;
+    bool lastMessageIsText;
     QSystemTrayIcon* sticon;
     QLabel *text;
+    QLabel *lastText;
     QMenu *stmenu;
     QTcpSocket *socket;
     serveur *server;

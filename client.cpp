@@ -173,7 +173,18 @@ void client::sendFile(const QString message, const QString path, const QString N
     sendmap["shippingmonth"]=QDateTime::currentDateTime().toString("MMMM");
     sendmap["shippingyears"]=QDateTime::currentDateTime().toString("yyyy");
     sendmap["attachment"]=ba;
-    senddatamap(sendmap);
+    //senddatamap(sendmap);
+    QByteArray paquet;
+    QDataStream out(&paquet, QIODevice::WriteOnly);
+
+    out << (int) 0;
+    out << sendmap;
+    out.device()->seek(0);
+    out << (int) (paquet.size() - sizeof(int));
+    int sentzise = socket->write(paquet); // On envoie le paquet
+    if(sentzise == -1){
+      QMessageBox::critical(nullptr, tr("Erreur d'envoie","quand un fichier est trop lourd"), tr("le packet n'a pas pue etre corectemment ecrit dans le socket, le fichier doit etre trop lourd","quand un fichier est trop lourd"));
+    }
 }
 QString client::getPsedo(){
     return psedo;
@@ -293,11 +304,11 @@ QString client::generatedate()
     QString heures = QDateTime::currentDateTime().toString("hh:mm:ss");
     QString Date = QDateTime::currentDateTime().toString("ddd dd MMMM yyyy");
     QDateTime::fromString(heures, "hh:mm:ss");
-    return ("<span style=\"font-size: 10px\">"  +   tr("le ")    +   Date    +"</span> <span style=\"font-size: 10px\">"+   tr("à") +   heures +"</span><br/>");
+    return ("<span style=\"font-size: 12px\">"  +   tr(" le ")    +   Date    +"</span> <span style=\"font-size: 10px\">"+   tr("à") +   heures +"</span><br/>");
 }
 QString client::generatedate(QMap<QString, QVariant> date)
 {
-        return("<span style=\"font-size: 10px\">"+ tr(" Le ","dans la generationde message")+date["shippingday"].toString()+" "+date["sendingdate"].toString()+" "+date["shippingmonth"].toString()+" "+date["shippingyears"].toString() +"</span> <span style=\"font-size: 10px\">"+tr( " à ","dans la generationde message")+date["sendingtime"].toString()+" : "+date["minuteofsending"].toString()+tr(" </span><br/>"));
+        return("<span style=\"font-size: 12px\">"+ tr(" Le ","dans la generationde message")+date["shippingday"].toString()+" "+date["sendingdate"].toString()+" "+date["shippingmonth"].toString()+" "+date["shippingyears"].toString() +"</span> <span style=\"font-size: 10px\">"+tr( " à ","dans la generationde message")+date["sendingtime"].toString()+" : "+date["minuteofsending"].toString()+tr(" </span><br/>"));
 }
 QString client::generatemesage(QString message, QString pseudo)
 {
