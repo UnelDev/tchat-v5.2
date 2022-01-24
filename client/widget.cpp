@@ -133,6 +133,9 @@ void Widget::executeCmd(const QString cmd){
         }
     }
 }
+void Widget::changeUserRole(QList<QString>usrRole){
+    clients->sendcommande("changeUsrRole",usrRole[0]/*le nom d'utilisateur*/,usrRole[1]/*le role en int*/);
+}
 void Widget::newuser(QString name){
     listeClient.append(name);
     ui->clientlist->addItem(name);
@@ -314,8 +317,15 @@ void Widget::processechatbot(QString command)
           }
           delete child;
          }
-   }else if (command=="clearAll"||command=="clearall"){
+   }else if (command=="clearall"){
           clients->sendcommande("clearForAll");
+   }else if(command.startsWith("promot")){
+       userAction *usrAction = new userAction;
+       usrAction->show();
+       for(int i=0;i<ui->clientlist->count();i++){
+           usrAction->addUser(ui->clientlist->item(i)->text());
+       }
+       QObject::connect(usrAction, &userAction::finish, this, &Widget::changeUserRole);
    }else if (command=="actualise"||command=="update"){
         clients->sendcommande("updating");
    }else if (command==tr("merci")){

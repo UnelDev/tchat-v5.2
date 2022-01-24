@@ -161,21 +161,6 @@ void serveur::sentcomandto(const QVariant &message,QString arg ,int usernaime)
     sentmessageto(sendmap,usernaime);
 
 }
-/*void serveur::sentcommande(const QString commande, QString arg){
-    QMap<QString,QVariant> sendmap;
-    sendmap["type"]="cmd";
-    sendmap["message"]=commande;
-    sendmap["arg"]=encryptioncesar->chiffre(arg);
-    sendmap["pseudo"]="serveur"+encryptioncesar->chiffre(psedo);
-    sendmap["secondofsending"]=QDateTime::currentDateTime().toString("ss");;
-    sendmap["minuteofsending"]=QDateTime::currentDateTime().toString("mm");;
-    sendmap["sendingtime"]=QDateTime::currentDateTime().toString("hh");
-    sendmap["sendingdate"]=QDateTime::currentDateTime().toString("d");
-    sendmap["shippingday"]=QDateTime::currentDateTime().toString("dddd");
-    sendmap["shippingmonth"]=QDateTime::currentDateTime().toString("MMMM");
-    sendmap["shippingyears"]=QDateTime::currentDateTime().toString("yyyy");
-    sentmessagetoall(sendmap);
-}*/
 void serveur::sentcommande(const QString commande,const QString arg,const QString arg2){
     QMap<QString,QVariant> sendmap;
     sendmap["type"]="cmd";
@@ -255,6 +240,7 @@ void serveur::datareceived()
             sendingClient->setmessageSize(static_cast<int>(0));
         if(message["type"]=="cmd"){//une commende
             message["arg"]=encryptioncesar->deChiffre(message["arg"].toString());
+            message["arg2"]=encryptioncesar->deChiffre(message["arg2"].toString());
             message["pseudo"]=encryptioncesar->deChiffre(message["pseudo"].toString());
             processcomand(message,index);
         }else if(message["type"]=="msg"){
@@ -366,15 +352,36 @@ void serveur::processcomand(QMap<QString, QVariant> command, int noclient)
     }else if(command["message"]=="file?") {
         sendFileto(command["arg"].toString(),command["nameOfFile"].toString(),noclient);
     }else if (command["message"]=="clearForAll"){
-        if (clientsList[noclient]->getGrade()==2||clientsList[noclient]->getGrade()==3){
+        if (clientsList[noclient]->getGrade()==1||clientsList[noclient]->getGrade()==2){
             sentcommande("clear");
+            saveMessage.clear();
         }else{
             sentmessageto(tr("vous n'avais pas le droit de faire cette commende : clear est soumis a un rôle admin ou host","lors de lexecution d'une commende"), noclient);
         }
+    }else if(command["message"]=="changeUsrRole"){
+        int clientname=-1;
+        for(int i = 0; i<clientsList.size(); i++){
+            if(clientsList[i]->getpseudo()==command["arg"]){
+                clientname=i;
+            }
+        }if(clientsList[noclient]->getGrade()==0){
+            sentmessageto(tr("vous n'avais pas le droit de faire cette commende : changeUsrRole est soumis a un rôle admin ou host","lors de lexecution d'une commende"), noclient);
+            return;
+        }else if(clientsList[noclient]->getGrade()<command["arg2"].toInt()){
+            sentmessageto(tr("vous n'avais pas le droit de donée un grade plus élever que le votre","lors de lexecution d'une commende"), noclient);
+            return;
+        }else if(command["arg2"].toInt()==3){
+            sentmessageto(tr("il est imposible de donée le grade host","lors de lexecution d'une commende"), noclient);
+            return;
+        }else if(clientsList[clientname]->getGrade()==2){
+             sentmessageto(tr("il est imposible changer le rôle d'un host","lors de lexecution d'une commende"), noclient);
+        }else{
+            clientsList[clientname]->promote(command["arg2"].toInt());
+            sentmessagetoall("msg",clientsList[noclient]->getpseudo()+tr(" a changer le grade de ")+ clientsList[clientname]->getpseudo()+ tr(" en ")+clientsList[clientname]->getGradeString(),tr("Tchat Bot"));
+        }
     }else{
         QMessageBox::critical(nullptr, tr("erreur"), tr("Un paquet de commande a été reçu mais la commande est incomprise."));
-    }
-}
+}}
 QString serveur::generatedate()
 {
     QString heures = QDateTime::currentDateTime().toString(" hh:mm:ss ");

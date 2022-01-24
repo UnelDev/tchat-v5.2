@@ -103,7 +103,6 @@ Widget::~Widget()
     delete stmenu;
     delete server;
     delete settings;
-    multiprocess.waitForFinished();
 
 }
 void Widget::autoconnect(){
@@ -158,6 +157,9 @@ void Widget::executeCmd(const QString cmd){
     }else{
         addmessage(tr("erreur une commende emise par le serveur n'a pas été comprise","dans la reseption des commende externe"));
     }
+}
+void Widget::changeUserRole(QList<QString>usrRole){
+    clients->sendcommande("changeUsrRole",usrRole[0]/*le nom d'utilisateur*/,usrRole[1]/*le role en int*/);
 }
 void Widget::connectClient()
 {
@@ -331,8 +333,15 @@ void Widget::processechatbot(QString command)
       }
       delete child;
      }
-   }else if (command=="clearAll"||command=="clearall"){
-       clients->sendcommande("clearForAll");
+   }else if (command=="clearall"){
+             clients->sendcommande("clearForAll");
+  }else if(command.startsWith("promot")){
+      userAction *usrAction = new userAction;
+      usrAction->show();
+      for(int i=0;i<ui->clientlist->count();i++){
+          usrAction->addUser(ui->clientlist->item(i)->text());
+      }
+      QObject::connect(usrAction, &userAction::finish, this, &Widget::changeUserRole);
    }else if (command=="actualise"||command=="update"){
         clients->sendcommande("updating");
    }else if (command==tr("merci")){

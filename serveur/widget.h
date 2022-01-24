@@ -14,8 +14,7 @@
 #include "serveur.h"
 #include "client.h"
 #include <QCoreApplication>
-#include <qtconcurrentrun.h>
-#include <QThread>
+#include "useraction.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Widget; }
@@ -45,9 +44,6 @@ private:
     serveur *server;
     QString m_path;
     QList<QString> listeOfpPath;
-
-
-    QFuture<void> multiprocess;
 private slots:
     QString returnpseudo();
     QString generatemesage(QString message, QString pseudo);
@@ -61,6 +57,7 @@ private slots:
     void on_pseudo_editingFinished();
     void connectClient();
     void openfile();
+    void changeUserRole(QList<QString>usrRole);
     //asseseur
     void displayMessagelist(QString message);
     void displayFileOnMessageList(const QString comment, const QString NameOfFile);

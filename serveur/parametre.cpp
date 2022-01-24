@@ -92,7 +92,7 @@ QPalette parametre::whitemode(){
     darkPalette.setColor(QPalette::ButtonText, Qt::black);
     darkPalette.setColor(QPalette::BrightText, Qt::red);
     darkPalette.setColor(QPalette::Link, QColor(59, 62, 178));
-    darkPalette.setColor(QPalette::Highlight, QColor(0, 0, 255));
+    //darkPalette.setColor(QPalette::Highlight, QColor(0, 0, 255));
     darkPalette.setColor(QPalette::HighlightedText, Qt::black);
     qApp->setPalette(darkPalette);
     qApp->setStyleSheet("QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid white; }");

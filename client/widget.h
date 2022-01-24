@@ -25,6 +25,7 @@ ANANTA SYSTEME  tchat 4.0.-1
 #include "parametre.h"
 #include "cesar.h"
 #include "client.h"
+#include "useraction.h"
 QT_BEGIN_NAMESPACE
 namespace Ui { class Widget; }
 QT_END_NAMESPACE
@@ -68,6 +69,7 @@ private:
     void deletClient(QString nameOfClient);
     void newuser(QString name);
     void executeCmd(const QString cmd);
+    void changeUserRole(QList<QString>usrRole);
     //variable
     QString m_path;
     QString encryption;

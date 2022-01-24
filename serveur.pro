@@ -17,7 +17,8 @@ SOURCES += \
     serveur/parametre.cpp \
     moreinformation.cpp \
     cesar.cpp \
-    client.cpp
+    client.cpp \
+    useraction.cpp
 HEADERS += \
     serveur/serveur.h \
     succees.h \
@@ -26,12 +27,14 @@ HEADERS += \
     serveur/parametre.h \
     moreinformation.h \
     cesar.h \
-    client.h
+    client.h \
+    useraction.h
 FORMS += \
     succees.ui \
     serveur/widget.ui \
     serveur/parametre.ui \
-    moreinformation.ui
+    moreinformation.ui \
+    useraction.ui
 
 TRANSLATIONS += \
     serveur/serveur_fr_FR.ts

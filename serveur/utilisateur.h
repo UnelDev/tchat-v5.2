@@ -23,6 +23,7 @@ public:
     QString getpseudo();
     QString getversion();
     QString safe();
+    QString getGradeString();
     bool isconnecteed();
     bool highSafe();
     bool medumSafeOrSuperior();

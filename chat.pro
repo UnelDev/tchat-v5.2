@@ -16,7 +16,8 @@ SOURCES += \
     client\parametre.cpp \
     succees.cpp \
     client\widget.cpp \
-    cesar.cpp
+    cesar.cpp \
+    useraction.cpp
 
 HEADERS += \
     client.h \
@@ -24,14 +25,16 @@ HEADERS += \
     cesar.h \
     succees.h \
     client\parametre.h \
-    client\widget.h
+    client\widget.h \
+    useraction.h
 
 
 FORMS += \
     moreinformation.ui \
     succees.ui \
     client\widget.ui \
-    client\parametre.ui
+    client\parametre.ui \
+    useraction.ui
 
 TRANSLATIONS += \
     client\chat_fr_FR.ts

@@ -137,26 +137,13 @@ void client::senddatamap(const QString type, QString message){
     sendmap["shippingyears"]=QDateTime::currentDateTime().toString("yyyy");
     senddatamap(sendmap);
 }
-void client::sendcommande(const QString commande){
-    QMap<QString,QVariant> sendmap;
-    sendmap["type"]="cmd";
-    sendmap["message"]=commande;
-    sendmap["pseudo"]=encryptioncesar->chiffre(psedo);
-    sendmap["version"]=QCoreApplication::applicationVersion();;
-    sendmap["secondofsending"]=QDateTime::currentDateTime().toString("ss");;
-    sendmap["minuteofsending"]=QDateTime::currentDateTime().toString("mm");;
-    sendmap["sendingtime"]=QDateTime::currentDateTime().toString("hh");
-    sendmap["sendingdate"]=QDateTime::currentDateTime().toString("d");
-    sendmap["shippingday"]=QDateTime::currentDateTime().toString("dddd");
-    sendmap["shippingmonth"]=QDateTime::currentDateTime().toString("MMMM");
-    sendmap["shippingyears"]=QDateTime::currentDateTime().toString("yyyy");
-    senddatamap(sendmap);
-}
-void client::sendcommande(const QString commande, QString arg){
+
+void client::sendcommande(const QString commande, const QString arg, const QString arg2){
     QMap<QString,QVariant> sendmap;
     sendmap["type"]="cmd";
     sendmap["message"]=commande;
     sendmap["arg"]=encryptioncesar->chiffre(arg);
+    sendmap["arg2"]=encryptioncesar->chiffre(arg2);
     sendmap["pseudo"]=encryptioncesar->chiffre(psedo);
     sendmap["version"]=QCoreApplication::applicationVersion();;
     sendmap["secondofsending"]=QDateTime::currentDateTime().toString("ss");;

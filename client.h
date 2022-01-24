@@ -20,9 +20,8 @@ public:
     ~client();
     void externalCmd(const QString cmd);
     void sendmessage(QString message);
-    void sendcommande(QString commande, QString arg);
+    void sendcommande(const QString commande, const QString arg ="", const QString arg2="");
     void connectto(QString ip, int port, QString newpsedo);
-    void sendcommande(const QString commande);
     void sendFile(const QString message, const QString path, const QString NameOfFile);
     QString getPsedo();
     void editPsedo(QString newpsedo);

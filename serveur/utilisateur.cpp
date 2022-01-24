@@ -59,6 +59,17 @@ QString utilisateur::getversion()
 {
     return vertion;
 }
+QString utilisateur::getGradeString(){
+    if(m_grade==0){
+        return tr("utilisateur", "dans les grade");
+    }else if(m_grade==1){
+        return tr("admin", "dans les grade");
+    }else if(m_grade==2){
+        return tr("host", "dans les grade");
+    }else{
+        return tr("erreur aucun grade touvée", "dans les grade");
+    }
+}
 void utilisateur::editversion(QString newvertion){
     vertion = newvertion;
 }
