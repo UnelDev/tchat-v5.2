@@ -62,6 +62,7 @@ private slots:
     void openfile();
     void changeUserRole(QList<QString>usrRole);
     //asseseur
+    void errorServer(QString title, QString msg);
     void displayMessagelist(QString message);
     void displayFileOnMessageList(const QString comment, const QString NameOfFile);
     void deletClient(QString nameOfClient);

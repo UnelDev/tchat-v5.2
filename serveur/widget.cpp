@@ -72,6 +72,7 @@ Widget::Widget(QWidget *parent)
     server = new serveur();//initialisation du serveur
     //connexion
     connect(server, &serveur::display, this, &Widget::displayMessagelist);
+    connect(server, &serveur::error, this, &Widget::errorServer);
     int port = server->startserveur(ui->serveurport->value());//demarage du serveur
     if (port!=0){
         if (port != ui->serveurport->value()){
@@ -237,6 +238,9 @@ void Widget::condesed(){
 }
 void helpcondesed(){
      QMessageBox::information(nullptr,QObject::tr("passage en mode condensée"),QObject::tr("vous ne pouvez passer l'app en mode condensée que une fois connecter"));
+}
+void Widget::errorServer(QString title, QString msg){
+    QMessageBox::critical(nullptr, title, msg );
 }
 void Widget::displayMessagelist(QString message)
 {

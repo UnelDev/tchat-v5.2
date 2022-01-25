@@ -17,6 +17,7 @@ serveur::serveur()
     recoverallfile();
 }
 void serveur::displayMessagelist(QString newMessage){ emit serveur::display(newMessage); }
+void serveur::messageBox( QString title, QString msg){emit serveur::error(title,msg );}
 int serveur::startserveur(int port)
 {
     m_serveur = new QTcpServer(this);
@@ -269,7 +270,7 @@ void serveur::datareceived()
         }else if(message["type"]=="connection"){
             connect(message, index);
         }else{
-        QMessageBox::critical(nullptr, tr("erreur"), tr("un paquet de comande a été recu mais la l'idantificateur ")+ message["type"].toString() +tr("est incompri."));
+        messageBox(tr("erreur"),tr("un paquet de comande a été recu mais la l'idantificateur ")+ message["type"].toString() +tr("est incompri."));
         displayMessagelist(generatemesage(tr("un paquet de comande a été recu mais la l'idantificateur ")+ message["type"].toString() +tr("est incompri."),tr("serveur bot")));
     }
         sendingClient->setmessageSize(static_cast<int>(0));
@@ -282,7 +283,7 @@ void serveur::disconnectclients()
     if(disconnectingClientSocket == nullptr) //Error
     {
         displayMessagelist(generatemesage(tr("Erreur fatal: les clients ne peuvent pas être supprimés. fermeture!"),tr("Serveur Bot")));
-        QMessageBox::critical(nullptr, tr("Erreur fatal"),tr("Les clients ne peuvent pas être supprimés. fermeture!"));
+        messageBox(tr("Erreur fatal"),tr("Les clients ne peuvent pas être supprimés. fermeture!"));
         qApp->quit();
         return;
     }
@@ -380,7 +381,7 @@ void serveur::processcomand(QMap<QString, QVariant> command, int noclient)
             sentmessagetoall("msg",clientsList[noclient]->getpseudo()+tr(" a changer le grade de ")+ clientsList[clientname]->getpseudo()+ tr(" en ")+clientsList[clientname]->getGradeString(),tr("Tchat Bot"));
         }
     }else{
-        QMessageBox::critical(nullptr, tr("erreur"), tr("Un paquet de commande a été reçu mais la commande est incomprise."));
+        messageBox(tr("erreur"), tr("Un paquet de commande a été reçu mais la commande est incomprise."));
 }}
 QString serveur::generatedate()
 {
@@ -397,7 +398,7 @@ void serveur::recap(){
     const auto fichier = QFileDialog::getOpenFileName(nullptr, tr("ou enregister le recapitulatif ?","dans les recapitulatif de serveur"), QString());
     QFile file(fichier);//on crée le fichier
     if(!file.open(QIODevice::WriteOnly | QIODevice::Text)){
-        QMessageBox::critical(nullptr,tr("erreur de permision","dans les ouverture de fichier"),tr("le fichier ne peut pas etre lu sans doute une erreur d'autorisation","dans les ouverture de fichier"));
+        messageBox(tr("erreur de permision","dans les ouverture de fichier"),tr("le fichier ne peut pas etre lu sans doute une erreur d'autorisation","dans les ouverture de fichier"));
         return;
     }
     QTextStream out(&file);

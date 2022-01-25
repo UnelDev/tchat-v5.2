@@ -3,7 +3,6 @@
 
 #include <QObject>
 #include <QTcpSocket>
-#include <QMessageBox>
 #include <QDateTime>
 #include <QTcpServer>
 #include <QFile>
@@ -23,6 +22,7 @@ class serveur : public QObject
     int startserveur(int port);
     void recap();
     private:
+    void messageBox(QString title, QString msg);
     void displayMessagelist(QString message);
     void sentmessagetoall(const QMap<QString, QVariant> &message);
     void sentmessageto(const QMap<QString, QVariant> &message, int NoUtilisateur);
@@ -53,6 +53,7 @@ class serveur : public QObject
     int NbOfMessage;
     signals:
     void display(QString message);
+    void error(QString title, QString msg);
 };
 
 #endif // SERVEUR_H
