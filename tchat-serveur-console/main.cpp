@@ -24,8 +24,8 @@ public:
     }
     void log(const QString log){
         std::cout <<"server log :   " <<log.toUtf8().toStdString()<<std::endl;
-        if(settings->value("settings/logPaht")!=""){
-            QFile file("out.txt");
+        if(settings->value("settings/logPaht").toString()!=""){
+            QFile file(settings->value("settings/logPaht").toString());
             if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
                 return;
             QTextStream out(&file);

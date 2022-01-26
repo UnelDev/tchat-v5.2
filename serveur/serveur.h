@@ -22,6 +22,7 @@ class serveur : public QObject
     int startserveur(int port);
     void recap();
     private:
+    void emitlog(const QString log);
     void messageBox(QString title, QString msg);
     void displayMessagelist(const QString message, const QString psedo);
     void sentmessagetoall(const QMap<QString, QVariant> &message);
@@ -52,6 +53,7 @@ class serveur : public QObject
     signals:
     void display(const QString message, const QString psedo);
     void error(QString title, QString msg);
+    void log(const QString log);
 };
 
 #endif // SERVEUR_H

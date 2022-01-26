@@ -7,7 +7,7 @@ serveur::serveur()
     QCoreApplication::setOrganizationName("ananta system");
     QCoreApplication::setOrganizationDomain("https://anantasystem.com/");
     QCoreApplication::setApplicationName("tchat");
-    QCoreApplication::setApplicationVersion("5.0");
+    QCoreApplication::setApplicationVersion("5.2");
 
     settings = new QSettings("settings.ini", QSettings::IniFormat);
     encryptioncesar = new cesar(2);
@@ -16,6 +16,7 @@ serveur::serveur()
     NbOfMessage=0;
     recoverallfile();
 }
+void serveur::emitlog(const QString log){emit serveur::log(log);}
 void serveur::displayMessagelist(const QString newMessage, const QString psedo){ emit serveur::display(newMessage, psedo); }
 void serveur::messageBox( QString title, QString msg){emit serveur::error(title,msg );}
 int serveur::startserveur(int port)
@@ -187,12 +188,14 @@ void serveur::newconect()
     clientsList.append(newClient);
     QObject::connect(clientsList.last()->getSocket(), &QTcpSocket::readyRead, this, &serveur::datareceived);
     QObject::connect(clientsList.last()->getSocket(), &QTcpSocket::disconnected, this ,&serveur::disconnectclients);
+    emitlog(tr("un client s'est connécter mais ne s'est pas encors identifier.", "dans les log"));
 }
 void serveur::connect(const QMap<QString, QVariant> &connectpack, int usernaime){
     QString username =encryptioncesar->deChiffre(connectpack["pseudo"].toString());
     clientsList[usernaime]->editpseudo(username);
     clientsList[usernaime]->editversion(connectpack["version"].toString());
     sentmessagetoall(connectpack);
+    emitlog(tr("un client vien de sidentifier : ", "dans les log")+ clientsList[usernaime]->getpseudo());
     srand (time(NULL));
     int random = rand() % 4 + 1;
     if(random == 1){
@@ -221,6 +224,7 @@ void serveur::datareceived()
 
       if(socket == nullptr) {
         displayMessagelist(tr("erreur lors de la recherche du client qui a envoyé le paquet (non il y a pas de jeux de mot pouris)"),tr("serveur bot"));
+        emitlog(tr("erreur lors de la recherche du client qui a envoyé le paquet", "dans les log"));
         return; //Error
       }
       QDataStream in(socket);
@@ -284,12 +288,14 @@ void serveur::disconnectclients()
     {
         displayMessagelist(tr("Erreur fatal: les clients ne peuvent pas être supprimés. fermeture!"),tr("Serveur Bot"));
         messageBox(tr("Erreur fatal"),tr("Les clients ne peuvent pas être supprimés. fermeture!"));
+        emitlog("/!\\"+tr("un client n'a pas pue etre suprimée", "dans les log")+"/!\\");
         qApp->quit();
         return;
     }
 
     int index = findIndex(disconnectingClientSocket);
     utilisateur* disconnectingClient = clientsList[index];
+    emitlog(tr("un client vien d'etre suprimée : ", "dans les log")+disconnectingClient->getpseudo());
     sentcommande("disconnected",disconnectingClient->getpseudo());
 
     clientsList.removeOne(disconnectingClient);
@@ -349,15 +355,19 @@ void serveur::processcomand(QMap<QString, QVariant> command, int noclient)
         }
         sentcommande("changePsedo",clientsList[noclient]->getpseudo(),command["arg"].toString());
         sentmessagetoall("msg",clientsList[noclient]->getpseudo()+" a changer son psedo en "+ command["arg"].toString(),"Tchat Bot");
+        emitlog(clientsList[noclient]->getpseudo()+tr(" a changer son psedo en : ", "dans les log")+command["arg"].toString());
         clientsList[noclient]->editpseudo(command["arg"].toString());
     }else if(command["message"]=="file?") {
         sendFileto(command["arg"].toString(),command["nameOfFile"].toString(),noclient);
+        emitlog(clientsList[noclient]->getpseudo()+tr("a demander le fichier : ", "dans les log")+command["nameOfFile"].toString());
     }else if (command["message"]=="clearForAll"){
         if (clientsList[noclient]->getGrade()==1||clientsList[noclient]->getGrade()==2){
             sentcommande("clear");
             saveMessage.clear();
+            emitlog(clientsList[noclient]->getpseudo()+tr(" a suprimée tout les message", "dans les log"));
         }else{
             sentmessageto(tr("vous n'avais pas le droit de faire cette commende : clear est soumis a un rôle admin ou host","lors de lexecution d'une commende"), noclient);
+            emitlog(clientsList[noclient]->getpseudo()+tr(" a voulue suprimée tout les messagemais n'a pas pue !", "dans les log"));
         }
     }else if(command["message"]=="changeUsrRole"){
         int clientname=-1;
@@ -379,6 +389,7 @@ void serveur::processcomand(QMap<QString, QVariant> command, int noclient)
         }else{
             clientsList[clientname]->promote(command["arg2"].toInt());
             sentmessagetoall("msg",clientsList[noclient]->getpseudo()+tr(" a changer le grade de ")+ clientsList[clientname]->getpseudo()+ tr(" en ")+clientsList[clientname]->getGradeString(),tr("Tchat Bot"));
+            emitlog(clientsList[noclient]->getpseudo()+tr(" a changer le grade de ", "dans les log")+ clientsList[clientname]->getpseudo()+ tr(" en ", "dans les log")+clientsList[clientname]->getGradeString());
         }
     }else{
         messageBox(tr("erreur"), tr("Un paquet de commande a été reçu mais la commande est incomprise."));
