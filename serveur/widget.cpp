@@ -242,8 +242,11 @@ void helpcondesed(){
 void Widget::errorServer(QString title, QString msg){
     QMessageBox::critical(nullptr, title, msg );
 }
-void Widget::displayMessagelist(QString message)
+void Widget::displayMessagelist(QString message, QString psedo)
 {
+    if (psedo!=""){//si le message a pas deja ete generer
+        message = generatemesage(message, psedo);
+    }
     if(settings->value("settings/SoundNotification").toBool())
     {
         if(!QApplication::activeWindow()){
@@ -507,4 +510,3 @@ void Widget::on_pieceJointe_clicked()
         ui->pieceJointe->setIcon(QIcon(":/image/resource/image/paper-clip.png"));
     }
 }
-
