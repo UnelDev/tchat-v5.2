@@ -4,12 +4,12 @@
 #include <QObject>
 #include <QTcpSocket>
 #include <QDateTime>
+#include <QDataStream>
 #include <QTcpServer>
 #include <QFile>
 #include <QCoreApplication>
 #include <QSettings>
 #include <QDir>
-#include <QFileDialog>
 #include <QNetworkInterface>
 #include "utilisateur.h"
 #include "cesar.h"

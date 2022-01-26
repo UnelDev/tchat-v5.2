@@ -395,7 +395,7 @@ QString serveur::generatemesage(QString message, QString pseudo)
     return("<span style=\"font-size: 12px; color:#000000; font-weight: bold;\">"+pseudo+"</span>"+generatedate()+"<span style=\"font-size: 14px; color:#2F2F2F\">"+message+"</span><br/><br/>");
 }
 void serveur::recap(){
-    const auto fichier = QFileDialog::getOpenFileName(nullptr, tr("ou enregister le recapitulatif ?","dans les recapitulatif de serveur"), QString());
+    const auto fichier = "raport.txt";
     QFile file(fichier);//on crée le fichier
     if(!file.open(QIODevice::WriteOnly | QIODevice::Text)){
         messageBox(tr("erreur de permision","dans les ouverture de fichier"),tr("le fichier ne peut pas etre lu sans doute une erreur d'autorisation","dans les ouverture de fichier"));
