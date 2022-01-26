@@ -71,7 +71,7 @@ Widget::Widget(QWidget *parent)
     //serveur
     server = new serveur();//initialisation du serveur
     //connexion
-    connect(server, &serveur::display, this, &Widget::displayMessagelist);
+    connect(server, &serveur::display, this, &Widget::displayMessagelistNoFormat);
     connect(server, &serveur::error, this, &Widget::errorServer);
     int port = server->startserveur(ui->serveurport->value());//demarage du serveur
     if (port!=0){
@@ -242,11 +242,8 @@ void helpcondesed(){
 void Widget::errorServer(QString title, QString msg){
     QMessageBox::critical(nullptr, title, msg );
 }
-void Widget::displayMessagelist(QString message, QString psedo)
+void Widget::displayMessagelist(const QString message)
 {
-    if (psedo!=""){//si le message a pas deja ete generer
-        message = generatemesage(message, psedo);
-    }
     if(settings->value("settings/SoundNotification").toBool())
     {
         if(!QApplication::activeWindow()){
@@ -263,6 +260,24 @@ void Widget::displayMessagelist(QString message, QString psedo)
     }
 
     addmessage(message);
+}
+void Widget::displayMessagelistNoFormat(const QString message, const QString psedo){
+    if(settings->value("settings/SoundNotification").toBool())
+    {
+        if(!QApplication::activeWindow()){
+            QApplication::beep();
+        }
+    }
+    if(settings->value("settings/visualNotification").toBool())
+    {
+        if(!QApplication::activeWindow()){
+            auto text = QTextDocumentFragment::fromHtml(message);
+            sticon->showMessage("",text.toPlainText(),QSystemTrayIcon::Information,2000);
+        }
+        QApplication::alert(this);
+    }
+
+    addmessage(generatemesage(message, psedo));
 }
 void Widget::displayFileOnMessageList(const QString comment, const QString NameOfFile){
     int i = listeOfpPath.indexOf(NameOfFile);

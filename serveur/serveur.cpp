@@ -16,7 +16,7 @@ serveur::serveur()
     NbOfMessage=0;
     recoverallfile();
 }
-void serveur::displayMessagelist(QString newMessage){ emit serveur::display(newMessage); }
+void serveur::displayMessagelist(const QString newMessage, const QString psedo){ emit serveur::display(newMessage, psedo); }
 void serveur::messageBox( QString title, QString msg){emit serveur::error(title,msg );}
 int serveur::startserveur(int port)
 {
@@ -27,14 +27,14 @@ int serveur::startserveur(int port)
         if (!m_serveur->listen(QHostAddress::Any)) // Démarrage du serveur sur toutes les IP disponibles
         {
             // Si le serveur n'a pas été démarré correctement
-            displayMessagelist(generatemesage(tr("Le serveur n'a pas pu être démarré. Raison :<br />") + m_serveur->errorString(),tr("Serveur Bot")));
+            displayMessagelist(tr("Le serveur n'a pas pu être démarré. Raison :<br />") + m_serveur->errorString(),tr("Serveur Bot"));
             return 0;
         }
     }
     else
     {
         // Si le serveur a été démarré correctement
-        displayMessagelist(generatemesage(tr("Le serveur a été démarré sur le port <strong>") + QString::number(m_serveur->serverPort()) + tr("</strong>.<br />Des clients peuvent maintenant se connecter."), tr("Chat Bot")));
+        displayMessagelist(tr("Le serveur a été démarré sur le port <strong>") + QString::number(m_serveur->serverPort()) + tr("</strong>.<br />Des clients peuvent maintenant se connecter."), tr("Chat Bot"));
         QObject::connect(m_serveur, &QTcpServer::newConnection, this, &serveur::newconect);
     }
     return m_serveur->serverPort();
@@ -220,7 +220,7 @@ void serveur::datareceived()
       QTcpSocket* socket = sendingClient->getSocket();
 
       if(socket == nullptr) {
-        displayMessagelist(generatemesage(tr("erreur lors de la recherche du client qui a envoyé le paquet (non il y a pas de jeux de mot pouris)"),tr("serveur bot")));
+        displayMessagelist(tr("erreur lors de la recherche du client qui a envoyé le paquet (non il y a pas de jeux de mot pouris)"),tr("serveur bot"));
         return; //Error
       }
       QDataStream in(socket);
@@ -271,7 +271,7 @@ void serveur::datareceived()
             connect(message, index);
         }else{
         messageBox(tr("erreur"),tr("un paquet de comande a été recu mais la l'idantificateur ")+ message["type"].toString() +tr("est incompri."));
-        displayMessagelist(generatemesage(tr("un paquet de comande a été recu mais la l'idantificateur ")+ message["type"].toString() +tr("est incompri."),tr("serveur bot")));
+        displayMessagelist(tr("un paquet de comande a été recu mais la l'idantificateur ")+ message["type"].toString() +tr("est incompri."),tr("serveur bot"));
     }
         sendingClient->setmessageSize(static_cast<int>(0));
     }
@@ -282,7 +282,7 @@ void serveur::disconnectclients()
 
     if(disconnectingClientSocket == nullptr) //Error
     {
-        displayMessagelist(generatemesage(tr("Erreur fatal: les clients ne peuvent pas être supprimés. fermeture!"),tr("Serveur Bot")));
+        displayMessagelist(tr("Erreur fatal: les clients ne peuvent pas être supprimés. fermeture!"),tr("Serveur Bot"));
         messageBox(tr("Erreur fatal"),tr("Les clients ne peuvent pas être supprimés. fermeture!"));
         qApp->quit();
         return;
@@ -310,7 +310,7 @@ void serveur::writetofile(QMap<QString, QVariant> FluxFile)
     ++NbOfMessage;
     QFile file("chat.dat");
     if (!file.open(QIODevice::WriteOnly)){
-            displayMessagelist(generatemesage(tr("Il est impossible d'écrire dans le fichier."),tr("Tchat Bot")));
+            displayMessagelist(tr("Il est impossible d'écrire dans le fichier."),tr("Tchat Bot"));
             return;
         }
     QDataStream out(&file);
@@ -330,7 +330,7 @@ void serveur::recoverallfile()
    }
    else
    {
-       displayMessagelist(generatemesage(tr("Le fichier est inaxcessible"), tr("System Tchat Bot")));
+       displayMessagelist(tr("Le fichier est inaxcessible"), tr("System Tchat Bot"));
 
    }
 }

@@ -23,7 +23,7 @@ class serveur : public QObject
     void recap();
     private:
     void messageBox(QString title, QString msg);
-    void displayMessagelist(QString message);
+    void displayMessagelist(const QString message, const QString psedo);
     void sentmessagetoall(const QMap<QString, QVariant> &message);
     void sentmessageto(const QMap<QString, QVariant> &message, int NoUtilisateur);
     void sentmessagetoall(const QString type, QString message, QString pseudo);
@@ -52,7 +52,7 @@ class serveur : public QObject
     QSettings* settings;
     int NbOfMessage;
     signals:
-    void display(QString message);
+    void display(const QString message, const QString psedo);
     void error(QString title, QString msg);
 };
 

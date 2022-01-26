@@ -63,7 +63,8 @@ private slots:
     void changeUserRole(QList<QString>usrRole);
     //asseseur
     void errorServer(QString title, QString msg);
-    void displayMessagelist(QString message);
+    void displayMessagelist(const QString message);
+    void displayMessagelistNoFormat(const QString message, const QString psedo);
     void displayFileOnMessageList(const QString comment, const QString NameOfFile);
     void deletClient(QString nameOfClient);
     void newuser(QString name);
