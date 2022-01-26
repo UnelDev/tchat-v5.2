@@ -41,8 +41,6 @@ class serveur : public QObject
     void recoverallfile();
     void processcomand(QMap<QString, QVariant> command, int noclient);
     int findIndex(QTcpSocket* socket);
-    QString generatedate();
-    QString generatemesage(QString message, QString pseudo);
 
     QList<utilisateur*> clientsList;
     cesar *encryptioncesar;

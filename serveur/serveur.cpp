@@ -383,17 +383,6 @@ void serveur::processcomand(QMap<QString, QVariant> command, int noclient)
     }else{
         messageBox(tr("erreur"), tr("Un paquet de commande a été reçu mais la commande est incomprise."));
 }}
-QString serveur::generatedate()
-{
-    QString heures = QDateTime::currentDateTime().toString(" hh:mm:ss ");
-    QString Date = QDateTime::currentDateTime().toString(" dd MM yyyy ");
-    QDateTime::fromString(heures, " hh:mm:ss ");
-    return("<span style=\"font-size: 10px\">"+tr(" Le ")+Date+"</span> <span style=\"font-size: 10px\">"+tr(" à ")+heures+" </span><br/>");
-}
-QString serveur::generatemesage(QString message, QString pseudo)
-{
-    return("<span style=\"font-size: 12px; color:#000000; font-weight: bold;\">"+pseudo+"</span>"+generatedate()+"<span style=\"font-size: 14px; color:#2F2F2F\">"+message+"</span><br/><br/>");
-}
 void serveur::recap(){
     const auto fichier = "raport.txt";
     QFile file(fichier);//on crée le fichier
