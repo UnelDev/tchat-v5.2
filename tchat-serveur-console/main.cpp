@@ -5,8 +5,13 @@
 class console : public QObject
 {
 public:
-    void pinUp(QString message){
-        std::cout <<message.toStdString() << std::endl;
+    void pinUp(const QString message,const QString pseudo = ""){
+        if(pseudo==""){
+            std::cout <<message.toStdString() << std::endl;
+        }else{
+           std::cout <<"\""<<pseudo.toStdString()<<" \" sent the message : " <<message.toStdString() << std::endl;
+        }
+
     }
     void errorOnServer(QString title, QString msg){
         std::cout <<title.toStdString() <<" : " <<msg.toStdString()<<std::endl;

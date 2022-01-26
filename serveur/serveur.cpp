@@ -27,14 +27,14 @@ int serveur::startserveur(int port)
         if (!m_serveur->listen(QHostAddress::Any)) // Démarrage du serveur sur toutes les IP disponibles
         {
             // Si le serveur n'a pas été démarré correctement
-            displayMessagelist(tr("Le serveur n'a pas pu être démarré. Raison :<br />") + m_serveur->errorString(),tr("Serveur Bot"));
+            displayMessagelist(tr("Le serveur n'a pas pu être démarré. Raison : ") + m_serveur->errorString(),tr("Serveur Bot"));
             return 0;
         }
     }
     else
     {
         // Si le serveur a été démarré correctement
-        displayMessagelist(tr("Le serveur a été démarré sur le port <strong>") + QString::number(m_serveur->serverPort()) + tr("</strong>.<br />Des clients peuvent maintenant se connecter."), tr("Chat Bot"));
+        displayMessagelist(tr("Le serveur a été démarré sur le port <strong>") + QString::number(m_serveur->serverPort()) + tr("</strong>.Des clients peuvent maintenant se connecter."), tr("Chat Bot"));
         QObject::connect(m_serveur, &QTcpServer::newConnection, this, &serveur::newconect);
     }
     return m_serveur->serverPort();
