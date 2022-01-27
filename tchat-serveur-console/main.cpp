@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
     }if(!settings.contains("settings/high")){
         settings.setValue("settings/level of secure","high");
     }if(!settings.contains("settings/log")){
-        settings.setValue("settings/log",true);
+        settings.setValue("settings/log",false);
     }if(!settings.contains("settings/logPaht")){
         settings.setValue("settings/logPaht","");
     }

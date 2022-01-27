@@ -1,5 +1,6 @@
 QT -= gui
 QT += network
+QMAKE_CXXFLAGS += -m32
 
 CONFIG += c++11 console
 CONFIG -= app_bundle
