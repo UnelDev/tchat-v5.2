@@ -397,16 +397,20 @@ void serveur::processcomand(QMap<QString, QVariant> command, int noclient)
             emitlog(clientsList[noclient]->getpseudo()+tr(" a changer le grade de ", "dans les log")+ clientsList[clientname]->getpseudo()+ tr(" en ", "dans les log")+clientsList[clientname]->getGradeString());
         }
     }else if(command["message"]=="changeUsrRoom"){
+        int clientname=-1;
+        for(int i = 0; i<clientsList.size(); i++){
+            if(clientsList[i]->getpseudo()==command["arg"]){
+                clientname=i;
+            }
+        }
         if(clientsList[noclient]->getGrade()==0){
             sentmessageto(tr("vous n'avais pas le droit de faire cette commende : changeUsrRoom est soumis a un rôle admin ou host","lors de lexecution d'une commende"), noclient);
             return;
+        }else if(clientsList[clientname]->getGrade()==2){
+            sentmessageto(tr("vous n'avais pas le droit de faire cette commende : changeUsrRoom ne peut etre faut sur un host","lors de lexecution d'une commende"), noclient);
+            return;
         }else{
-            int clientname=-1;
-            for(int i = 0; i<clientsList.size(); i++){
-                if(clientsList[i]->getpseudo()==command["arg"]){
-                    clientname=i;
-                }
-            }if(clientname<0){
+            if(clientname<0){
                 return;
             }
             sentcomandto("clear",clientname);
