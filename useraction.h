@@ -14,11 +14,12 @@ class userAction : public QDialog
 public:
     void addUser(QString name);
     explicit userAction(QWidget *parent = nullptr);
-    ~userAction();    
-private:
-    Ui::userAction *ui;
+    ~userAction();
 signals:
     void finish(QList<QString>usrRole);
+private:
+    Ui::userAction *ui;
+
 private slots:
     void on_buttonBox_accepted();
 };

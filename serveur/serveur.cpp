@@ -23,18 +23,15 @@ int serveur::startserveur(int port)
 {
     m_serveur = new QTcpServer(this);
     if (!m_serveur->listen(QHostAddress::Any, port)) // Démarrage du serveur sur toutes les IP disponibles et sur le port 2048
-    {
-        // Si le serveur n'a pas été démarré correctement
+    {// Si le serveur n'a pas été démarré correctement
         if (!m_serveur->listen(QHostAddress::Any)) // Démarrage du serveur sur toutes les IP disponibles
-        {
-            // Si le serveur n'a pas été démarré correctement
+        { // Si le serveur n'a pas été démarré correctement
             displayMessagelist(tr("Le serveur n'a pas pu être démarré. Raison : ") + m_serveur->errorString(),tr("Serveur Bot"));
             return 0;
         }
     }
     else
-    {
-        // Si le serveur a été démarré correctement
+    {// Si le serveur a été démarré correctement
         displayMessagelist(tr("Le serveur a été démarré sur le port <strong>") + QString::number(m_serveur->serverPort()) + tr("</strong>.Des clients peuvent maintenant se connecter."), tr("Chat Bot"));
         QObject::connect(m_serveur, &QTcpServer::newConnection, this, &serveur::newconect);
     }
@@ -82,23 +79,11 @@ void serveur::sentmessagetoall(const QString type, QString message, QString pseu
     sendmap["shippingyears"]=QDateTime::currentDateTime().toString("yyyy");
     sentmessagetoall(sendmap);
 }
-void serveur::sentmessageto(const QString &message, int NoUtilisateur)
+void serveur::sentmessageto(const QString &message, const int NoUtilisateur, QString pseudo)
 {
-    QMap<QString,QVariant> sendmap;
-    sendmap["type"]="msg";
-    sendmap["message"]=encryptioncesar->chiffre(message);
-    sendmap["pseudo"]="serveur"+encryptioncesar->chiffre(psedo);
-    sendmap["secondofsending"]=QDateTime::currentDateTime().toString("ss");;
-    sendmap["minuteofsending"]=QDateTime::currentDateTime().toString("mm");;
-    sendmap["sendingtime"]=QDateTime::currentDateTime().toString("hh");
-    sendmap["sendingdate"]=QDateTime::currentDateTime().toString("d");
-    sendmap["shippingday"]=QDateTime::currentDateTime().toString("dddd");
-    sendmap["shippingmonth"]=QDateTime::currentDateTime().toString("MMMM");
-    sendmap["shippingyears"]=QDateTime::currentDateTime().toString("yyyy");
-    sentmessageto(sendmap,NoUtilisateur);
-}
-void serveur::sentmessageto(const QString &message,QString pseudo, int NoUtilisateur)
-{
+    if(psedo==""){
+        pseudo = "serveur"+encryptioncesar->chiffre(psedo);
+    }
     QMap<QString,QVariant> sendmap;
     sendmap["type"]="msg";
     sendmap["message"]=encryptioncesar->chiffre(message);
@@ -111,6 +96,13 @@ void serveur::sentmessageto(const QString &message,QString pseudo, int NoUtilisa
     sendmap["shippingmonth"]=QDateTime::currentDateTime().toString("MMMM");
     sendmap["shippingyears"]=QDateTime::currentDateTime().toString("yyyy");
     sentmessageto(sendmap,NoUtilisateur);
+}
+void serveur::sentMessageToRole(const QString message, const int role, QString psedoOfSent){
+    for(int i = 0; i<clientsList.size(); i++){
+        if(clientsList[i]->getGrade()==role){
+            sentmessageto(message,i,psedoOfSent);
+        }
+    }
 }
 void serveur::sendFileto(const QString path, const QString NameOfFile, const int NoUtilisateur){
     QFile file(path);
@@ -184,6 +176,7 @@ void serveur::newconect()
     utilisateur* newClient = new utilisateur(m_serveur->nextPendingConnection());
     if(clientsList.empty()){
         newClient->promote(2); //on le passe host
+        newClient->changeRoom("talk");
     }
     clientsList.append(newClient);
     QObject::connect(clientsList.last()->getSocket(), &QTcpSocket::readyRead, this, &serveur::datareceived);
@@ -194,25 +187,33 @@ void serveur::connect(const QMap<QString, QVariant> &connectpack, int usernaime)
     QString username =encryptioncesar->deChiffre(connectpack["pseudo"].toString());
     clientsList[usernaime]->editpseudo(username);
     clientsList[usernaime]->editversion(connectpack["version"].toString());
-    sentmessagetoall(connectpack);
-    emitlog(tr("un client vien de sidentifier : ", "dans les log")+ clientsList[usernaime]->getpseudo());
-    srand (time(NULL));
-    int random = rand() % 4 + 1;
-    if(random == 1){
-        sentmessagetoall("msg",clientsList[usernaime]->getpseudo() + tr(" est connecté."),tr("Tchat Bot"));
-    }else if(random == 2){
-         sentmessagetoall("msg",clientsList[usernaime]->getpseudo() + tr(" vient d'arriver dans le salon."),tr("Tchat Bot"));
-    }else if(random == 3){
-        sentmessagetoall("msg",clientsList[usernaime]->getpseudo() + tr(" vient de nous rejoindre."),tr("Tchat Bot"));
-    }else if(random == 4){
-        sentmessagetoall("msg",tr("Il ne nous manquait plus que ")+clientsList[usernaime]->getpseudo()+ tr(" heureusement il nous a rejoint."),tr("Tchat Bot"));
-    }
-    for(int i = 0; i < saveMessage.size()-1; i++)
-    {
-        sentmessageto(saveMessage[i],usernaime);
-    }
-    for(int i = 0; i < clientsList.size()-1; i++){
-        sentcomandto("isconnected",clientsList[i]->getpseudo(),usernaime);
+    if(clientsList[usernaime]->getRoom()!="waiting"){// si il est pas en sale d'atente{
+        sentmessagetoall(connectpack);
+        emitlog(tr("un client vien de sidentifier : ", "dans les log")+ clientsList[usernaime]->getpseudo());
+        srand (time(NULL));
+        int random = rand() % 4 + 1;
+        if(random == 1){
+            sentmessagetoall("msg",clientsList[usernaime]->getpseudo() + tr(" est connecté."),tr("Tchat Bot"));
+        }else if(random == 2){
+             sentmessagetoall("msg",clientsList[usernaime]->getpseudo() + tr(" vient d'arriver dans le salon."),tr("Tchat Bot"));
+        }else if(random == 3){
+            sentmessagetoall("msg",clientsList[usernaime]->getpseudo() + tr(" vient de nous rejoindre."),tr("Tchat Bot"));
+        }else if(random == 4){
+            sentmessagetoall("msg",tr("Il ne nous manquait plus que ")+clientsList[usernaime]->getpseudo()+ tr(" heureusement il nous a rejoint."),tr("Tchat Bot"));
+        }
+        for(int i = 0; i < saveMessage.size()-1; i++)
+        {
+            sentmessageto(saveMessage[i],usernaime);
+        }
+        for(int i = 0; i < clientsList.size()-1; i++){
+            sentcomandto("isconnected",clientsList[i]->getpseudo(),usernaime);
+        }
+    }else{//il est en sale d'atente
+        sentmessageto(tr("vous avez ete placée en sale d'atente...","lors d'une connexion"),usernaime,tr("tchat bot"));
+        sentMessageToRole(clientsList[usernaime]->getpseudo()+tr(" vien de se connecter... il a été placée en salle d'atente","lors d'une connexion"),1);
+        sentMessageToRole(clientsList[usernaime]->getpseudo()+tr(" vien de se connecter... il a été placée en salle d'atente","lors d'une connexion"),2);
+        sentmessageto(tr("les administarteur est l'host on été prevenu","lors d'une connexion"),usernaime,tr("tchat bot"));
+        emitlog(clientsList[usernaime]->getpseudo()+tr(" vien de se connecter... il a été placée en salle d'atente","lors d'une connexion"));
     }
 
 }
@@ -249,10 +250,14 @@ void serveur::datareceived()
             message["pseudo"]=encryptioncesar->deChiffre(message["pseudo"].toString());
             processcomand(message,index);
         }else if(message["type"]=="msg"){
+            if(clientsList[index]->getRoom()!="waiting"){// si il est pas en sale d'atente
                 sentmessagetoall(message);
                 if(settings->value("settings/SaveMessage").toBool()){
                     writetofile(message);
                 }
+            }else{//si il est en sale d'atente
+                sentmessageto(tr("vous ne pouvez pas envoyer de message car vous ete en sale d'atente","lors de la reception de message si le client est en salle d'atente"),index,tr("Tchat Bot"));
+            }
         }else if(message["type"]=="attachment"){
             sentmessagetoall(message);
             message["pseudo"]=encryptioncesar->deChiffre(message["pseudo"].toString());
@@ -381,7 +386,7 @@ void serveur::processcomand(QMap<QString, QVariant> command, int noclient)
         }else if(clientsList[noclient]->getGrade()<command["arg2"].toInt()){
             sentmessageto(tr("vous n'avais pas le droit de donée un grade plus élever que le votre","lors de lexecution d'une commende"), noclient);
             return;
-        }else if(command["arg2"].toInt()==3){
+        }else if(command["arg2"].toInt()==2){
             sentmessageto(tr("il est imposible de donée le grade host","lors de lexecution d'une commende"), noclient);
             return;
         }else if(clientsList[clientname]->getGrade()==2){
@@ -390,6 +395,24 @@ void serveur::processcomand(QMap<QString, QVariant> command, int noclient)
             clientsList[clientname]->promote(command["arg2"].toInt());
             sentmessagetoall("msg",clientsList[noclient]->getpseudo()+tr(" a changer le grade de ")+ clientsList[clientname]->getpseudo()+ tr(" en ")+clientsList[clientname]->getGradeString(),tr("Tchat Bot"));
             emitlog(clientsList[noclient]->getpseudo()+tr(" a changer le grade de ", "dans les log")+ clientsList[clientname]->getpseudo()+ tr(" en ", "dans les log")+clientsList[clientname]->getGradeString());
+        }
+    }else if(command["message"]=="changeUsrRoom"){
+        if(clientsList[noclient]->getGrade()==0){
+            sentmessageto(tr("vous n'avais pas le droit de faire cette commende : changeUsrRoom est soumis a un rôle admin ou host","lors de lexecution d'une commende"), noclient);
+            return;
+        }else{
+            int clientname=-1;
+            for(int i = 0; i<clientsList.size(); i++){
+                if(clientsList[i]->getpseudo()==command["arg"]){
+                    clientname=i;
+                }
+            }if(clientname<0){
+                return;
+            }
+            sentcomandto("clear",clientname);
+            clientsList[clientname]->changeRoom(command["arg2"].toString());
+            sentmessageto(tr("vous avez été changer de salle par ")+clientsList[noclient]->getpseudo()+ tr(" vous éte maintenant en salle : ")+clientsList[clientname]->getRoom(), clientname);
+            emitlog(command["arg"].toString()+tr(" a été changer de sale par : ", "dans les log")+clientsList[noclient]->getpseudo()+tr("il est maintenant en salle :", "dans les log")+clientsList[clientname]->getRoom());
         }
     }else{
         messageBox(tr("erreur"), tr("Un paquet de commande a été reçu mais la commande est incomprise."));

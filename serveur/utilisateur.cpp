@@ -46,6 +46,9 @@ void utilisateur::promote(int grade){
       m_grade = grade;
     }
 }
+void utilisateur::changeRoom(QString newRoom){
+    room = newRoom;
+}
 int utilisateur::getmessageSize()
 {
     return messageSize;
@@ -61,6 +64,9 @@ QString utilisateur::getpseudo()
 QString utilisateur::getversion()
 {
     return vertion;
+}
+QString utilisateur::getRoom(){
+    return room;
 }
 QString utilisateur::getGradeString(){
     if(m_grade==0){
