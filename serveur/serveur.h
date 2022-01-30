@@ -35,6 +35,7 @@ class serveur : public QObject
     void sentcomandto(const QVariant &message,QString arg ,int usernaime);
     void sentcommande(const QString commande,const QString arg = "",const QString arg2 = "");
     void newconect();
+    void outOfWating(int usernaime);
     void connect(QMap<QString, QVariant> &connectpack, int usernaime);
     void datareceived();
     void disconnectclients();
