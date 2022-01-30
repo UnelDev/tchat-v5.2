@@ -11,34 +11,37 @@ CONFIG += c++11
 
 SOURCES += \
     client.cpp \
-    client\main.cpp \
+    client/main.cpp \
     moreinformation.cpp \
-    client\parametre.cpp \
+    client/parametre.cpp \
     succees.cpp \
-    client\widget.cpp \
+    client/widget.cpp \
     cesar.cpp \
-    useraction.cpp
+    useraction.cpp \
+    changeuserroom.cpp
 
 HEADERS += \
     client.h \
     moreinformation.h \
     cesar.h \
     succees.h \
-    client\parametre.h \
-    client\widget.h \
-    useraction.h
+    client/parametre.h \
+    client/widget.h \
+    useraction.h \
+    changeuserroom.h
 
 
 FORMS += \
     moreinformation.ui \
     succees.ui \
-    client\widget.ui \
-    client\parametre.ui \
-    useraction.ui
+    client/widget.ui \
+    client/parametre.ui \
+    useraction.ui \
+    changeuserroom.ui
 
 TRANSLATIONS += \
-    client\chat_fr_FR.ts
-    client\chat_An_AN.ts
+    client/chat_fr_FR.ts
+    client/chat_An_AN.ts
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -50,4 +53,4 @@ DISTFILES += \
     client\chat_fr_FR.ts
 
 RESOURCES += \
-    client\resources.qrc
+    client/resources.qrc

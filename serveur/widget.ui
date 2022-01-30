@@ -13,10 +13,6 @@
   <property name="windowTitle">
    <string>ananta systeme serveur</string>
   </property>
-  <property name="windowIcon">
-   <iconset resource="resource.qrc">
-    <normaloff>:/image/resource/image/Ananta.png</normaloff>:/image/resource/image/Ananta.png</iconset>
-  </property>
   <property name="windowOpacity">
    <double>1.000000000000000</double>
   </property>
@@ -40,8 +36,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>392</width>
-        <height>334</height>
+        <width>397</width>
+        <height>341</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_2">

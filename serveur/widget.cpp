@@ -8,6 +8,7 @@ Widget::Widget(QWidget *parent)
     ui(new Ui::Widget)
 {
     ui->setupUi(this);
+    this->setWindowIcon(QIcon(QPixmap(":/image/resource/image/Ananta.png").scaled(QSize(128, 128), Qt::KeepAspectRatio, Qt::SmoothTransformation)));//sinon sur linux ca carsh
     ui->erorLabel->setVisible(false);
     QCoreApplication::setOrganizationName("ananta system");
     QCoreApplication::setOrganizationDomain("https://anantasystem.com/");

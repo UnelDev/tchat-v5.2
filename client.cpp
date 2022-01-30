@@ -295,6 +295,9 @@ void client::processcomand(QMap<QString, QVariant> commend)
         displayMessagelist(commend["arg"].toString()+ tr(" a changer son psedo en : ","lors d'un changement de nom utilisateur")+commend["arg2"].toString());
         deleteclient(commend["arg"].toString());
         newclient(commend["arg2"].toString());
+    }else if(commend["message"]=="silentNameChange"){
+        deleteclient(commend["arg"].toString());
+        newclient(commend["arg2"].toString());
     }else{
         QMessageBox::critical(nullptr, tr("Erreur"), tr("Un paquet de comande a été reçu mais la commande est incomprise. ")+commend["message"].toString());
     }

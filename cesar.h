@@ -14,8 +14,8 @@ public:
     void addChar(const char add);
     void addTabChar(const std::vector<char> add);
     void chageTabChar(const std::vector<char> change);
-    QString chiffre(QString text);
-    QString deChiffre(QString text);
+    const QString chiffre(QString text);
+    const QString deChiffre(QString text);
 private:
     bool initialize();
     int gap;

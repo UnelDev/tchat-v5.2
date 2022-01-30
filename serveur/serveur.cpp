@@ -183,11 +183,15 @@ void serveur::newconect()
     QObject::connect(clientsList.last()->getSocket(), &QTcpSocket::disconnected, this ,&serveur::disconnectclients);
     emitlog(tr("un client s'est connécter mais ne s'est pas encors identifier.", "dans les log"));
 }
-void serveur::connect(const QMap<QString, QVariant> &connectpack, int usernaime){
+void  serveur::outOfWating(){
+
+}
+void serveur::connect( QMap<QString, QVariant> &connectpack, int usernaime){
     QString username =encryptioncesar->deChiffre(connectpack["pseudo"].toString());
-    clientsList[usernaime]->editpseudo(username);
+
     clientsList[usernaime]->editversion(connectpack["version"].toString());
-    if(clientsList[usernaime]->getRoom()!="waiting"){// si il est pas en sale d'atente{
+    if(clientsList[usernaime]->getRoom()!="waiting"){// si  il est pas en sale d'atente{
+        clientsList[usernaime]->editpseudo(username);//on le nomme
         sentmessagetoall(connectpack);
         emitlog(tr("un client vien de sidentifier : ", "dans les log")+ clientsList[usernaime]->getpseudo());
         srand (time(NULL));
@@ -208,12 +212,16 @@ void serveur::connect(const QMap<QString, QVariant> &connectpack, int usernaime)
         for(int i = 0; i < clientsList.size()-1; i++){
             sentcomandto("isconnected",clientsList[i]->getpseudo(),usernaime);
         }
+        sentmessagetoall(connectpack);
     }else{//il est en sale d'atente
+        clientsList[usernaime]->editpseudo(username+tr(" (en salle d'atente)"));//on le nome
         sentmessageto(tr("vous avez ete placée en sale d'atente...","lors d'une connexion"),usernaime,tr("tchat bot"));
-        sentMessageToRole(clientsList[usernaime]->getpseudo()+tr(" vien de se connecter... il a été placée en salle d'atente","lors d'une connexion"),1);
-        sentMessageToRole(clientsList[usernaime]->getpseudo()+tr(" vien de se connecter... il a été placée en salle d'atente","lors d'une connexion"),2);
+        sentMessageToRole(clientsList[usernaime]->getpseudo()+tr(" vien de se connecter... il a été placée en salle d'atente taper /acept","lors d'une connexion"),1);
+        sentMessageToRole(clientsList[usernaime]->getpseudo()+tr(" vien de se connecter... il a été placée en salle d'atente taper /acept","lors d'une connexion"),2);
         sentmessageto(tr("les administarteur est l'host on été prevenu","lors d'une connexion"),usernaime,tr("tchat bot"));
         emitlog(clientsList[usernaime]->getpseudo()+tr(" vien de se connecter... il a été placée en salle d'atente","lors d'une connexion"));
+        connectpack["pseudo"]=encryptioncesar->chiffre(encryptioncesar->deChiffre(connectpack["pseudo"].toString())+tr(" (en salle d'atente)"));
+        sentmessagetoall(connectpack);
     }
 
 }
@@ -399,24 +407,27 @@ void serveur::processcomand(QMap<QString, QVariant> command, int noclient)
     }else if(command["message"]=="changeUsrRoom"){
         int clientname=-1;
         for(int i = 0; i<clientsList.size(); i++){
-            if(clientsList[i]->getpseudo()==command["arg"]){
+            if(clientsList[i]->getpseudo()==command["arg"].toString()){//on prend le n° du client
                 clientname=i;
             }
         }
-        if(clientsList[noclient]->getGrade()==0){
+        if(clientname<0){
+            return;
+        }
+        if(clientsList[noclient]->getGrade()==0){// si c'est un user
             sentmessageto(tr("vous n'avais pas le droit de faire cette commende : changeUsrRoom est soumis a un rôle admin ou host","lors de lexecution d'une commende"), noclient);
             return;
-        }else if(clientsList[clientname]->getGrade()==2){
-            sentmessageto(tr("vous n'avais pas le droit de faire cette commende : changeUsrRoom ne peut etre faut sur un host","lors de lexecution d'une commende"), noclient);
+        }else if(clientsList[clientname]->getGrade()==2){//si on veut changer un host
+            sentmessageto(tr("vous n'avais pas le droit de faire cette commende : changeUsrRoom ne peut etre fait sur un host","lors de lexecution d'une commende"), noclient);
             return;
         }else{
-            if(clientname<0){
-                return;
-            }
             sentcomandto("clear",clientname);
             clientsList[clientname]->changeRoom(command["arg2"].toString());
             sentmessageto(tr("vous avez été changer de salle par ")+clientsList[noclient]->getpseudo()+ tr(" vous éte maintenant en salle : ")+clientsList[clientname]->getRoom(), clientname);
             emitlog(command["arg"].toString()+tr(" a été changer de sale par : ", "dans les log")+clientsList[noclient]->getpseudo()+tr("il est maintenant en salle :", "dans les log")+clientsList[clientname]->getRoom());
+            sentcommande("silentNameChange",clientsList[clientname]->getpseudo(),clientsList[clientname]->getpseudo().remove(tr(" (en salle d'atente)")));//on dit qu'il s'est renomée
+            clientsList[clientname]->editpseudo(clientsList[clientname]->getpseudo().remove(tr(" (en salle d'atente)")));//on le renome
+
         }
     }else{
         messageBox(tr("erreur"), tr("Un paquet de commande a été reçu mais la commande est incomprise."));
