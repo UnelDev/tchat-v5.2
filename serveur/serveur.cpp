@@ -183,19 +183,21 @@ void serveur::newconect()
     QObject::connect(clientsList.last()->getSocket(), &QTcpSocket::disconnected, this ,&serveur::disconnectclients);
     emitlog(tr("un client s'est connécter mais ne s'est pas encors identifier.", "dans les log"));
 }
-void  serveur::outOfWating(int usernaime){
+void  serveur::outOfWating(int usernaime, const QString newpsedo)
+{
     if(clientsList[usernaime]->getRoom()!="waiting"){// si  il est pas en sale d'atente{
+        sentcommande("silentNameChange",clientsList[usernaime]->getpseudo(),newpsedo);//on dit qu'il s'est renomée
         emitlog(tr("un client vien de sidentifier : ", "dans les log")+ clientsList[usernaime]->getpseudo());
         srand (time(NULL));
         int random = rand() % 4 + 1;
         if(random == 1){
-            sentmessagetoall("msg",clientsList[usernaime]->getpseudo() + tr(" est connecté."),tr("Tchat Bot"));
+            sentmessagetoall("msg",newpsedo + tr(" est connecté."),tr("Tchat Bot"));
         }else if(random == 2){
-             sentmessagetoall("msg",clientsList[usernaime]->getpseudo() + tr(" vient d'arriver dans le salon."),tr("Tchat Bot"));
+             sentmessagetoall("msg",newpsedo + tr(" vient d'arriver dans le salon."),tr("Tchat Bot"));
         }else if(random == 3){
-            sentmessagetoall("msg",clientsList[usernaime]->getpseudo() + tr(" vient de nous rejoindre."),tr("Tchat Bot"));
+            sentmessagetoall("msg",newpsedo + tr(" vient de nous rejoindre."),tr("Tchat Bot"));
         }else if(random == 4){
-            sentmessagetoall("msg",tr("Il ne nous manquait plus que ")+clientsList[usernaime]->getpseudo()+ tr(" heureusement il nous a rejoint."),tr("Tchat Bot"));
+            sentmessagetoall("msg",tr("Il ne nous manquait plus que ")+newpsedo+ tr(" heureusement il nous a rejoint."),tr("Tchat Bot"));
         }
         for(int i = 0; i < saveMessage.size()-1; i++)
         {
@@ -221,7 +223,7 @@ void  serveur::outOfWating(int usernaime){
         sentMessageToRole(clientsList[usernaime]->getpseudo()+tr(" vien de se connecter... il a été placée en salle d'atente taper /acept","lors d'une connexion"),2);
         sentmessageto(tr("les administarteur est l'host on été prevenu","lors d'une connexion"),usernaime,tr("tchat bot"));
         emitlog(clientsList[usernaime]->getpseudo()+tr(" vien de se connecter... il a été placée en salle d'atente","lors d'une connexion"));
-
+        sentcommande("silentNameChange",clientsList[usernaime]->getpseudo(),clientsList[usernaime]->getpseudo()+" ("+clientsList[usernaime]->getRoom()+")");//on dit qu'il s'est renomée
     }
 }
 void serveur::connect( QMap<QString, QVariant> &connectpack, int usernaime){
@@ -460,13 +462,12 @@ void serveur::processcomand(QMap<QString, QVariant> command, int noclient)
             return;
         }else{
             sentcomandto("clear",clientname);
-
             sentmessageto(tr("vous avez été changer de salle par ")+clientsList[noclient]->getpseudo()+ tr(" vous éte maintenant en salle : ")+command["arg2"].toString(), clientname);
             emitlog(command["arg"].toString()+tr(" a été changer de sale par : ", "dans les log")+clientsList[noclient]->getpseudo()+tr("il est maintenant en salle :", "dans les log")+command["arg2"].toString());
-            sentcommande("silentNameChange",clientsList[clientname]->getpseudo(),clientsList[clientname]->getpseudo().remove(" ("+clientsList[clientname]->getRoom()+")"));//on dit qu'il s'est renomée
-            clientsList[clientname]->editpseudo(clientsList[clientname]->getpseudo().remove(" ("+clientsList[clientname]->getRoom()+")"));//on le renome
+            const QString name =clientsList[clientname]->getpseudo().remove(" ("+clientsList[clientname]->getRoom()+")");
             clientsList[clientname]->changeRoom(command["arg2"].toString());
-            outOfWating(clientname);
+            outOfWating(clientname,name);
+            clientsList[clientname]->editpseudo(clientsList[clientname]->getpseudo().remove(" ("+clientsList[clientname]->getRoom()+")"));//on le renome
         }
     }else{
         messageBox(tr("erreur"), tr("Un paquet de commande a été reçu mais la commande est incomprise."));
