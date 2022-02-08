@@ -27,6 +27,7 @@ ANANTA SYSTEME  tchat 4.0.-1
 #include "cesar.h"
 #include "client.h"
 #include "useraction.h"
+#include "changeuserroom.h"
 QT_BEGIN_NAMESPACE
 namespace Ui { class Widget; }
 QT_END_NAMESPACE
@@ -71,6 +72,7 @@ private:
     void newuser(QString name);
     void executeCmd(const QString cmd);
     void changeUserRole(QList<QString>usrRole);
+    void changeUsersaloon(const QString username, const QString room);
     //variable
     QString m_path;
     QString encryption;

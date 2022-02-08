@@ -45,7 +45,7 @@ bool cesar::initialize(){
     alphabet.push_back('9');
     return true;
 }
-QString cesar::chiffre(QString text){
+const QString cesar::chiffre( QString text){
     int size =alphabet.size();
     for (int i(0) ; i < text.size() ; i++)
     {
@@ -63,7 +63,7 @@ QString cesar::chiffre(QString text){
     }
     return text;
 }
-QString cesar::deChiffre( QString text){
+const QString cesar::deChiffre( QString text){
     for (int i {text.size()-1}; i >= 0; --i)
     {
         auto pos = find(alphabet.begin(), alphabet.end(), text[i]);

@@ -11,11 +11,13 @@
 #include <QScrollBar>
 #include <QDateTime>
 #include <QCheckBox>
+#include <QCoreApplication>
 #include "parametre.h"
 #include "serveur.h"
 #include "client.h"
-#include <QCoreApplication>
+#include "changeuserroom.h"
 #include "useraction.h"
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Widget; }
@@ -61,6 +63,7 @@ private slots:
     void connectClient();
     void openfile();
     void changeUserRole(QList<QString>usrRole);
+    void changeUsersaloon(const QString username, const QString room);
     //asseseur
     void errorServer(QString title, QString msg);
     void displayMessagelist(const QString message);

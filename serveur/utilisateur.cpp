@@ -9,6 +9,7 @@ utilisateur::utilisateur()
     messageSize = 0;
     vertion = "0";
     m_grade = 0;
+    room = "waiting";
 }
 utilisateur::utilisateur(QTcpSocket* socketToServer)
 {
@@ -17,6 +18,7 @@ utilisateur::utilisateur(QTcpSocket* socketToServer)
     messageSize = 0;
     vertion = "0";
     m_grade = 0;
+    room = "waiting";
 }
 utilisateur::utilisateur(QString pseudo, QTcpSocket* socket)
 {
@@ -25,6 +27,7 @@ utilisateur::utilisateur(QString pseudo, QTcpSocket* socket)
     messageSize = 0;
     vertion = "0";
     m_grade = 0;
+    room = "waiting";
 }
 utilisateur::~utilisateur(){
     delete socket;
@@ -43,6 +46,9 @@ void utilisateur::promote(int grade){
       m_grade = grade;
     }
 }
+void utilisateur::changeRoom(QString newRoom){
+    room = newRoom;
+}
 int utilisateur::getmessageSize()
 {
     return messageSize;
@@ -58,6 +64,9 @@ QString utilisateur::getpseudo()
 QString utilisateur::getversion()
 {
     return vertion;
+}
+QString utilisateur::getRoom(){
+    return room;
 }
 QString utilisateur::getGradeString(){
     if(m_grade==0){

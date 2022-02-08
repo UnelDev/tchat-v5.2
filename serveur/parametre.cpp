@@ -51,8 +51,7 @@ void parametre::checklanguage(){
                       break;//ne rien faire
                 }
             }
-        QMessageBox::warning(nullptr,tr("erreur de traduction"),tr("ops se message ne doit pas saficher si il saficher c'st qu'il y a pas de traduction disponble, contacter nous sur le discord ou reinsatalez le tchat","dans les chargemment des trad"));
-    }
+        }
     ui->language->clear();
     for (int i = 0;i<language.value("nbLanguage").toInt();i++) {//tan qu'il reste des launge
         ui->language->addItem(language.value("langageName/"+QString::number(i+1)).toString());

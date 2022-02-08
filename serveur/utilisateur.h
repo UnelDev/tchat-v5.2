@@ -17,6 +17,7 @@ public:
     void setmessageSize(int size);
     void promote(int grade);
     void demote(int grande = 0);
+    void changeRoom(QString newRoom);
     QTcpSocket* getSocket();
     int getmessageSize();
     int getGrade();
@@ -24,6 +25,7 @@ public:
     QString getversion();
     QString safe();
     QString getGradeString();
+    QString getRoom();
     bool isconnecteed();
     bool highSafe();
     bool medumSafeOrSuperior();
@@ -31,6 +33,7 @@ public:
 private:
     QString vertion;
     QString pseudo;
+    QString room;
     int m_grade;// peut etre 0 : utilisateur, 1 admin, 2host
     QTcpSocket* socket;
     int messageSize;

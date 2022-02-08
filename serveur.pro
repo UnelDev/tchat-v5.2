@@ -18,7 +18,8 @@ SOURCES += \
     moreinformation.cpp \
     cesar.cpp \
     client.cpp \
-    useraction.cpp
+    useraction.cpp \
+    changeuserroom.cpp
 HEADERS += \
     serveur/serveur.h \
     succees.h \
@@ -28,13 +29,15 @@ HEADERS += \
     moreinformation.h \
     cesar.h \
     client.h \
-    useraction.h
+    useraction.h \
+    changeuserroom.h
 FORMS += \
     succees.ui \
     serveur/widget.ui \
     serveur/parametre.ui \
     moreinformation.ui \
-    useraction.ui
+    useraction.ui \
+    changeuserroom.ui
 
 TRANSLATIONS += \
     serveur/serveur_fr_FR.ts

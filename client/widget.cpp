@@ -8,6 +8,7 @@ Widget::Widget(QWidget *parent)
 {
     //lib externe
     ui->setupUi(this);
+    this->setWindowIcon(QIcon(QPixmap(":/image/resource/image/Ananta.png").scaled(QSize(128, 128), Qt::KeepAspectRatio, Qt::SmoothTransformation)));//sinon sur linux ca carsh
     ui->erorLabel->setVisible(false);
     QCoreApplication::setOrganizationName("ananta system");
     QCoreApplication::setOrganizationDomain("https://anantasystem.com/");
@@ -154,9 +155,17 @@ void Widget::executeCmd(const QString cmd){
            delete child;
         }
     }
+    lastMessageIsText =false;
 }
 void Widget::changeUserRole(QList<QString>usrRole){
     clients->sendcommande("changeUsrRole",usrRole[0]/*le nom d'utilisateur*/,usrRole[1]/*le role en int*/);
+    userAction *usraction = qobject_cast<userAction*>(sender());
+    usraction->deleteLater();
+}
+void Widget::changeUsersaloon(const QString username, const QString room){
+    clients->sendcommande("changeUsrRoom",username/*le nom d'utilisateur*/,room/*la salle*/);
+    class changeUserRoom *usrRoom = qobject_cast<class changeUserRoom*>(sender());
+    usrRoom->deleteLater();
 }
 void Widget::newuser(QString name){
     listeClient.append(name);
@@ -342,15 +351,7 @@ void Widget::processechatbot(QString command)
    }else if (command==tr("qui est tu")){
        addmessage(generatemesage(tr("Je suis le Tchat Bot crée par les développeurs de Ananta System, je suis encore très inachevé."),tr("Tchat Bot")));
    }else if (command=="clear"){
-       QLayoutItem* child;
-         while((child = ui->messageliste->takeAt(0)) != 0)
-         {
-          if(child->widget() != 0)
-          {
-           delete child->widget();
-          }
-          delete child;
-         }
+       executeCmd("clear");
    }else if (command=="clearall"){
           clients->sendcommande("clearForAll");
    }else if(command.startsWith("promot")){
@@ -362,6 +363,13 @@ void Widget::processechatbot(QString command)
        QObject::connect(usrAction, &userAction::finish, this, &Widget::changeUserRole);
    }else if (command=="actualise"||command=="update"){
         clients->sendcommande("updating");
+   }else if(command.startsWith("acept")){
+          changeUserRoom *usrRoom = new changeUserRoom;
+          usrRoom->show();
+          for(int i=0;i<ui->clientlist->count();i++){
+              usrRoom->addUser(ui->clientlist->item(i)->text());
+          }
+          QObject::connect(usrRoom, &changeUserRoom::finish, this, &Widget::changeUsersaloon);
    }else if (command==tr("merci")){
        int random = rand() % 7 + 1;
        if(random == 1){

@@ -23,13 +23,21 @@ public:
         std::cout <<title.toStdString() <<" : " <<msg.toStdString()<<std::endl;
     }
     void log(const QString log){
-        std::cout <<"server log :   " <<log.toUtf8().toStdString()<<std::endl;
-        if(settings->value("settings/logPaht")!=""){
-            QFile file("out.txt");
-            if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+        QString sDate = QDateTime::currentDateTime().toString("hh:mm:ss");
+        QString message = "server log at "+sDate+" :   " +log.toUtf8();
+        std::cout <<message.toStdString()<<std::endl;
+        save(message);
+
+    }
+    void save(QString msg){
+        if(settings->value("settings/logPaht").toString()!=""){
+            const auto fichier = settings->value("settings/logPaht").toString();
+            QFile file(fichier);//on crée le fichier
+            if(!file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append)){
                 return;
+            }
             QTextStream out(&file);
-            out<<log;
+            out<<msg.toUtf8()<<Qt::endl;
         }
     }
 
@@ -50,10 +58,12 @@ int main(int argc, char *argv[])
     }if(!settings.contains("settings/high")){
         settings.setValue("settings/level of secure","high");
     }if(!settings.contains("settings/log")){
-        settings.setValue("settings/log",true);
+        settings.setValue("settings/log",false);
     }if(!settings.contains("settings/logPaht")){
         settings.setValue("settings/logPaht","");
     }
+    display.pinUp("-----------------generate-by-Ananta-System-5.2-on-"+QDateTime::currentDateTime().toString("-dddd-dd-MMMM-yyyy-hh:mm:ss")+"s----------------");
+    display.save("-----------------generate-by-Ananta-System-5.2-on-"+QDateTime::currentDateTime().toString("-dddd-dd-MMMM-yyyy-hh:mm:ss")+"s----------------");
     serveur serv;
     QObject::connect(&serv, &serveur::display, &display, &console::pinUp);
     QObject::connect(&serv, &serveur::error, &display, &console::errorOnServer);
