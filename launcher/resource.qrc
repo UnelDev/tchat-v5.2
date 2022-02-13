@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/images">
         <file>Anantasite.png</file>
+        <file>admin.png</file>
     </qresource>
 </RCC>

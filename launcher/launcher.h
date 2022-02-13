@@ -24,10 +24,10 @@ public:
 
 private slots:
     void on_pushButton_clicked();
-
     void on_pushButton_2_clicked();
 
 private:
     Ui::launcher *ui;
+    serverInteraction servinteract;
 };
 #endif // LAUNCHER_H

@@ -327,9 +327,8 @@ void serveur::datareceived()
         }else if(message["type"]=="connection"){
             connect(message, index);
         }else{
-        messageBox(tr("erreur"),tr("un paquet de comande a été recu mais la l'idantificateur ")+ message["type"].toString() +tr("est incompri."));
-        displayMessagelist(tr("un paquet de comande a été recu mais la l'idantificateur ")+ message["type"].toString() +tr("est incompri."),tr("serveur bot"));
-    }
+        emit serveur::noInternal(message);
+        }
         sendingClient->setmessageSize(static_cast<int>(0));
     }
 }

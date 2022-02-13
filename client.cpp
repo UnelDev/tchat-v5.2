@@ -52,6 +52,7 @@ void client::connectto(QString ip, int port, QString newpsedo)
 }
 void client::connected()
 {
+    emit client::isConnected();
     QString textmessage = generatemesage(tr("Connexion établie!"), tr("Tchat Bot"));
     senddatamap("connection");
     displayMessagelist(textmessage);
@@ -60,6 +61,7 @@ void client::connected()
 }
 void client::disconnect()
 {
+    emit client::isDesconected();
     QString textmessage = generatemesage(tr("Déconnecté du serveur"),tr("Tchat Bot"));
     displayconnectlabel("<font color=\"#ff0000\">"+tr("Déconnecté", "lors de la déconnexion a un serveur")+"</font>");
     displayMessagelist(textmessage);
@@ -258,7 +260,7 @@ void client::processthemessage(QMap<QString,QVariant> message)
            file.close();// Close the file
         }
     }else{
-        QMessageBox::critical(nullptr,tr("Erreur"), tr("Un paquet a été recu mais l'indentificateur : ") + message["type"].toString() + tr(" est inconnu."));
+        emit externalCommend(message);
     }
 
 }
@@ -328,6 +330,7 @@ QString client::generatemesage(QMap<QString, QVariant> message){
 }
 void client::socketerror(QAbstractSocket::SocketError erreur)
 {
+    emit client::isConnected();
     displayconnectlabel(tr("<font color=\"#ff0000\">Déconnecté</font>"));
     switch(erreur) // On affiche un message diff?rent selon l'erreur qu'on nous indique
     {

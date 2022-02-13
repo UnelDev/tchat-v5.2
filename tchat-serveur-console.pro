@@ -1,25 +1,28 @@
 QT -= gui
 QT += network
-QMAKE_CXXFLAGS += -m32
 
 CONFIG += c++11 console
-CONFIG -= app_bundle
+#CONFIG -= app_bundle
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-        tchat-serveur-console/main.cpp \
-        serveur/serveur.cpp \
+        tchat-serveur-console/console.cpp \
+        tchat-serveur-console\main.cpp \
+        serveur\serveur.cpp \
         cesar.cpp \
-        serveur/utilisateur.cpp
+        serveur\utilisateur.cpp
 HEADERS += \
-    serveur/serveur.h \
+    serveur\serveur.h \
     cesar.h \
-    serveur/utilisateur.h
+    serveur\utilisateur.h \
+    tchat-serveur-console/console.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+FORMS +=

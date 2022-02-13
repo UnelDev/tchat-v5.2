@@ -51,6 +51,8 @@ startserveur::startserveur(QWidget *parent) :
 
 startserveur::~startserveur()
 {
+    delete interactServer;
+    delete settings;
     delete ui;
 }
 void startserveur::on_checkBox_toggled(bool checked)
@@ -63,18 +65,25 @@ void startserveur::on_checkBox_toggled(bool checked)
 }
 void startserveur::on_pushButton_clicked()
 {
-    QString name = settings->value("launcher/AutoConectServeurPosition").toString();
-    QFile file(name);
-    if(!file.open(QIODevice::WriteOnly|QIODevice::Text))
-        QMessageBox::information(this,tr("erreur a louverture du registre"),tr("la clef de registre n'est pas presente faite nous un signalement"));
-    QTextStream out(&file);
-    out << ui->ip->text()+"\n";
-    out <<QString::number(ui->port->value())+"\n";
-    out << ui->username->text();
-    if(!QDesktopServices::openUrl(QUrl(settings->value("launcher/serveurPosition").toString()))){
-        QMessageBox::information(this,tr("erreur a louverture du lien"),tr("le lien ne veut pas souvrir la clef du registre a du etre modifier reinstaler le tchat"));
+    bool test{ui->out->isChecked()};
+    if(test){
+        QString name = settings->value("launcher/AutoConectServeurPosition").toString();
+        QFile file(name);
+        if(!file.open(QIODevice::WriteOnly|QIODevice::Text))
+            QMessageBox::information(this,tr("erreur a louverture du registre"),tr("la clef de registre n'est pas presente faite nous un signalement"));
+        QTextStream out(&file);
+        out << ui->ip->text()+"\n";
+        out <<QString::number(ui->port->value())+"\n";
+        out << ui->username->text();
+        if(!QDesktopServices::openUrl(QUrl(settings->value("launcher/serveurPosition").toString()))){
+            QMessageBox::information(this,tr("erreur a louverture du lien"),tr("le lien ne veut pas souvrir la clef du registre a du etre modifier reinstaler le tchat"));
+        }
+        qApp->quit();
+    }else{
+       interactServer = new serverInteraction();
+       interactServer->connectTo();
     }
-    qApp->quit();
+
 }
 bool startserveur::verify(){
     QTcpServer serveurTest;
@@ -98,3 +107,14 @@ void startserveur::on_port_valueChanged(int arg1)
     verify();
 }
 
+
+void startserveur::on_checkBox_2_clicked(bool checked)
+{
+    if(checked){
+        ui->erorLabel->setText("<font color=#DAA520>"+tr("il vous faudra un compte administrateur")+"</font>");
+        ui->erorLabel->setVisible(true);
+    }else{
+        ui->erorLabel->setText("");
+        ui->erorLabel->setVisible(false);
+    }
+}

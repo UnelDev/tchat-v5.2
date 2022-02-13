@@ -10,6 +10,7 @@
 #include <QFile>
 #include <QNetworkInterface>
 #include <QTcpServer>
+#include "serverinteraction.h"
 
 namespace Ui {
 class startserveur;
@@ -28,8 +29,10 @@ private slots:
     bool verify();
     void on_pushButton_clicked();
     void on_port_valueChanged(int arg1);
+    void on_checkBox_2_clicked(bool checked);
 
 private:
+    serverInteraction* interactServer;
     QSettings* settings;
     Ui::startserveur *ui;
 };

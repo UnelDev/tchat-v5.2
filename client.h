@@ -25,9 +25,10 @@ public:
     void sendFile(const QString message, const QString path, const QString NameOfFile);
     QString getPsedo();
     void editPsedo(QString newpsedo);
+    void senddatamap(const QMap<QString, QVariant> sendmap);
 protected:
     void senddatamap(const QString type);
-    void senddatamap(const QMap<QString, QVariant> sendmap);
+
     void senddatamap(const QString type, QString message, QString pseudo, QDateTime seconde, QDateTime minute, QDateTime heurs, QDateTime NoJour, QDate jour);
     void senddatamap(const QString type, QString message, QString pseudo);
     void senddatamap(const QString type, QString message);
@@ -66,6 +67,9 @@ signals:
     void newuser(QString newClientName);
     void remouveClient(QString nameOfClient);
     void externalOrder(const QString cmd);
+    void isConnected();
+    void isDesconected();
+    void externalCommend(QMap<QString, QVariant> message);
 };
 
 #endif // CLIENT_H
