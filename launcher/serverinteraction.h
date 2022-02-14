@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QDesktopServices>
 #include <QUrl>
+#include <QInputDialog>
 #include "client.h"
 #include "externalserver.h"
 
@@ -24,6 +25,7 @@ private:
     void desconnect();
     void external(QMap<QString, QVariant> message);
     void createPacket(const QString message, const QString arg1="", const QString arg2="");
+    void createServeur();
 signals:
     void desconnected();
     void connected();

@@ -24,6 +24,7 @@ void serverInteraction::connect(){
     createPacket("launchControl");
     progresse=progresse+1;
     externalServ->changeProgress(progresse);
+    externalServ->setState(tr("connecter au serveur verification de la version","luncher"));
 }
 void serverInteraction::desconnect(){emit serverInteraction::desconnected();}
 void serverInteraction::external(QMap<QString, QVariant> message){
@@ -31,14 +32,15 @@ void serverInteraction::external(QMap<QString, QVariant> message){
     message["arg"]=encryptioncesar->deChiffre(message["arg"].toString());
     message["arg2"]=encryptioncesar->deChiffre(message["arg2"].toString());
     message["pseudo"]=encryptioncesar->deChiffre(message["pseudo"].toString());
-    if(message["type"]=="laucher"){
+    if(message["type"].toString()=="laucher"){
         if(message["message"]=="versionServer"){
-            if(message["versionServer"].toString()!=QCoreApplication::applicationVersion()){
+            QString version{QCoreApplication::applicationVersion()};
+            if(message["arg"].toString()!=version){
                 int rep {QMessageBox::question(nullptr,tr("mise a jour dispolible"),tr("une nouvelle version est disponible voulez vous la telecharger ?"))};
                 switch (rep) {
-                  case QMessageBox::Ok:
-                    if(!QDesktopServices::openUrl(QUrl("https://anantasystem.com/"))){
-                        QMessageBox::information(nullptr,tr("erreur a louverture du lien","guit hub pour les theme"),tr("le lien ne veut pas souvrir le probleme vien de votre navigateur par default taper anantasystem.com dans votre navigateur et faite nous un raport de bug sur le discord","guit hub pour les theme"));
+                  case QMessageBox::Yes:
+                    if(!QDesktopServices::openUrl(QUrl("https://anantasystem.com/downloads"))){
+                        QMessageBox::information(nullptr,tr("erreur a louverture du lien","luncher mise a jour"),tr("le lien ne veut pas souvrir le probleme vien de votre navigateur par default taper anantasystem.com dans votre navigateur et faite nous un raport de bug sur le discord","luncher mise a jour"));
                     }
                     break;
                   case QMessageBox::Abort:
@@ -47,11 +49,22 @@ void serverInteraction::external(QMap<QString, QVariant> message){
             }else{
                 progresse=progresse+1;
                 externalServ->changeProgress(progresse);
+                externalServ->setState(tr("bonne version creation du serveur","luncher"));
+                createServeur();
             }
+        }else if(message["message"].toString()=="errorName"){
+            progresse=progresse-1;
+            externalServ->changeProgress(progresse);
+            externalServ->setState(tr("erreur de nom réessayer","luncher nom"));
+            QMessageBox::information(nullptr,tr("erreur de nom","luncher nom"),tr("le nom doit deja etre utiliser chnager le !"));
+            createServeur();
+        }else if(message["message"].toString()=="createServer"){
+            progresse=progresse+1;
+            externalServ->changeProgress(progresse);
+            externalServ->setState(tr("initialisation du serveur","luncher"));
         }
     }
 }
-
 
 void serverInteraction::createPacket(const QString message, const QString arg1, const QString arg2){
 
@@ -69,4 +82,11 @@ void serverInteraction::createPacket(const QString message, const QString arg1, 
     packet["shippingmonth"]=QDateTime::currentDateTime().toString("MMMM");
     packet["shippingyears"]=QDateTime::currentDateTime().toString("yyyy");
     clients->senddatamap(packet);
+}
+void serverInteraction::createServeur(){
+    QString text = QInputDialog::getText(nullptr,tr("nom du serveur"), tr("quelle est le nom du serveur ? atention cella sera public"));
+    createPacket("startNew",text);
+    progresse=progresse+1;
+    externalServ->changeProgress(progresse);
+    externalServ->setState(tr("interogation du serveur sur le nom","dans la creation de serveur"));
 }

@@ -15,6 +15,7 @@ public:
     explicit externalServer(int* valueProgress,QString Adresse, QWidget *parent = nullptr);
     ~externalServer();
     void changeProgress(const int newValue);
+    void setState(const QString newState);
 private:
     Ui::externalServer *ui;
 };

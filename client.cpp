@@ -7,7 +7,7 @@ client::client()
     QCoreApplication::setOrganizationName("ananta system");
     QCoreApplication::setOrganizationDomain("https://anantasystem.com/");
     QCoreApplication::setApplicationName("tchat");
-    QCoreApplication::setApplicationVersion("5.2.2");
+    QCoreApplication::setApplicationVersion("5.2");
     //variable global
     //variable complex
     cesar(1);

@@ -67,7 +67,7 @@ void console::exernalCommende(QMap<QString, QVariant> &message){
     }
     if(message["message"].toString()=="launchControl"){
         createPacket("versionServer", QCoreApplication::applicationVersion());
-        if(!servlist.isEmpty()){
+        if(servlist.empty()){
             for(int i=0; i>servlist.size();){
                 createPacket("newSerrveur",servName[i]);
             }
@@ -75,10 +75,15 @@ void console::exernalCommende(QMap<QString, QVariant> &message){
              createPacket("newSerrveur","noServerLauch");
         }
     }else if(message["message"].toString()=="startNew"){
+        if(servName.indexOf(message["arg"].toString())!=-1){//si le nom existe deja
+            createPacket("errorName");
+            return;
+        }
         serveur newServ;
         servlist.append(&newServ);
-        const QString name = message["arg2"].toString();
+        const QString name = message["arg"].toString();
         servName.append(name);
+        createPacket("createServer");
     }else if(message["message"].toString() == "init"){
         const int index {servName.indexOf(message["arg"].toString())};
         if(index>=0){

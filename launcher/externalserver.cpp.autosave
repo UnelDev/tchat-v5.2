@@ -8,6 +8,7 @@ externalServer::externalServer(int *valueProgress, QString Adresse, QWidget *par
     ui->setupUi(this);
     ui->ip->setText(Adresse);
     ui->progressBar->setValue(*valueProgress);
+    this
 }
 
 externalServer::~externalServer()
