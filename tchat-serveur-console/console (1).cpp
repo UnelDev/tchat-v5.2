@@ -26,9 +26,6 @@ console::~console(){
     delete serv;
     delete settings;
     delete encryptioncesar;
-    for (int i=0; i<servlist.size();i++ ) {
-        servlist[i]->deleteLater();
-    }
 }
 void console::pinUp(const QString message,const QString pseudo){
     if(pseudo==""){
@@ -85,9 +82,8 @@ void console::exernalCommende(QMap<QString, QVariant> &message){
     }else if(message["message"].toString() == "init"){
         const int index {servName.indexOf(message["arg"].toString())};
         if(index>=0){
-            const int portOfServeur = servlist[index]->startserveur();
-            createPacket("starting", QString::number(portOfServeur));
-            log("the server : "+message["arg"].toString()+" has been initialized on port "+QString::number(portOfServeur));
+            createPacket("starting", QString::number(servlist[index]->startserveur()));
+            log("the server : "+message["arg"].toString()+"has been initialized");
         }
     }
 }
@@ -114,11 +110,9 @@ void console::serverLog(const QString logs){
 
 }
 void console::newServeur(const QString name){
-    serveur* newServ;
-    newServ = new serveur();
-    QObject::connect(newServ, &serveur::log, this, &console::serverLog);
-    QObject::connect(newServ, &serveur::error, this, &console::errorOnServer);
-    servlist.append(newServ);
+    serveur newServ;
+    connect(&newServ, &serveur::log, this, &console::serverLog);
+    servlist.append(&newServ);
     servName.append(name);
     createPacket("createServer");
     log("a new server has been created : "+ name);

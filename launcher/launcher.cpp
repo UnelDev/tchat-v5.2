@@ -16,10 +16,10 @@ launcher::~launcher()
 
 void launcher::on_pushButton_clicked()
 {
-    startserveur.show();
+    startserver.show();
 }
 
 void launcher::on_pushButton_2_clicked()
 {
-    connecttoclient.show();
+    connectclient.show();
 }

@@ -18,6 +18,7 @@ public:
 
 private:
     int progresse;
+    QString name;
     client* clients;
     externalServer* externalServ;
     cesar* encryptioncesar;

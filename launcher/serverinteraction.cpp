@@ -3,6 +3,7 @@
 serverInteraction::serverInteraction()
 {
     progresse=0;
+    name="";
 }
 void serverInteraction::connectTo(int port){
     QCoreApplication::setApplicationVersion("5.2");
@@ -17,7 +18,10 @@ void serverInteraction::connectTo(int port){
 
 }
 serverInteraction::~serverInteraction(){
-    delete clients;
+    if(clients!=nullptr){
+        delete clients;
+    }
+
 }
 void serverInteraction::connect(){
     emit serverInteraction::connected();
@@ -62,6 +66,12 @@ void serverInteraction::external(QMap<QString, QVariant> message){
             progresse=progresse+1;
             externalServ->changeProgress(progresse);
             externalServ->setState(tr("initialisation du serveur","luncher"));
+            createPacket("init",name
+                         );
+        }else if(message["message"].toString()=="starting"){
+            progresse=progresse+1;
+            externalServ->changeProgress(progresse);
+            externalServ->setState(tr("initialisation terminée sur le port : ","luncher")+message["arg"].toString());
         }
     }
 }
@@ -84,8 +94,8 @@ void serverInteraction::createPacket(const QString message, const QString arg1, 
     clients->senddatamap(packet);
 }
 void serverInteraction::createServeur(){
-    QString text = QInputDialog::getText(nullptr,tr("nom du serveur"), tr("quelle est le nom du serveur ? atention cella sera public"));
-    createPacket("startNew",text);
+    name = QInputDialog::getText(nullptr,tr("nom du serveur"), tr("quelle est le nom du serveur ? atention cella sera public"));
+    createPacket("startNew",name);
     progresse=progresse+1;
     externalServ->changeProgress(progresse);
     externalServ->setState(tr("interogation du serveur sur le nom","dans la creation de serveur"));

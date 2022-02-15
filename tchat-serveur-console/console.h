@@ -8,7 +8,7 @@
 #include <QFile>
 #include <QDateTime>
 #include <iostream>
-#include "serveur\serveur.h"
+#include "serveur/serveur.h"
 #include "cesar.h"
 class console: public QObject
 {
@@ -23,9 +23,12 @@ public:
 private:
     void errorOnServer(QString title, QString msg);
     void exernalCommende(QMap<QString, QVariant> &message);
+    void newServeur(const QString name);
+    void serverLog(const QString logs);
     QSettings *settings;
     bool write;
     serveur* serv;
+
     cesar* encryptioncesar;
     QList<serveur*> servlist;
     QList<QString> servName;

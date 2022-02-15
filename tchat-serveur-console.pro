@@ -10,14 +10,14 @@ CONFIG += c++11 console
 
 SOURCES += \
         tchat-serveur-console/console.cpp \
-        tchat-serveur-console\main.cpp \
-        serveur\serveur.cpp \
+        tchat-serveur-console/main.cpp \
+        serveur/serveur.cpp \
         cesar.cpp \
-        serveur\utilisateur.cpp
+        serveur/utilisateur.cpp
 HEADERS += \
-    serveur\serveur.h \
+    serveur/serveur.h \
     cesar.h \
-    serveur\utilisateur.h \
+    serveur/utilisateur.h \
     tchat-serveur-console/console.h
 
 # Default rules for deployment.

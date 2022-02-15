@@ -17,8 +17,8 @@ class launcher : public QMainWindow
     Q_OBJECT
 
 public:
-    startserveur startserveur;
-    connecttoclient connecttoclient;
+    startserveur startserver;
+    connecttoclient connectclient;
     launcher(QWidget *parent = nullptr);
     ~launcher();
 
