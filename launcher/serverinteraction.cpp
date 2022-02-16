@@ -8,7 +8,7 @@ serverInteraction::serverInteraction()
 void serverInteraction::connectTo(int port){
     QCoreApplication::setApplicationVersion("5.2");
     encryptioncesar = new cesar(2);
-    externalServ = new externalServer(&progresse,"192.168.0.1");
+    externalServ = new externalServer(&progresse,"127.0.0.1");
     externalServ->show();
     clients = new client();
     clients->connectto("127.0.0.1", 2048, "launcher");
