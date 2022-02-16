@@ -3,7 +3,6 @@
 #include <iostream>
 #include <QObject>
 #include <QSettings>
-
 #include "console.h"
 
 int main(int argc, char *argv[])

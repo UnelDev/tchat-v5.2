@@ -7,15 +7,15 @@ console::console(int Preferedport)
     QCoreApplication::setApplicationName("tchat");
     QCoreApplication::setApplicationVersion("5.2");
     serv = new serveur();
+    servlist.append(serv);
+    servName.append("general");
     settings= new QSettings("settings.ini", QSettings::IniFormat);
     QObject::connect(serv, &serveur::display, this, &console::pinUp);
     QObject::connect(serv, &serveur::error, this, &console::errorOnServer);
-    if(settings->value("settings/log").toBool()){
-        QObject::connect(serv, &serveur::log, this, &console::log);
-    }
-
+    //if(settings->value("settings/log").toBool()){
+        QObject::connect(serv, &serveur::log, this, &console::serverLog);
+    //}
     connect(serv, &serveur::noInternal, this, &console::exernalCommende);
-
     int port =serv->startserveur(Preferedport);
     pinUp("the server has been start of port "+QString::number(port));
     pinUp("initialization down !");
@@ -108,8 +108,8 @@ void console::createPacket(const QString message, const QString arg1, const QStr
     serv->sentmessagetoall(packet);
 }
 void console::serverLog(const QString logs){
-    serveur* serv = qobject_cast<serveur*>(sender());
-    const QString name  = servName[servlist.indexOf(serv)];
+    serveur* servSend = qobject_cast<serveur*>(sender());
+    const QString name  = servName[servlist.indexOf(servSend)];
     log("the serveur : "+name+" sent :"+logs);
 
 }
