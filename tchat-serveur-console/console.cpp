@@ -6,16 +6,19 @@ console::console(int Preferedport)
     QCoreApplication::setOrganizationDomain("https://anantasystem.com/");
     QCoreApplication::setApplicationName("tchat");
     QCoreApplication::setApplicationVersion("5.2");
+    settings= new QSettings("settings.ini", QSettings::IniFormat);
+
+
     serv = new serveur();
     servlist.append(serv);
     servName.append("general");
-
-    settings= new QSettings("settings.ini", QSettings::IniFormat);
     QObject::connect(serv, &serveur::display, this, &console::pinUp);
+    QObject::connect(serv, &serveur::log, this, &console::serverLog);
     QObject::connect(serv, &serveur::error, this, &console::errorOnServer);
-    //if(settings->value("settings/log").toBool()){
-        QObject::connect(serv, &serveur::log, this, &console::serverLog);
-    //}
+    QObject::connect(serv, &serveur::newuser, this, &console::newUser);
+    QObject::connect(serv, &serveur::noInternal, this, &console::exernalCommende);
+    servlist.append(serv);
+
     int port =serv->startserveur(Preferedport);
     pinUp("the server has been start of port "+QString::number(port));
     pinUp("initialization down !");
@@ -107,7 +110,7 @@ void console::createPacket(const QString message, const QString arg1, const QStr
     serv->sentmessagetoall(packet);
 }
 void console::serverLog(const QString logs){
-    serveur* servSend = qobject_cast<serveur*>(sender());
+    serveur* servSend = qobject_cast<serveur*>(sender());//on retrouve le serveur qui a emis
     const QString name  = servName[servlist.indexOf(servSend)];
     log("the serveur "+name+" sent :"+logs);
 
@@ -117,8 +120,13 @@ void console::newServeur(const QString name){
     newServ = new serveur();
     QObject::connect(newServ, &serveur::log, this, &console::serverLog);
     QObject::connect(newServ, &serveur::error, this, &console::errorOnServer);
+    QObject::connect(newServ, &serveur::newuser, this, &console::newUser);
     servlist.append(newServ);
     servName.append(name);
     createPacket("createServer");
     log("a new server has been created : "+ name);
+}
+void console::newUser(utilisateur *user){
+    serveur* servSend = qobject_cast<serveur*>(sender());//on retrouve le serveur qui a emis
+    userlist[servSend].append(user);//on l'ajoute a la liste des utilisateur au serveur servsend
 }

@@ -9,6 +9,7 @@
 #include <QDateTime>
 #include <iostream>
 #include "serveur/serveur.h"
+#include "serveur/utilisateur.h"
 #include "cesar.h"
 class console: public QObject
 {
@@ -25,6 +26,7 @@ private:
     void exernalCommende(QMap<QString, QVariant> &message);
     void newServeur(const QString name);
     void serverLog(const QString logs);
+    void newUser(utilisateur*user);
     QSettings *settings;
     bool write;
     serveur* serv;
@@ -32,6 +34,7 @@ private:
     cesar* encryptioncesar;
     QList<serveur*> servlist;
     QList<QString> servName;
+    QMap<serveur*, QList<utilisateur*>> userlist;
 };
 
 #endif // CONSOLE_H

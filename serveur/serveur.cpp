@@ -207,6 +207,7 @@ void  serveur::outOfWating(int usernaime, const QString newpsedo)
         for(int i = 0; i < clientsList.size()-1; i++){
             sentcomandto("isconnected",clientsList[i]->getpseudo(),usernaime);
         }
+        emit serveur::newuser(clientsList[usernaime]);
     }else if (clientsList[usernaime]->getRoom()=="waiting"){
         emitlog(tr("un client vien d'etre mis en salle d'atente : ", "dans les log")+ clientsList[usernaime]->getpseudo());
         srand (time(NULL));
@@ -254,6 +255,7 @@ void serveur::connect( QMap<QString, QVariant> &connectpack, int usernaime){
             sentcomandto("isconnected",clientsList[i]->getpseudo(),usernaime);
         }
         sentmessagetoall(connectpack);
+        emit
     }else{//il est en sale d'atente
         clientsList[usernaime]->editpseudo(username+" ("+clientsList[usernaime]->getRoom()+")");//on le nome
         sentmessageto(tr("vous avez ete placée en sale d'atente...","lors d'une connexion"),usernaime,tr("tchat bot"));
@@ -273,7 +275,7 @@ void serveur::datareceived()
       QTcpSocket* socket = sendingClient->getSocket();
 
       if(socket == nullptr) {
-        displayMessagelist(tr("erreur lors de la recherche du client qui a envoyé le paquet (non il y a pas de jeux de mot pouris)"),tr("serveur bot"));
+        displayMessagelist(tr("erreur lors de la recherche du client qui a envoyé le paquet"),tr("serveur bot"));
         emitlog(tr("erreur lors de la recherche du client qui a envoyé le paquet", "dans les log"));
         return; //Error
       }
