@@ -79,6 +79,10 @@ void console::exernalCommende(QMap<QString, QVariant> &message){
              createPacket("newSerrveur","noServerLauch");
         }
     }else if(message["message"].toString()=="startNew"){
+        if(message["arg"].toString().remove(" ")==""){//si le nom est vide
+            createPacket("errorName");
+            return;
+        }
         if(servName.indexOf(message["arg"].toString())!=-1){//si le nom existe deja
             createPacket("errorName");
             return;
