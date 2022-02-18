@@ -57,7 +57,7 @@ class serveur : public QObject
     void error(QString title, QString msg);
     void log(const QString log);
     void noInternal(QMap<QString, QVariant> &message);
-    void newuser(utilisateur*user);
+    void ActionOnUser(utilisateur*user, const bool living);
 };
 
 #endif // SERVEUR_H

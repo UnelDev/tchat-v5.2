@@ -11,7 +11,7 @@ void serverInteraction::connectTo(int port){
     externalServ = new externalServer(&progresse,"127.0.0.1");
     externalServ->show();
     clients = new client();
-    clients->connectto("127.0.0.1", 2048, "launcher");
+    clients->connectto("127.0.0.1", port, "launcher");
     QObject::connect(clients,&client::isConnected, this, &serverInteraction::connect);
     QObject::connect(clients,&client::isDesconected, this, &serverInteraction::desconnect);
     QObject::connect(clients,&client::externalCommend, this, &serverInteraction::external);

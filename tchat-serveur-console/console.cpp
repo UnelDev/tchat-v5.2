@@ -15,7 +15,7 @@ console::console(int Preferedport)
     QObject::connect(serv, &serveur::display, this, &console::pinUp);
     QObject::connect(serv, &serveur::log, this, &console::serverLog);
     QObject::connect(serv, &serveur::error, this, &console::errorOnServer);
-    QObject::connect(serv, &serveur::newuser, this, &console::newUser);
+    QObject::connect(serv, &serveur::ActionOnUser, this, &console::newUser);
     QObject::connect(serv, &serveur::noInternal, this, &console::exernalCommende);
     servlist.append(serv);
 
@@ -79,14 +79,6 @@ void console::exernalCommende(QMap<QString, QVariant> &message){
              createPacket("newSerrveur","noServerLauch");
         }
     }else if(message["message"].toString()=="startNew"){
-        if(message["arg"].toString().remove(" ")==""){//si le nom est vide
-            createPacket("errorName");
-            return;
-        }
-        if(servName.indexOf(message["arg"].toString())!=-1){//si le nom existe deja
-            createPacket("errorName");
-            return;
-        }
         newServeur(message["arg"].toString());
     }else if(message["message"].toString() == "init"){
         const int index {servName.indexOf(message["arg"].toString())};
@@ -119,18 +111,35 @@ void console::serverLog(const QString logs){
     log("the serveur "+name+" sent :"+logs);
 
 }
-void console::newServeur(const QString name){
+void console::newServeur(QString name){
+    if(name.remove(" ")==""){//si le nom est vide
+        createPacket("errorName");
+        return;
+    }else if(servName.indexOf(name)!=-1){//si le nom existe deja
+        createPacket("errorName");
+        return;
+    }//verification terminée
     serveur* newServ;
     newServ = new serveur();
     QObject::connect(newServ, &serveur::log, this, &console::serverLog);
     QObject::connect(newServ, &serveur::error, this, &console::errorOnServer);
-    QObject::connect(newServ, &serveur::newuser, this, &console::newUser);
+    QObject::connect(newServ, &serveur::ActionOnUser, this, &console::newUser);
     servlist.append(newServ);
     servName.append(name);
     createPacket("createServer");
     log("a new server has been created : "+ name);
 }
-void console::newUser(utilisateur *user){
+void console::newUser(utilisateur *user, const bool living){
     serveur* servSend = qobject_cast<serveur*>(sender());//on retrouve le serveur qui a emis
-    userlist[servSend].append(user);//on l'ajoute a la liste des utilisateur au serveur servsend
+    if(living){//si l'utilisateur est encore actif
+        userlist[servSend].append(user);//on l'ajoute a la liste des utilisateur au serveur servsend
+    }else{// si il vien d'etre suprimée
+        userlist[servSend].removeOne(user); //on le suprime de la liste des utilisateur au serveur servsend
+        if(userlist[servSend].empty()){//si il n'y a plus personne
+            const QString name = servName[servlist.indexOf(servSend)];
+            log("-->the serveur "+name+"has been deleted because no client is connected");
+            servSend->deleteLater();
+        }
+    }
+
 }

@@ -207,7 +207,7 @@ void  serveur::outOfWating(int usernaime, const QString newpsedo)
         for(int i = 0; i < clientsList.size()-1; i++){
             sentcomandto("isconnected",clientsList[i]->getpseudo(),usernaime);
         }
-        emit serveur::newuser(clientsList[usernaime]);
+        emit serveur::ActionOnUser(clientsList[usernaime],true);
     }else if (clientsList[usernaime]->getRoom()=="waiting"){
         emitlog(tr("un client vien d'etre mis en salle d'atente : ", "dans les log")+ clientsList[usernaime]->getpseudo());
         srand (time(NULL));
@@ -338,7 +338,10 @@ void serveur::datareceived()
 void serveur::disconnectclients()
 {
     QTcpSocket* disconnectingClientSocket = qobject_cast<QTcpSocket*>(sender());
+    int index = findIndex(disconnectingClientSocket);
+    utilisateur* disconnectingClient = clientsList[index];//on recherche le cilent
 
+    emit serveur::ActionOnUser(disconnectingClient, false);//on dit qu'il a été suprimée
     if(disconnectingClientSocket == nullptr) //Error
     {
         displayMessagelist(tr("Erreur fatal: les clients ne peuvent pas être supprimés. fermeture!"),tr("Serveur Bot"));
@@ -347,9 +350,6 @@ void serveur::disconnectclients()
         qApp->quit();
         return;
     }
-
-    int index = findIndex(disconnectingClientSocket);
-    utilisateur* disconnectingClient = clientsList[index];
     emitlog(tr("un client vien d'etre suprimée : ", "dans les log")+disconnectingClient->getpseudo());
     sentcommande("disconnected",disconnectingClient->getpseudo());
 

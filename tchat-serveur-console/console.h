@@ -24,9 +24,9 @@ public:
 private:
     void errorOnServer(QString title, QString msg);
     void exernalCommende(QMap<QString, QVariant> &message);
-    void newServeur(const QString name);
+    void newServeur(QString name);
     void serverLog(const QString logs);
-    void newUser(utilisateur*user);
+    void newUser(utilisateur*user, const bool living);
     QSettings *settings;
     bool write;
     serveur* serv;
