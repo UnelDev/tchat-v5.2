@@ -20,11 +20,15 @@ int main(int argc, char *argv[])
     }if(!settings.contains("settings/high")){
         settings.setValue("settings/level of secure","high");
     }if(!settings.contains("settings/log")){
-        settings.setValue("settings/log",false);
+        settings.setValue("settings/log",true);
     }if(!settings.contains("settings/logPaht")){
-        settings.setValue("settings/logPaht","");
+        settings.setValue("settings/logPaht","general.log");
     }if(!settings.contains("settings/port")){
         settings.setValue("settings/port",2048);
+    }if(!settings.contains("settings/serverPath")){
+        settings.setValue("settings/serverPath","serveur.exe");
+    }if(!settings.contains("settings/port/NbOpenPort")){
+        settings.setValue("settings/port/NbOpenPort",0);
     }
     std::cout << "-----------------generate-by-Ananta-System-5.2-on-"<< QDateTime::currentDateTime().toString("-dddd-dd-MMMM-yyyy-hh:mm:ss").toStdString() << "s----------------"<<std::endl;
     console display(settings.value("settings/port").toInt());

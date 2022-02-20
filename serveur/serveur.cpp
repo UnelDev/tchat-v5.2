@@ -183,6 +183,7 @@ void serveur::newconect()
     QObject::connect(clientsList.last()->getSocket(), &QTcpSocket::readyRead, this, &serveur::datareceived);
     QObject::connect(clientsList.last()->getSocket(), &QTcpSocket::disconnected, this ,&serveur::disconnectclients);
     emitlog(tr("un client s'est connécter mais ne s'est pas encors identifier.", "dans les log"));
+    emit serveur::ActionOnUser(newClient,true);
 }
 void  serveur::outOfWating(int usernaime, const QString newpsedo)
 {

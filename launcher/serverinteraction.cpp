@@ -66,8 +66,7 @@ void serverInteraction::external(QMap<QString, QVariant> message){
             progresse=progresse+1;
             externalServ->changeProgress(progresse);
             externalServ->setState(tr("initialisation du serveur","luncher"));
-            createPacket("init",name
-                         );
+            createPacket("init",name);
         }else if(message["message"].toString()=="starting"){
             progresse=progresse+1;
             externalServ->changeProgress(progresse);
@@ -84,8 +83,8 @@ void serverInteraction::createPacket(const QString message, const QString arg1, 
     packet["pseudo"]=encryptioncesar->chiffre("botLauncher");
     packet["arg"]=encryptioncesar->chiffre(arg1);
     packet["arg2"]=encryptioncesar->chiffre(arg2);
-    packet["secondofsending"]=QDateTime::currentDateTime().toString("ss");;
-    packet["minuteofsending"]=QDateTime::currentDateTime().toString("mm");;
+    packet["secondofsending"]=QDateTime::currentDateTime().toString("ss");
+    packet["minuteofsending"]=QDateTime::currentDateTime().toString("mm");
     packet["sendingtime"]=QDateTime::currentDateTime().toString("hh");
     packet["sendingdate"]=QDateTime::currentDateTime().toString("d");
     packet["shippingday"]=QDateTime::currentDateTime().toString("dddd");

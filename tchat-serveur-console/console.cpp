@@ -10,14 +10,11 @@ console::console(int Preferedport)
 
 
     serv = new serveur();
-    servlist.append(serv);
     servName.append("general");
     QObject::connect(serv, &serveur::display, this, &console::pinUp);
     QObject::connect(serv, &serveur::log, this, &console::serverLog);
     QObject::connect(serv, &serveur::error, this, &console::errorOnServer);
-    QObject::connect(serv, &serveur::ActionOnUser, this, &console::newUser);
     QObject::connect(serv, &serveur::noInternal, this, &console::exernalCommende);
-    servlist.append(serv);
 
     int port =serv->startserveur(Preferedport);
     pinUp("the server has been start of port "+QString::number(port));
@@ -28,9 +25,6 @@ console::~console(){
     delete serv;
     delete settings;
     delete encryptioncesar;
-    for (int i=0; i<servlist.size();i++ ) {
-        servlist[i]->deleteLater();
-    }
 }
 void console::pinUp(const QString message,const QString pseudo){
     if(pseudo==""){
@@ -71,22 +65,8 @@ void console::exernalCommende(QMap<QString, QVariant> &message){
     }
     if(message["message"].toString()=="launchControl"){
         createPacket("versionServer", QCoreApplication::applicationVersion());
-        if(servlist.empty()){
-            for(int i=0; i>servlist.size();){
-                createPacket("newSerrveur",servName[i]);
-            }
-        }else{
-             createPacket("newSerrveur","noServerLauch");
-        }
     }else if(message["message"].toString()=="startNew"){
-        newServeur(message["arg"].toString());
-    }else if(message["message"].toString() == "init"){
-        const int index {servName.indexOf(message["arg"].toString())};
-        if(index>=0){
-            const int portOfServeur = servlist[index]->startserveur();
-            createPacket("starting", QString::number(portOfServeur));
-            log("the server : "+message["arg"].toString()+" has been initialized on port "+QString::number(portOfServeur));
-        }
+        createFile(message["arg"].toString());
     }
 }
 void console::createPacket(const QString message, const QString arg1, const QString arg2){
@@ -106,40 +86,33 @@ void console::createPacket(const QString message, const QString arg1, const QStr
     serv->sentmessagetoall(packet);
 }
 void console::serverLog(const QString logs){
-    serveur* servSend = qobject_cast<serveur*>(sender());//on retrouve le serveur qui a emis
-    const QString name  = servName[servlist.indexOf(servSend)];
-    log("the serveur "+name+" sent :"+logs);
-
+    log("the serveur general sent :"+logs);
 }
-void console::newServeur(QString name){
-    if(name.remove(" ")==""){//si le nom est vide
-        createPacket("errorName");
-        return;
-    }else if(servName.indexOf(name)!=-1){//si le nom existe deja
-        createPacket("errorName");
-        return;
-    }//verification terminée
-    serveur* newServ;
-    newServ = new serveur();
-    QObject::connect(newServ, &serveur::log, this, &console::serverLog);
-    QObject::connect(newServ, &serveur::error, this, &console::errorOnServer);
-    QObject::connect(newServ, &serveur::ActionOnUser, this, &console::newUser);
-    servlist.append(newServ);
-    servName.append(name);
-    createPacket("createServer");
-    log("a new server has been created : "+ name);
-}
-void console::newUser(utilisateur *user, const bool living){
-    serveur* servSend = qobject_cast<serveur*>(sender());//on retrouve le serveur qui a emis
-    if(living){//si l'utilisateur est encore actif
-        userlist[servSend].append(user);//on l'ajoute a la liste des utilisateur au serveur servsend
-    }else{// si il vien d'etre suprimée
-        userlist[servSend].removeOne(user); //on le suprime de la liste des utilisateur au serveur servsend
-        if(userlist[servSend].empty()){//si il n'y a plus personne
-            const QString name = servName[servlist.indexOf(servSend)];
-            log("-->the serveur "+name+"has been deleted because no client is connected");
-            servSend->deleteLater();
-        }
+int console::createFile(const QString name){
+    QSettings room("room.ini", QSettings::IniFormat);
+    if(settings->value("settings/port/NbOpenPort").toInt()>=room.value("NbOfRoom").toInt()){
+        //tout les port sont pris
     }
-
+    QDir folder;
+    folder.mkpath(name);
+    QFile log(name+"/name.log");//on crée le fichier
+    if(!log.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append)){
+        return 0;
+    }
+    QTextStream out(&log);//on initialise le fichier
+    out<<"-----------------generate-by-Ananta-System-5.2-on-"+QDateTime::currentDateTime().toString("-dddd-dd-MMMM-yyyy-hh:mm:ss")+"s----------------"<<Qt::endl;
+    const bool copy = QFile::copy(settings->value("settings/serverPath").toString(),
+                                  "/"+name+settings->value("settings/serverPath").toString());//on crée un nouveaux serveur dans le dossier
+    if(!copy){
+        //il est imposible de copier le fichier
+    }
+    room.setValue("NbOfRoom",room.value("NbOfRoom").toInt()+1);//on augmente le nombre de salle
+    QFile tmp("/"+name+"sart.tmp");
+    if(!tmp.open(QIODevice::WriteOnly | QIODevice::Text)){
+        return 0;
+    }
+    QTextStream outTmp(&tmp);//on initialise le fichier
+    outTmp<<room.value(QString::number(room.value("NbOfRoom").toInt())).toInt();//on ecrit le port dans le fichier
+    return room.value(QString::number(room.value("NbOfRoom").toInt())).toInt();//on donne le port
+    //ouvrir le serveur
 }

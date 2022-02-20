@@ -8,6 +8,7 @@
 #include <QFile>
 #include <QDateTime>
 #include <iostream>
+#include <QDir>
 #include "serveur/serveur.h"
 #include "serveur/utilisateur.h"
 #include "cesar.h"
@@ -24,17 +25,14 @@ public:
 private:
     void errorOnServer(QString title, QString msg);
     void exernalCommende(QMap<QString, QVariant> &message);
-    void newServeur(QString name);
     void serverLog(const QString logs);
-    void newUser(utilisateur*user, const bool living);
+    int createFile(const QString name);
     QSettings *settings;
     bool write;
     serveur* serv;
 
     cesar* encryptioncesar;
-    QList<serveur*> servlist;
     QList<QString> servName;
-    QMap<serveur*, QList<utilisateur*>> userlist;
 };
 
 #endif // CONSOLE_H
