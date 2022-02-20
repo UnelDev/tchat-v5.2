@@ -95,19 +95,19 @@ int console::createFile(const QString name){
     }
     QDir folder;
     folder.mkpath(name);
-    QFile log(name+"/name.log");//on crée le fichier
+    QFile log(name+"/"+name+".log");//on crée le fichier
     if(!log.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append)){
         return 0;
     }
     QTextStream out(&log);//on initialise le fichier
     out<<"-----------------generate-by-Ananta-System-5.2-on-"+QDateTime::currentDateTime().toString("-dddd-dd-MMMM-yyyy-hh:mm:ss")+"s----------------"<<Qt::endl;
     const bool copy = QFile::copy(settings->value("settings/serverPath").toString(),
-                                  "/"+name+settings->value("settings/serverPath").toString());//on crée un nouveaux serveur dans le dossier
+                                  name+"/"+settings->value("settings/serverPath").toString());//on crée un nouveaux serveur dans le dossier
     if(!copy){
         //il est imposible de copier le fichier
     }
     room.setValue("NbOfRoom",room.value("NbOfRoom").toInt()+1);//on augmente le nombre de salle
-    QFile tmp("/"+name+"sart.tmp");
+    QFile tmp(name+"/sart.tmp");
     if(!tmp.open(QIODevice::WriteOnly | QIODevice::Text)){
         return 0;
     }
