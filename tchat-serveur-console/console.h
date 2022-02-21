@@ -9,6 +9,10 @@
 #include <QDateTime>
 #include <iostream>
 #include <QDir>
+#include <QProcess>
+
+#include <QDesktopServices>
+#include <QUrl>
 #include "serveur/serveur.h"
 #include "serveur/utilisateur.h"
 #include "cesar.h"
@@ -26,6 +30,7 @@ private:
     void errorOnServer(QString title, QString msg);
     void exernalCommende(QMap<QString, QVariant> &message);
     void serverLog(const QString logs);
+    bool copyFile(const QString name);
     int createFile(const QString name);
     QSettings *settings;
     bool write;
