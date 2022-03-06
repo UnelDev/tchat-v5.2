@@ -87,31 +87,6 @@ void console::createPacket(const QString message, const QString arg1, const QStr
 void console::serverLog(const QString logs){
     log("the serveur general sent :"+logs);
 }
-bool console::copyFile(const QString name){
-    bool succesful{true};
-    if(!QFile::copy(settings->value("settings/serverPath").toString(),name+"/"+settings->value("settings/serverPath").toString())){//on crée un nouveaux serveur dans le dossier
-        succesful = false;
-    }
-    if(!QFile::copy("libgcc_s_seh-1.dll",name+"/libgcc_s_seh-1.dll")){
-        succesful = false;
-    }
-    if(!QFile::copy("libstdc++-6.dll",name+"/libstdc++-6.dll")){
-        succesful = false;
-    }
-    if(!QFile::copy("libwinpthread-1.dll",name+"/libwinpthread-1.dll")){
-        succesful = false;
-    }
-    if(!QFile::copy("Qt5Core.dll",name+"/Qt5Core.dll")){
-        succesful = false;
-    }
-    if(!QFile::copy("Qt5Multimedia.dll",name+"/Qt5Multimedia.dll")){
-        succesful = false;
-    }
-    if(!QFile::copy("Qt5Network.dll",name+"/Qt5Network.dll")){
-        succesful = false;
-    }
-    return succesful;
-}
 int console::createFile(const QString name){
     QSettings room("room.ini", QSettings::IniFormat);
     if(settings->value("settings/port/NbOpenPort").toInt()<=room.value("NbOfRoom").toInt()){
@@ -121,27 +96,12 @@ int console::createFile(const QString name){
     room.setValue("NbOfRoom",room.value("NbOfRoom").toInt()+1);//on augmente le nombre de salle
 
 
-    QDir folder;//creation du dossier
-    folder.mkpath(name);
-    QSettings settingNewServer(name+"/settings.ini", QSettings::IniFormat);
-    settingNewServer.setValue("pathParent",QDir::currentPath()+"room.ini");
-    settingNewServer.setValue("port",room.value(QString::number(room.value("NbOfRoom").toInt())).toInt());//on met le port dans le ini
-
-
-    QFile logFile(name+"/"+name+".log");//on crée le fichier
-    if(!logFile.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append)){
-        return 0;
-    }
-    QTextStream out(&logFile);//on initialise le fichier
-    out<<"-----------------generate-by-Ananta-System-5.2-on-"+QDateTime::currentDateTime().toString("-dddd-dd-MMMM-yyyy-hh:mm:ss")+"s----------------"<<Qt::endl;
-
-
-
-    if(!copyFile(name)){
-        return 0;
-    }//copie reusi
     QProcess starter;
-    starter.setProgram(name+"/"+settings->value("settings/serverPath").toString());
+    QStringList arg;
+    arg.append(QString::number(room.value(QString::number(room.value("NbOfRoom").toInt())).toInt()));//on met le port
+    arg.append(name);
+    starter.setArguments(arg);
+    starter.setProgram(settings->value("settings/serverPath").toString());
     if(!starter.startDetached()){
         log("error on start server");
     }else{

@@ -19,7 +19,7 @@ class serveur : public QObject
     Q_OBJECT
     public:
     serveur();
-    int startserveur(int port = 2048);
+    int startserveur(const int port = 2048, const QString fileOfSave = "chat.dat");
     void recap();
     void sentcommande(const QString commande,const QString arg = "",const QString arg2 = "");
     void sentmessagetoall(const QString type, QString message, QString pseudo);
@@ -51,6 +51,7 @@ class serveur : public QObject
     QTcpServer* m_serveur;
     QList<QMap<QString,QVariant>> saveMessage;
     QSettings* settings;
+    QString m_FileOfSave;
     int NbOfMessage;
     signals:
     void display(const QString message, const QString psedo);

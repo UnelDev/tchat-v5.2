@@ -19,8 +19,9 @@ serveur::serveur()
 void serveur::emitlog(const QString log){emit serveur::log(log);}
 void serveur::displayMessagelist(const QString newMessage, const QString psedo){ emit serveur::display(newMessage, psedo); }
 void serveur::messageBox( QString title, QString msg){emit serveur::error(title,msg );}
-int serveur::startserveur(int port)
+int serveur::startserveur(const int port, const QString fileOfSave)
 {
+    m_FileOfSave = fileOfSave;
     m_serveur = new QTcpServer();
     if (!m_serveur->listen(QHostAddress::Any, port)) // Démarrage du serveur sur toutes les IP disponibles et sur le port 2048
     {// Si le serveur n'a pas été démarré correctement
@@ -370,7 +371,7 @@ void serveur::writetofile(QMap<QString, QVariant> FluxFile)
 {
     saveMessage.push_back(FluxFile);
     ++NbOfMessage;
-    QFile file("chat.dat");
+    QFile file(m_FileOfSave);
     if (!file.open(QIODevice::WriteOnly)){
             displayMessagelist(tr("Il est impossible d'écrire dans le fichier."),tr("Tchat Bot"));
             return;
@@ -380,7 +381,7 @@ void serveur::writetofile(QMap<QString, QVariant> FluxFile)
 }
 void serveur::recoverallfile()
 {
-    QFile fichier("chat.dat");
+    QFile fichier(m_FileOfSave);
 
    if(fichier.open(QIODevice::ReadOnly))
    {
