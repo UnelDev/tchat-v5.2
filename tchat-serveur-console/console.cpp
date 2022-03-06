@@ -38,7 +38,6 @@ void console::log(const QString log){
     QString message = "server log at "+sDate+" :   " +log.toUtf8();
     std::cout <<message.toStdString()<<std::endl;
     save(message);
-
 }
 void console::save(QString msg){
     if(settings->value("settings/logPaht").toString()!=""){
@@ -116,7 +115,8 @@ bool console::copyFile(const QString name){
 int console::createFile(const QString name){
     QSettings room("room.ini", QSettings::IniFormat);
     if(settings->value("settings/port/NbOpenPort").toInt()>=room.value("NbOfRoom").toInt()){
-        //tout les port sont pris
+        log("error all port is taken");
+        return(0);
     }
     room.setValue("NbOfRoom",room.value("NbOfRoom").toInt()+1);//on augmente le nombre de salle
 
@@ -140,12 +140,12 @@ int console::createFile(const QString name){
     if(!copyFile(name)){
         return 0;
     }//copie reusi
-    /*QProcess starter;
+    QProcess starter;
     starter.setProgram(name+"/"+settings->value("settings/serverPath").toString());
     if(!starter.startDetached()){
         log("error on start server");
     }else{
         log("the demarage is down");
-    }*/
+    }
     return room.value(QString::number(room.value("NbOfRoom").toInt())).toInt();//on donne le port
 }

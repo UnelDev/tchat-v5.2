@@ -11,7 +11,7 @@
 #include <QDir>
 #include <QProcess>
 
-#include <QDesktopServices>
+//#include <QDesktopServices>
 #include <QUrl>
 #include "serveur/serveur.h"
 #include "serveur/utilisateur.h"
