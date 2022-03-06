@@ -3,7 +3,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <QDateTime>
-#include <Qsettings>
+#include <QSettings>
 #include "serveur/serveur.h"
 class Console: public QObject
 {

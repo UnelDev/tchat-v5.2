@@ -114,7 +114,7 @@ bool console::copyFile(const QString name){
 }
 int console::createFile(const QString name){
     QSettings room("room.ini", QSettings::IniFormat);
-    if(settings->value("settings/port/NbOpenPort").toInt()>=room.value("NbOfRoom").toInt()){
+    if(settings->value("settings/port/NbOpenPort").toInt()<=room.value("NbOfRoom").toInt()){
         log("error all port is taken");
         return(0);
     }
