@@ -9,6 +9,7 @@ class Console: public QObject
 {
 public:
     QString m_name;
+    int nbClient;
     Console(const QString name){
         m_name = name;
     }
@@ -51,6 +52,18 @@ public:
     void serverLog(const QString logs){
         log(m_name +" send : "+logs);//on emet avec lo nom du repertoir courant
     }
+    void user(utilisateur*user, const bool living){
+        if(living){
+            ++nbClient;
+        }else{
+            --nbClient;
+            if(nbClient<=0){
+                log("the last client has been desconect");
+                log("<<<<end of this room>>>>");
+                exit(0);
+            }
+        }
+    }
 };
 bool createEnvironement(const QString name){
     QDir dir;
@@ -83,6 +96,7 @@ int main(int argc, char *argv[])//les argument : le port de lancement, lenom de 
     QObject::connect(&serv, &serveur::display, &console, &Console::pinUp);//on connect
     QObject::connect(&serv, &serveur::log, &console, &Console::serverLog);
     QObject::connect(&serv, &serveur::error, &console, &Console::errorOnServer);
+    QObject::connect(&serv, &serveur::ActionOnUser, &console, &Console::user);
     const int definitivePort = serv.startserveur(port.toInt(),name+"/"+name+".dat");//oncrée le serveur
     console.log("<<<<< the serveur of tchat has been create on port : "+QString::number(definitivePort)+">>>>>");
     return a.exec();
