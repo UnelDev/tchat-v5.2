@@ -98,8 +98,8 @@ int console::createFile(const QString name){
 
     QProcess starter;
     QStringList arg;
-    arg.append(QString::number(room.value(QString::number(room.value("NbOfRoom").toInt())).toInt()));//on met le port
-    arg.append(name);
+    arg.push_back(QString::number(room.value(QString::number(room.value("NbOfRoom").toInt())).toInt()));//on met le port
+    arg.push_back(name);
     starter.setArguments(arg);
     starter.setProgram(settings->value("settings/serverPath").toString());
     if(!starter.startDetached()){

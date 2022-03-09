@@ -5,6 +5,40 @@
 #include <QDateTime>
 #include <QSettings>
 #include "serveur/serveur.h"
+bool removeDir(QString dir) //par Keisuke
+{
+    QDir dossier(dir);
+    QFileInfoList listElem = dossier.entryInfoList(QDir::AllEntries);// On parcours la liste des élèments
+    for(int i=2; i<listElem.size(); i++)
+    {
+        QFileInfo fi(listElem.at(i));// Si c'est un fichier
+        if(fi.isFile())
+        {
+            if(!QFile::remove(fi.filePath()))// On supprime le fichier
+            {
+                return false;
+            }
+        }
+        // Si c'est un dossier
+        else if(fi.isDir())
+        {// On supprime les fichiers par récursivité
+            removeDir(fi.filePath());
+        }
+    }
+    if(!dossier.rmdir(dossier.path()))
+    {
+        return false;
+    }
+    return true;
+}
+void clearEnvironement(const QString name){
+    if(!removeDir(name)){
+        std::cout << "error in remouve dir" << std::endl;
+    }
+    QSettings room("room.ini", QSettings::IniFormat);
+    room.setValue("NbOfRoom",room.value("NbOfRoom").toInt()-1);//on reduit le nombre de salle
+    std::cout << "remouve dir success" << std::endl;
+}
 class Console: public QObject
 {
 public:
@@ -13,17 +47,12 @@ public:
     Console(const QString name){
         m_name = name;
     }
-    ~Console(){
-        QFile::remove(m_name+"/"+m_name+".dat");
-        const QString nameSave = QDir::currentPath()+"/"+m_name+"_"+QDateTime::currentDateTime().toString("-dddd-dd-MMMM-yyyy-hh:mm:ss");
-        QFile::rename(m_name+"/"+m_name+".log",nameSave);
-
-        QSettings room("room.ini", QSettings::IniFormat);
-        room.setValue("NbOfRoom",room.value("NbOfRoom").toInt()-1);//on reduit le nombre de salle
-    }
+    /*~Console(){
+        clearEnvironement(m_name);
+    }*/
     void save(QString msg){
-        const auto fichier = m_name+"/"+m_name+".log";
-        QFile file(fichier);//on crée le fichier
+        const auto fichier = "log/"+m_name+".log";
+        QFile file(fichier);//m_name crée le fichier
         if(!file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append)){
             return;
         }
@@ -60,38 +89,48 @@ public:
             if(nbClient<=0){
                 log("the last client has been desconect");
                 log("<<<<end of this room>>>>");
+                clearEnvironement(m_name);
                 exit(0);
             }
         }
     }
 };
 bool createEnvironement(const QString name){
+    bool notError = true;
     QDir dir;
+    dir.mkdir("log");
     dir.mkdir(name);
-    QFile logFile(name+"/"+name+".log");//on crée le fichier
+    const QString time = QDateTime::currentDateTime().toString("dd-MM-yy-hh-mm-ss");
+    QFile logFile("log/"+name+time+".log");//on crée le fichier
     if(!logFile.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append)){
-        return false;
+        notError = false;
     }else{
         QTextStream out(&logFile);//on initialise le fichier
-        out<<"-----------------generate-by-Ananta-System-5.2-on-"+QDateTime::currentDateTime().toString("-dddd-dd-MMMM-yyyy-hh:mm:ss")+"s----------------"<<Qt::endl;
-        return true;
+        out<<"-----------------generate-by-Ananta-System-5.2-on-"+QDateTime::currentDateTime().toString("dd-MM-yy-hh:mm:ss")+"s----------------"<<Qt::endl;
     }
+    QFile dataFile(name+"/"+name+".dat");
+    if(!logFile.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append)){
+        notError =  false;
+    }
+    return notError;
 }
 int main(int argc, char *argv[])//les argument : le port de lancement, lenom de la salle
 {
 
-    QCoreApplication a(argc, argv);
+    QCoreApplication a(argc, argv);/*
     const QString port = argv[0];
-    const QString name = argv[1];
+    const QString name = argv[1];*/
+    const QString port = "2048";
+    const QString name = "test";
     if(port==""||name==""){
         std::cout << "error no argument inform"<<std::endl;
         exit(1);
     }
     Console console(name);
-    /*if(!createEnvironement(name)){
+    if(!createEnvironement(name)){
         std::cout << "error in create environement"<<std::endl;
-    }*/
-    console.log("initialization..."); 
+    }
+    console.log("initialization...");
     serveur serv;
     QObject::connect(&serv, &serveur::display, &console, &Console::pinUp);//on connect
     QObject::connect(&serv, &serveur::log, &console, &Console::serverLog);
@@ -99,5 +138,6 @@ int main(int argc, char *argv[])//les argument : le port de lancement, lenom de 
     QObject::connect(&serv, &serveur::ActionOnUser, &console, &Console::user);
     const int definitivePort = serv.startserveur(port.toInt(),name+"/"+name+".dat");//oncrée le serveur
     console.log("<<<<< the serveur of tchat has been create on port : "+QString::number(definitivePort)+">>>>>");
+    //clearEnvironement(name);
     return a.exec();
 }

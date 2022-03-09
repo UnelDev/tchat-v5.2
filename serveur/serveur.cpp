@@ -25,6 +25,7 @@ int serveur::startserveur(const int port, const QString fileOfSave)
     m_serveur = new QTcpServer();
     if (!m_serveur->listen(QHostAddress::Any, port)) // Démarrage du serveur sur toutes les IP disponibles et sur le port 2048
     {// Si le serveur n'a pas été démarré correctement
+        displayMessagelist(tr("le serveur n'a pas été lancée sur le port demandée"), tr("Serveur Bot"));
         if (!m_serveur->listen(QHostAddress::Any)) // Démarrage du serveur sur toutes les IP disponibles
         { // Si le serveur n'a pas été démarré correctement
             displayMessagelist(tr("Le serveur n'a pas pu être démarré. Raison : ") + m_serveur->errorString(),tr("Serveur Bot"));
