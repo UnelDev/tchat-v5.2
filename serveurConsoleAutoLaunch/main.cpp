@@ -138,8 +138,8 @@ int main(int argc, char *argv[])//les argument : le port de lancement, lenom de 
     console.log("initialization...");
     serveur serv;
     QObject::connect(&serv, &serveur::display, &console, &Console::pinUp);//on connect
-    QObject::connect(&serv, &serveur::log, &console, &Console::serverLog);
     QObject::connect(&serv, &serveur::error, &console, &Console::errorOnServer);
+    QObject::connect(&serv, &serveur::log, &console, &Console::serverLog);
     QObject::connect(&serv, &serveur::ActionOnUser, &console, &Console::user);
     const int definitivePort = serv.startserveur(port.toInt(),name+"/"+name+".dat");//oncrée le serveur
     if(definitivePort!=port.toInt()){

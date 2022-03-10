@@ -29,15 +29,19 @@ public:
 private:
     void errorOnServer(QString title, QString msg);
     void exernalCommende(QMap<QString, QVariant> &message,const int user);
+    void servStart(const int index);
+    void servDonwn(const int exitCode,const QProcess::ExitStatus exitStatus,  const int index);
     void serverLog(const QString logs);
     bool copyFile(const QString name);
-    int createFile(const QString name);
+    int createFile(const QString name, const int index);
     QSettings *settings;
     bool write;
     serveur* serv;
 
     cesar* encryptioncesar;
+    QList<int> portRequired;
     QList<QString> servName;
+    QList<QProcess*> servliste;
 };
 
 #endif // CONSOLE_H
