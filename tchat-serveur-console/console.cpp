@@ -22,9 +22,6 @@ console::console(int Preferedport)
     pinUp("");
 }
 console::~console(){
-    while(servliste.size()>=0){
-        servliste.removeFirst();
-    }
     delete serv;
     delete settings;
     delete encryptioncesar;
@@ -68,6 +65,7 @@ void console::exernalCommende(QMap<QString, QVariant> &message,const int user){
     if(message["message"].toString()=="launchControl"){
         createPacket(user,"versionServer", QCoreApplication::applicationVersion());
     }else if(message["message"].toString()=="startNew"){
+        createPacket(user,"createServer");
         createFile(message["arg"].toString(),user);
     }
 }
@@ -98,10 +96,10 @@ int console::createFile(const QString name, const int index){
     }
     room.setValue("NbOfRoom",room.value("NbOfRoom").toInt()+1);//on augmente le nombre de salle
 
-
     QProcess *starter = new QProcess();
     QStringList arg;
-    arg.push_back(QString::number(room.value(room.value("NbOfRoom").toString()).toInt()));//on met le port
+    const int portPrefered = room.value(room.value("NbOfRoom").toString()).toInt();
+    arg.push_back(QString::number(portPrefered));//on met le port
     arg.push_back(name);
     starter->setArguments(arg);
     starter->setProgram(settings->value("settings/serverPath").toString());
@@ -109,33 +107,8 @@ int console::createFile(const QString name, const int index){
         log("error on start server");
     }else{
         servName.append(name);
-        servliste.append(starter);
-        portRequired.append(room.value(room.value("NbOfRoom").toString()).toInt());
         log("the demarage is down");
-        QObject::connect(starter, &QProcess::started, [this, index](){
-            servStart(index);
-        });
-
-        connect(starter, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
-            [=](int exitCode, QProcess::ExitStatus exitStatus){
-            const int index = servliste.indexOf(qobject_cast<QProcess*>(sender()));
-            servDonwn(exitCode,exitStatus, index);});
+        createPacket(index, "starting",QString::number(portPrefered));
     }
     return room.value(room.value("NbOfRoom").toString()).toInt();//on donne le port
-}
-void console::servStart(const int index){
-    int serv = servliste.indexOf(qobject_cast<QProcess*>(sender()));
-    log("the serveur: "+servName[serv]+"has been start on port "+portRequired[serv]);
-
-}
-void console::servDonwn(const int exitCode,const  QProcess::ExitStatus exitStatus, const int index){
-    if(exitStatus == QProcess::NormalExit){
-        log("the serveur: "+servName[index]+"has been close with code "+ QString::number(exitCode));
-    }else if(exitStatus == QProcess::CrashExit){
-        log("/!\\the serveur: "+servName[index]+"has been CRASH with code "+ QString::number(exitCode));
-    }
-    log("the port " + QString::number(portRequired[index]) +" is free");
-    servName.removeAt(index);
-    servliste.removeAt(index);
-    portRequired.removeAt(index);
 }

@@ -11,6 +11,7 @@
 #include <QSettings>
 #include <QDir>
 #include <QNetworkInterface>
+#include <future>         // std::async, std::future
 #include "utilisateur.h"
 #include "cesar.h"
 
