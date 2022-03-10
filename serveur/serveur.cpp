@@ -333,7 +333,7 @@ void serveur::datareceived()
         }else if(message["type"]=="connection"){
             connect(message, index);
         }else{
-        emit serveur::noInternal(message);
+        emit serveur::noInternal(message, index);
         }
         sendingClient->setmessageSize(static_cast<int>(0));
     }

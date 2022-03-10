@@ -1,4 +1,5 @@
 #include "console.h"
+
 console::console(int Preferedport)
 {
     encryptioncesar = new cesar(2);
@@ -30,7 +31,7 @@ void console::pinUp(const QString message,const QString pseudo){
     if(pseudo==""){
         std::cout << message.toStdString() << std::endl;
     }else{
-       std::cout <<"\""<<pseudo.toStdString()<<" \" sent the message : " <<message.toStdString() << std::endl;
+        std::cout <<"\""<<pseudo.toStdString()<<" \" sent the message : " <<message.toStdString() << std::endl;
     }
 }
 void console::log(const QString log){
@@ -53,7 +54,7 @@ void console::save(QString msg){
 void console::errorOnServer(QString title, QString msg){
     std::cout <<title.toStdString() <<" : " <<msg.toStdString()<<std::endl;
 }
-void console::exernalCommende(QMap<QString, QVariant> &message){
+void console::exernalCommende(QMap<QString, QVariant> &message,const int user){
     cesar chiffremment(2);
     message["message"]=chiffremment.deChiffre(message["message"].toString());
     message["arg"]=chiffremment.deChiffre(message["arg"].toString());
@@ -63,12 +64,12 @@ void console::exernalCommende(QMap<QString, QVariant> &message){
         return;
     }
     if(message["message"].toString()=="launchControl"){
-        createPacket("versionServer", QCoreApplication::applicationVersion());
+        createPacket(user,"versionServer", QCoreApplication::applicationVersion());
     }else if(message["message"].toString()=="startNew"){
         createFile(message["arg"].toString());
     }
 }
-void console::createPacket(const QString message, const QString arg1, const QString arg2){
+void console::createPacket(const int index,const QString message, const QString arg1, const QString arg2){
     QMap<QString, QVariant> packet;
     packet["type"]="laucher";
     packet["message"]=encryptioncesar->chiffre(message);
@@ -82,7 +83,7 @@ void console::createPacket(const QString message, const QString arg1, const QStr
     packet["shippingday"]=QDateTime::currentDateTime().toString("dddd");
     packet["shippingmonth"]=QDateTime::currentDateTime().toString("MMMM");
     packet["shippingyears"]=QDateTime::currentDateTime().toString("yyyy");
-    serv->sentmessagetoall(packet);
+    serv->sentmessageto(packet,index);
 }
 void console::serverLog(const QString logs){
     log("the serveur general sent :"+logs);
@@ -98,7 +99,7 @@ int console::createFile(const QString name){
 
     QProcess starter;
     QStringList arg;
-    arg.push_back(QString::number(room.value(QString::number(room.value("NbOfRoom").toInt())).toInt()));//on met le port
+    arg.push_back(QString::number(room.value(room.value("NbOfRoom").toString()).toInt()));//on met le port
     arg.push_back(name);
     starter.setArguments(arg);
     starter.setProgram(settings->value("settings/serverPath").toString());
@@ -107,5 +108,5 @@ int console::createFile(const QString name){
     }else{
         log("the demarage is down");
     }
-    return room.value(QString::number(room.value("NbOfRoom").toInt())).toInt();//on donne le port
+    return room.value(room.value("NbOfRoom").toString()).toInt();//on donne le port
 }

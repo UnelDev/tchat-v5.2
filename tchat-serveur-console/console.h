@@ -25,10 +25,10 @@ public:
     void pinUp(const QString message,const QString pseudo = "");
     void log(const QString log);
     void save(QString msg);
-    void createPacket(const QString message, const QString arg1 = "", const QString arg2 = "");
+    void createPacket(const int index, const QString message, const QString arg1 = "", const QString arg2 = "");
 private:
     void errorOnServer(QString title, QString msg);
-    void exernalCommende(QMap<QString, QVariant> &message);
+    void exernalCommende(QMap<QString, QVariant> &message,const int user);
     void serverLog(const QString logs);
     bool copyFile(const QString name);
     int createFile(const QString name);

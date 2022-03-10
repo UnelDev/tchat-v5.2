@@ -117,11 +117,16 @@ bool createEnvironement(const QString name){
 int main(int argc, char *argv[])//les argument : le port de lancement, lenom de la salle
 {
 
-    QCoreApplication a(argc, argv);/*
-    const QString port = argv[0];
-    const QString name = argv[1];*/
-    const QString port = "2048";
-    const QString name = "test";
+    QCoreApplication a(argc, argv);
+    if(argc<3){
+        std::cout << "error to mutch argument "<<std::endl;
+        exit(1);
+    }else if(argc>3){
+        std::cout << "error to less argument "<<std::endl;
+        exit(1);
+    }
+    const QString port = argv[1];
+    const QString name = argv[2];
     if(port==""||name==""){
         std::cout << "error no argument inform"<<std::endl;
         exit(1);
@@ -137,7 +142,9 @@ int main(int argc, char *argv[])//les argument : le port de lancement, lenom de 
     QObject::connect(&serv, &serveur::error, &console, &Console::errorOnServer);
     QObject::connect(&serv, &serveur::ActionOnUser, &console, &Console::user);
     const int definitivePort = serv.startserveur(port.toInt(),name+"/"+name+".dat");//oncrée le serveur
+    if(definitivePort!=port.toInt()){
+        console.log("error the definitive port is not a requested, is'nt "+ port);
+    }
     console.log("<<<<< the serveur of tchat has been create on port : "+QString::number(definitivePort)+">>>>>");
-    //clearEnvironement(name);
     return a.exec();
 }
