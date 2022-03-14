@@ -1,6 +1,6 @@
 QT       += core gui network
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, ): QT += widgets
 
 CONFIG += c++11
 
@@ -34,7 +34,7 @@ FORMS += \
     launcher/startserveur.ui
 
 TRANSLATIONS += \
-    launcher/launcher_fr_FR.ts \
+    launcher/launcher_fr_FR.ts
     launcher/launcher_An_AN.ts
 
 # Default rules for deployment.

@@ -5,23 +5,20 @@ serverInteraction::serverInteraction()
     progresse=0;
     name="";
 }
-void serverInteraction::connectTo(int port){
+void serverInteraction::connectTo(const QString userName, const int port){
+    m_username = userName;
     QCoreApplication::setApplicationVersion("5.2");
     encryptioncesar = new cesar(2);
     externalServ = new externalServer(&progresse,"127.0.0.1");
     externalServ->show();
     clients = new client();
-    clients->connectto("127.0.0.1", port, "launcher");
+    clients->connectto("127.0.0.1", port, m_username);
     QObject::connect(clients,&client::isConnected, this, &serverInteraction::connect);
     QObject::connect(clients,&client::isDesconected, this, &serverInteraction::desconnect);
     QObject::connect(clients,&client::externalCommend, this, &serverInteraction::external);
 
 }
 serverInteraction::~serverInteraction(){
-    if(clients!=nullptr){
-        delete clients;
-    }
-
 }
 void serverInteraction::connect(){
     emit serverInteraction::connected();
@@ -30,7 +27,12 @@ void serverInteraction::connect(){
     externalServ->changeProgress(progresse);
     externalServ->setState(tr("connecter au serveur verification de la version","luncher"));
 }
-void serverInteraction::desconnect(){emit serverInteraction::desconnected();}
+void serverInteraction::desconnect(){
+    progresse=0;
+    externalServ->changeProgress(progresse);
+    externalServ->setState(tr("erreur le serveur a coupée la connexion dite le nous sur le discord si cella se n'est pas du a ta connexion !⏱️"));
+    emit serverInteraction::desconnected();
+}
 void serverInteraction::external(QMap<QString, QVariant> message){
     message["message"]=encryptioncesar->deChiffre(message["message"].toString());
     message["arg"]=encryptioncesar->deChiffre(message["arg"].toString());
@@ -60,7 +62,7 @@ void serverInteraction::external(QMap<QString, QVariant> message){
             progresse=progresse-1;
             externalServ->changeProgress(progresse);
             externalServ->setState(tr("erreur de nom réessayer","luncher nom"));
-            QMessageBox::information(nullptr,tr("erreur de nom","luncher nom"),tr("le nom doit deja etre utiliser chnager le !"));
+            QMessageBox::information(nullptr,tr("erreur de nom","luncher nom"),tr("le nom doit deja etre utiliser chanager le!"));
             createServeur();
         }else if(message["message"].toString()=="createServer"){
             progresse=progresse+1;
@@ -69,8 +71,17 @@ void serverInteraction::external(QMap<QString, QVariant> message){
             createPacket("init",name);
         }else if(message["message"].toString()=="starting"){
             progresse=progresse+1;
+            externalServ->setInformation(message["arg"].toInt(),m_username);
             externalServ->changeProgress(progresse);
             externalServ->setState(tr("initialisation terminée sur le port : ","luncher")+message["arg"].toString());
+        }else if(message["message"].toString()=="allPortTaken"){
+            progresse=0;
+            externalServ->changeProgress(progresse);
+            externalServ->setState(tr("erreur toute les salle sont prise revenez plus tard !⏱️"));
+        }else if(message["message"].toString()=="serverNoStart"){
+            progresse=0;
+            externalServ->changeProgress(progresse);
+            externalServ->setState(tr("erreur le serveur ne veut pas ce lancé dite le nous sur le discord !💬"));
         }
     }
 }

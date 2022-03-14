@@ -81,7 +81,7 @@ void startserveur::on_pushButton_clicked()
         qApp->quit();
     }else{
        interactServer = new serverInteraction();
-       interactServer->connectTo(ui->port->value());
+       interactServer->connectTo(ui->username->text(),ui->port->value());
     }
 
 }

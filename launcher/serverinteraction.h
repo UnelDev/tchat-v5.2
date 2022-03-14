@@ -14,10 +14,11 @@ class serverInteraction : public QObject
 public:
     serverInteraction();
     ~serverInteraction();
-    void connectTo(int port=2048);
+    void connectTo(const QString userName,const int port=2048);
 
 private:
     int progresse;
+    QString m_username;
     QString name;
     client* clients;
     externalServer* externalServ;
