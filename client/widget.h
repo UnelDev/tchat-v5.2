@@ -1,8 +1,3 @@
-/* ce projet est en test il a été consu comme si il y avait deux classe
- je voulais faire de la foward declaration mais je ne savais pas faire... donc en atendant...
-ANANTA SYSTEME  tchat 4.0.-1
-*/
-
 #ifndef WIDGET_H
 #define WIDGET_H
 #include <QMediaPlayer>
@@ -23,11 +18,12 @@ ANANTA SYSTEME  tchat 4.0.-1
 #include <QNetworkInterface>
 #include <QScrollBar>
 #include <QCheckBox>
+#include <future>
 #include "parametre.h"
 #include "cesar.h"
 #include "client.h"
-#include "useraction.h"
-#include "changeuserroom.h"
+#include "chatbot.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class Widget; }
 QT_END_NAMESPACE
@@ -73,6 +69,8 @@ private:
     void executeCmd(const QString cmd);
     void changeUserRole(QList<QString>usrRole);
     void changeUsersaloon(const QString username, const QString room);
+
+    void internalcommende(QString comd);
     //variable
     QString m_path;
     QString encryption;
@@ -86,6 +84,7 @@ private:
     QLabel *lastText;
     QMenu *stmenu;
     QTcpSocket *socket;
+    chatBot *m_chatBot;
     QList<QMap<QString,QString>> saveMessage;
     QList<QString> listeClient;
     QList<QString> listeOfpPath;

@@ -30,8 +30,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>404</width>
-        <height>386</height>
+        <width>399</width>
+        <height>374</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
@@ -87,8 +87,8 @@
         <string>Envoyer</string>
        </property>
        <property name="icon">
-        <iconset>
-         <normaloff>:/images/sent.png</normaloff>:/images/sent.png</iconset>
+        <iconset resource="resources.qrc">
+         <normaloff>:/image/resource/image/sent.png</normaloff>:/image/resource/image/sent.png</iconset>
        </property>
       </widget>
      </item>
@@ -120,6 +120,10 @@
        <property name="text">
         <string>Paramètres</string>
        </property>
+       <property name="icon">
+        <iconset resource="resources.qrc">
+         <normaloff>:/image/resource/image/Fichier_4.png</normaloff>:/image/resource/image/Fichier_4.png</iconset>
+       </property>
       </widget>
      </item>
      <item row="1" column="0">
@@ -133,6 +137,10 @@
       <widget class="QPushButton" name="conectbuton">
        <property name="text">
         <string>Connection</string>
+       </property>
+       <property name="icon">
+        <iconset resource="resources.qrc">
+         <normaloff>:/image/resource/image/Simpleicons_Interface_link-symbol.svg.png</normaloff>:/image/resource/image/Simpleicons_Interface_link-symbol.svg.png</iconset>
        </property>
       </widget>
      </item>

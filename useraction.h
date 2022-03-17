@@ -7,16 +7,16 @@ namespace Ui {
 class userAction;
 }
 
-class userAction : public QDialog
+class useraction : public QDialog
 {
     Q_OBJECT
 
 public:
     void addUser(QString name);
-    explicit userAction(QWidget *parent = nullptr);
-    ~userAction();
+    explicit useraction(QWidget *parent = nullptr);
+    ~useraction();
 signals:
-    void finish(QList<QString>usrRole);
+    void finish(QString name, int grade);
 private:
     Ui::userAction *ui;
 
