@@ -66,12 +66,7 @@ void console::exernalCommende(QMap<QString, QVariant> &message,const int user){
         createPacket(user,"versionServer", QCoreApplication::applicationVersion());
     }else if(message["message"].toString()=="startNew"){
         createPacket(user,"createServer");
-        const int stateCrate{createFile(message["arg"].toString(),user)};
-        if(stateCrate==-1){
-            createPacket(user,"allPortTaken");
-        }else if(stateCrate==-2){
-            createPacket(user,"serverNoStart");
-        }
+        createFile(message["arg"].toString(),user);
     }
 }
 void console::createPacket(const int index,const QString message, const QString arg1, const QString arg2){
@@ -97,7 +92,7 @@ int console::createFile(const QString name, const int index){
     QSettings room("room.ini", QSettings::IniFormat);
     if(settings->value("settings/port/NbOpenPort").toInt()<=room.value("NbOfRoom").toInt()){
         log("error all port is taken");
-        return(-1);
+        return(0);
     }
     room.setValue("NbOfRoom",room.value("NbOfRoom").toInt()+1);//on augmente le nombre de salle
 
@@ -110,7 +105,6 @@ int console::createFile(const QString name, const int index){
     starter->setProgram(settings->value("settings/serverPath").toString());
     if(!starter->startDetached()){
         log("error on start server");
-        return -2;
     }else{
         servName.append(name);
         log("the demarage is down");

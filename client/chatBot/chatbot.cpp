@@ -33,13 +33,13 @@ void chatBot::proccess(const QString command, const QString psedo){
     }else if (command==tr("qui est tu")){
         emitMessage(generatemesage(tr("Je suis le Tchat Bot crée par les développeurs de Ananta System, je suis encore très inachevé."),tr("Tchat Bot")));
     }else if (command=="clear"){
-        emitMessage("clear");
+        emitCommende("clear");
     }else if (command=="clearall"){
            emitCommende("clearForAll");
     }else if(command.startsWith("userAction")){
         emit chatBot::sendInternalCommend("promot");
     }else if(command.startsWith("acept")){
-        emit chatBot::sendInternalCommend("promot");
+        emit chatBot::sendInternalCommend("userRoom");
     }else if (command=="actualise"||command=="update"){
          emitCommende("updating");
     }else if (command==tr("merci")){
@@ -99,15 +99,19 @@ void chatBot::startUserAction(const QList<QString> userlist){
 void chatBot::startChangeUserRoom(const QList<QString> userlist){
     changeUserRoom *usrRoom;
     std::async(std::launch::deferred, [&](){usrRoom = new changeUserRoom;});//on crée l'object de maniere asycronne ( a tester)
-           usrRoom->show();
-           for(int i=0;i<userlist.size();i++){
-               usrRoom->addUser(userlist[i]);
-           }
+    usrRoom->show();
+    for(int i=0;i<userlist.size();i++){
+        usrRoom->addUser(userlist[i]);
+    }
     QObject::connect(usrRoom,&changeUserRoom::finish,this , &chatBot::finishChangeUserRoom);
 }
 void chatBot::finishChangeUserRoom(const QString username, const QString room){
     emit chatBot::sendInternalCommend("ChangeUserRoom",username,room);
+    useraction *usraction = qobject_cast<useraction*>(sender());
+    usraction->deleteLater();
 }
 void chatBot::finishUseraction(QString name, int grade){
     emit chatBot::sendInternalCommend("Useraction",name,grade);
+    changeUserRoom *usrRoom = qobject_cast<changeUserRoom*>(sender());
+    usrRoom->deleteLater();
 }

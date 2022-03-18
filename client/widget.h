@@ -22,7 +22,7 @@
 #include "parametre.h"
 #include "cesar.h"
 #include "client.h"
-#include "chatbot.h"
+#include "chatBot/chatbot.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Widget; }
@@ -56,7 +56,7 @@ private:
     void condesed();
     void helpcondesed();
     void autoconnect();
-    void processechatbot(QString command);
+    void processechatbot(const QString command, const QString psedo);
     void client_processechatbot(QString command);
     void client_generatemesage();
     //asseseur
@@ -66,11 +66,8 @@ private:
     void displayconnectlabel(QString text);
     void deletClient(QString nameOfClient);
     void newuser(QString name);
-    void executeCmd(const QString cmd);
-    void changeUserRole(QList<QString>usrRole);
-    void changeUsersaloon(const QString username, const QString room);
-
-    void internalcommende(QString comd);
+    void internalCmd(const QString cmd);
+    void internalcommende(const QString commende,const QVariant arg1 = "",const QVariant arg2 = "");
     //variable
     QString m_path;
     QString encryption;

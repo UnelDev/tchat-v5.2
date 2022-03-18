@@ -1,7 +1,9 @@
-/*By Unel at 30/12/21
-For Ananta Project*/
+/* By Unel at 30/12/21
+For Ananta Project */
+
 #ifndef CLIENT_H
 #define CLIENT_H
+
 #include <QObject>
 #include <QString>
 #include <QAbstractSocket>
