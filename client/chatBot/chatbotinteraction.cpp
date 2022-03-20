@@ -21,7 +21,16 @@ bool chatBotInteraction::ImageSupported(const QString nameOfFile)
 }
 bool chatBotInteraction::textSuported(const QString nameOfFile)
 {
+    QSettings settings("settings.ini", QSettings::IniFormat);
     QList<QString> extentionList{/*texte brut*/"txt",/*html*/"html","htm",/*text riche*/"md","css","xml","json",/*extention de progamation*/"h","hpp","c","cpp","js","py","bat","cmd","rs","rlib","java","cs" };
+    if(settings.contains("addtxtFormat/nbAdd")){
+        for (int i = 0; i <= settings.value("addtxtFormat/nbAdd").toInt(); i++)
+        {
+            extentionList.append(settings.value("addtxtFormat/"+QString::number(i)).toString());
+        }
+
+    }
+
     const QString extention = nameOfFile.split(".").last();
     if(extentionList.indexOf(extention)!=-1){
         return true;
