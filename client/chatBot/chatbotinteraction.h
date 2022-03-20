@@ -10,8 +10,9 @@ class chatBotInteraction : public QObject
     Q_OBJECT
 public:
     chatBotInteraction();
-    static bool fileSupported(const QString nameOfFile);
-    static QString exctractText(const QString nameOfFile,const int nbOfLinePrint);
+    static bool ImageSupported(const QString nameOfFile);
+    static bool textSuported(const QString nameOfFile);
+    static QString exctractText(const QString nameOfFile,const int nbOfLinePrint=10);
 };
 
 #endif // CHATBOTINTERACTION_H

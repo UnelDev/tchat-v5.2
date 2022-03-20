@@ -331,7 +331,7 @@ void Widget::displayFileOnMessageList(const QString comment, const QString NameO
         label->setPixmap(*pixmap_img);
         vlayout->addWidget(label);
     }
-    else if(NameOfFile.split(".").last()=="txt"){
+    else if(chatBotInteraction::textSuported(NameOfFile)){
         const QString file = chatBotInteraction::exctractText("temp/"+NameOfFile,10);
         if(file!=QString::number(-1)){
             QTextBrowser *TextBrowser = new QTextBrowser(this);
@@ -343,7 +343,7 @@ void Widget::displayFileOnMessageList(const QString comment, const QString NameO
             int height = font_height * number_of_lines;// Set the height to the text broswer
             TextBrowser->setMinimumHeight(height);
             TextBrowser->setMaximumHeight(height);
-            TextBrowser->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+            TextBrowser->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);//on cache la scrollBar
             vlayout->addWidget(TextBrowser);
         }
 
