@@ -12,6 +12,7 @@
 #include <QDateTime>
 #include <QCheckBox>
 #include <QCoreApplication>
+#include <QTextBrowser>
 #include "parametre.h"
 #include "serveur.h"
 #include "client.h"

@@ -2,7 +2,7 @@
 
 chatBotInteraction::chatBotInteraction()
 {}
-bool chatBotInteraction::fileSupported(QString nameOfFile){
+bool chatBotInteraction::fileSupported(const QString nameOfFile){
     bool state = false;
     if(nameOfFile.split(".").last()=="png"){
         state = true;
@@ -51,4 +51,23 @@ bool chatBotInteraction::fileSupported(QString nameOfFile){
         state = true;
     }
     return state;
+}
+QString chatBotInteraction::exctractText(const QString nameOfFile, const int nbOfLinePrint){
+    QFile inputFile(nameOfFile);
+    QString file;
+    if (inputFile.open(QIODevice::ReadOnly))
+    {
+       QTextStream in(&inputFile);
+       for (int i = 0; i < nbOfLinePrint; ++i) {
+           QString line = in.readLine();
+           file +="<br>"+line;
+           if(in.atEnd()){
+               break;
+           }
+       }
+       inputFile.close();
+       return file;
+    }else{
+        return QString::number(-1);
+    }
 }
