@@ -1,11 +1,17 @@
 #include "chatbotinteraction.h"
 
-chatBotInteraction::chatBotInteraction()
-{
-}
+chatBotInteraction::chatBotInteraction(){}
 bool chatBotInteraction::ImageSupported(const QString nameOfFile)
 {
-    QList<QString>extentionList{"png","jpeg","JPEG","JPG","jp2","j2k","jpf","jpx","jpm","mj2","tif","tiff","gif","jpg","bmp"};
+    QSettings settings("settings.ini", QSettings::IniFormat);
+    QList<QString>extentionList{"png","jpeg","JPEG","JPG","jp2","j2k","jpf","jpx","jpm","mj2","tif","tiff","gif","jpg"};
+    if(settings.contains("addImgFormat/nbAdd")){
+        for (int i = 0; i <= settings.value("addImgFormat/nbAdd").toInt(); i++)
+        {
+            extentionList.append(settings.value("addImgFormat/"+QString::number(i)).toString());
+        }
+        
+    }
     const QString extention = nameOfFile.split(".").last();
     if(extentionList.indexOf(extention)!=-1){
         return true;
