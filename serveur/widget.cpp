@@ -332,21 +332,18 @@ void Widget::displayFileOnMessageList(const QString comment, const QString NameO
         vlayout->addWidget(label);
     }
     else if(NameOfFile.split(".").last()=="txt"){
-        QTextBrowser *TextBrowser = new QTextBrowser(this);
         const QString file = chatBotInteraction::exctractText("temp/"+NameOfFile,10);
         if(file!=QString::number(-1)){
+            QTextBrowser *TextBrowser = new QTextBrowser(this);
             TextBrowser->append(file);
             const int number_of_lines = file.split("<br>").size();
             // Get the height of the font being used
             QFontMetrics font_metrics(TextBrowser->font());
-            int font_height = font_metrics.height();
-
-            // Get the height by multiplying number of lines by font height, Maybe add to this a bit for a slight margin?
-            int height = font_height * number_of_lines;
-
-            // Set the height to the text broswer
+            int font_height = font_metrics.height();// Get the height by multiplying number of lines by font height, Maybe add to this a bit for a slight margin?
+            int height = font_height * number_of_lines;// Set the height to the text broswer
             TextBrowser->setMinimumHeight(height);
             TextBrowser->setMaximumHeight(height);
+            TextBrowser->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
             vlayout->addWidget(TextBrowser);
         }
 
