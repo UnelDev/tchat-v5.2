@@ -3,7 +3,7 @@
 
 #include <QObject>
 
-class chatBotInteraction
+class chatBotInteraction : public QObject
 {
     Q_OBJECT
 public:

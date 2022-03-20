@@ -17,6 +17,7 @@
 #include "client.h"
 #include "client/chatBot/changeuserroom.h"
 #include "client/chatBot/useraction.h"
+#include "client/chatBot/chatbotinteraction.h"
 
 
 QT_BEGIN_NAMESPACE

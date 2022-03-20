@@ -323,7 +323,7 @@ void Widget::displayFileOnMessageList(const QString comment, const QString NameO
     vlayout->setSpacing(2);
     ui->messageliste->addLayout(vlayout);//on lajoute a l'ui
 
-    if(NameOfFile.split(".").last()=="png"  ||  NameOfFile.split(".").last()=="JPEG"  ||  NameOfFile.split(".").last()=="JPG"){
+    if(chatBotInteraction::fileSupported(NameOfFile)){
         QLabel  *label  = new QLabel(this);
         QPixmap *pixmap_img = new QPixmap(QPixmap("temp/"+NameOfFile).scaledToWidth(ui->scrollArea->size().width()-50,Qt::SmoothTransformation));//on redimentionne a la taille de l'afichage
         ui->scrollArea->setMinimumWidth(ui->scrollArea->size().width());
