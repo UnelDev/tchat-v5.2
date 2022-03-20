@@ -16,7 +16,7 @@ public:
     explicit useraction(QWidget *parent = nullptr);
     ~useraction();
 signals:
-    void finish(QString name, int grade);
+    void finish(QList<QString>usrRole);
 private:
     Ui::userAction *ui;
 

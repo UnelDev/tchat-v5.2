@@ -18,8 +18,8 @@ SOURCES += \
     moreinformation.cpp \
     cesar.cpp \
     client.cpp \
-    useraction.cpp \
-    changeuserroom.cpp
+    client/chatBot/useraction.cpp \
+    client/chatBot/changeuserroom.cpp
 HEADERS += \
     serveur/serveur.h \
     succees.h \
@@ -29,15 +29,15 @@ HEADERS += \
     moreinformation.h \
     cesar.h \
     client.h \
-    useraction.h \
-    changeuserroom.h
+    client/chatBot/useraction.h \
+    client/chatBot/changeuserroom.h
 FORMS += \
     succees.ui \
     serveur/widget.ui \
     serveur/parametre.ui \
     moreinformation.ui \
-    useraction.ui \
-    changeuserroom.ui
+    client/chatBot/useraction.ui \
+    client/chatBot/changeuserroom.ui
 
 TRANSLATIONS += \
     serveur/serveur_fr_FR.ts

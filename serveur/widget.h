@@ -15,8 +15,8 @@
 #include "parametre.h"
 #include "serveur.h"
 #include "client.h"
-#include "changeuserroom.h"
-#include "useraction.h"
+#include "client/chatBot/changeuserroom.h"
+#include "client/chatBot/useraction.h"
 
 
 QT_BEGIN_NAMESPACE

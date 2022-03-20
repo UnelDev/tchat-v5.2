@@ -62,7 +62,7 @@ private:
     int nbuser;
 signals:
     void newmessage();
-    void display(QString message);
+    void display(const QString message);
     void newFileAndComent(const QString Message, const QString NameOfFile);
     void changestateconnect(bool state);
     void changeTextConnect(QString newtext);

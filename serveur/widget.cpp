@@ -181,7 +181,7 @@ void Widget::executeCmd(const QString cmd){
 }
 void Widget::changeUserRole(QList<QString>usrRole){
     clients->sendcommande("changeUsrRole",usrRole[0]/*le nom d'utilisateur*/,usrRole[1]/*le role en int*/);
-    userAction *usraction = qobject_cast<userAction*>(sender());
+    useraction *usraction = qobject_cast<useraction*>(sender());
     usraction->deleteLater();
 }
 void Widget::changeUsersaloon(const QString username, const QString room){
@@ -323,6 +323,15 @@ void Widget::displayFileOnMessageList(const QString comment, const QString NameO
     vlayout->setSpacing(2);
     ui->messageliste->addLayout(vlayout);//on lajoute a l'ui
 
+    if(NameOfFile.split(".").last()=="png"){
+        QLabel  *label  = new QLabel(this);
+        QPixmap *pixmap_img = new QPixmap(QPixmap("temp/"+NameOfFile).scaledToWidth(ui->scrollArea->size().width()-50,Qt::SmoothTransformation));//on redimentionne a la taille de l'afichage
+        ui->scrollArea->setMinimumWidth(ui->scrollArea->size().width());
+        PushButton->setMaximumWidth(ui->scrollArea->size().width()-50);
+        label->setPixmap(*pixmap_img);
+        vlayout->addWidget(label);
+    }
+
     lastMessageIsText=false;
     lastText=0;
 
@@ -390,12 +399,12 @@ void Widget::processechatbot(QString command)
    }else if (command=="clearall"){
              clients->sendcommande("clearForAll");
   }else if(command.startsWith("promot")){
-      userAction *usrAction = new userAction;
+      useraction *usrAction = new useraction;
       usrAction->show();
       for(int i=0;i<ui->clientlist->count();i++){
           usrAction->addUser(ui->clientlist->item(i)->text());
       }
-      QObject::connect(usrAction, &userAction::finish, this, &Widget::changeUserRole);
+      QObject::connect(usrAction, &useraction::finish, this, &Widget::changeUserRole);
    }else if(command.startsWith("acept")){
        changeUserRoom *usrRoom = new changeUserRoom;
        usrRoom->show();
@@ -495,7 +504,7 @@ void Widget::on_sentbutton_clicked()
     }else if(message.startsWith(tr("ananta system"))){
         message.remove(tr("ananta system"));
        processechatbot(message);
-    }else if (m_path!=""){ 
+    }else if (m_path!=""){
         ui->erorLabel->setVisible(true);
         ui->erorLabel->setText("<font color=#DAA520>"+tr("uplaud du fichier en cours...","quand on envoi un fichier")+"</font>");
         QString m_pathSplit=m_path.split("/").last();

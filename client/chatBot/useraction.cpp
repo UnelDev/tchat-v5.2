@@ -16,6 +16,9 @@ void useraction::addUser(QString name){
 }
 void useraction::on_buttonBox_accepted()
 {
-    emit useraction::finish(ui->userList->currentText(),ui->roleList->currentIndex());
+    QList<QString>usrRole;
+    usrRole.append(ui->userList->currentText());
+    usrRole.append(QString::number(ui->roleList->currentIndex()));
+    emit useraction::finish(usrRole);
 }
 
