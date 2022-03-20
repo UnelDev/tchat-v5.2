@@ -21,7 +21,7 @@ bool chatBotInteraction::ImageSupported(const QString nameOfFile)
 }
 bool chatBotInteraction::textSuported(const QString nameOfFile)
 {
-    QList<QString> extentionList{/*texte brut*/"txt",/*html*/"html","htm",/*text riche*/"md","css","xml",/*extention de progamation*/"h","hpp","c","cpp","js","py","bat","cmd","rs","rlib","java","cs" };
+    QList<QString> extentionList{/*texte brut*/"txt",/*html*/"html","htm",/*text riche*/"md","css","xml","json",/*extention de progamation*/"h","hpp","c","cpp","js","py","bat","cmd","rs","rlib","java","cs" };
     const QString extention = nameOfFile.split(".").last();
     if(extentionList.indexOf(extention)!=-1){
         return true;
