@@ -343,6 +343,7 @@ void Widget::displayFileOnMessageList(const QString comment, const QString NameO
             int height = font_height * number_of_lines;// Set the height to the text broswer
             TextBrowser->setMinimumHeight(height);
             TextBrowser->setMaximumHeight(height);
+            TextBrowser->setTextInteractionFlags(Qt::TextSelectableByMouse|Qt::TextSelectableByKeyboard|Qt::LinksAccessibleByMouse|Qt::LinksAccessibleByKeyboard);
             TextBrowser->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);//on cache la scrollBar
             vlayout->addWidget(TextBrowser);
         }
