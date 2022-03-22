@@ -329,7 +329,6 @@ void serveur::datareceived()
                qDebug()<<file;
                file.close();// Close the file
             }
-            message["attachment"] = "";//on renitialise la case pour que ca ne prenne pas de la place
         }else if(message["type"]=="connection"){
             connect(message, index);
         }else{

@@ -17,8 +17,4 @@
         <file>resource/image/paper-clip.png</file>
         <file>resource/image/supression.png</file>
     </qresource>
-    <qresource prefix="/sound">
-        <file>resource/sond/notifdefault.wav</file>
-        <file>resource/sond/Sonnerie_Ananta.wav</file>
-    </qresource>
 </RCC>

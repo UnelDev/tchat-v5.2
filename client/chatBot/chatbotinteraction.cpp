@@ -4,7 +4,7 @@ chatBotInteraction::chatBotInteraction(){}
 bool chatBotInteraction::ImageSupported(const QString nameOfFile)
 {
     QSettings settings("settings.ini", QSettings::IniFormat);
-    QList<QString>extentionList{"png","jpeg","JPEG","JPG","jp2","j2k","jpf","jpx","jpm","mj2","tif","tiff","gif","jpg"};
+    QList<QString>extentionList{"png","jpeg","JPEG","JPG","jp2","j2k","jpf","jpx","jpm","mj2","tif","tiff","gif","jpg","bmp"};
     if(settings.contains("addImgFormat/nbAdd")){
         for (int i = 0; i <= settings.value("addImgFormat/nbAdd").toInt(); i++)
         {

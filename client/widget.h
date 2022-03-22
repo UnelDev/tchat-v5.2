@@ -18,11 +18,13 @@
 #include <QNetworkInterface>
 #include <QScrollBar>
 #include <QCheckBox>
-#include <future>
+#include <QTextBrowser>
 #include "parametre.h"
 #include "cesar.h"
 #include "client.h"
-#include "chatBot/chatbot.h"
+#include "client/chatBot/changeuserroom.h"
+#include "client/chatBot/useraction.h"
+#include "client/chatBot/chatbotinteraction.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Widget; }
@@ -56,9 +58,12 @@ private:
     void condesed();
     void helpcondesed();
     void autoconnect();
-    void processechatbot(const QString command, const QString psedo);
+    void processechatbot(const QString command);
     void client_processechatbot(QString command);
     void client_generatemesage();
+    void executeCmd(const QString cmd);
+    void changeUserRole(QList<QString>usrRole);
+    void changeUsersaloon(const QString username, const QString room);
     //asseseur
     void displayMessagelist(QString message);
     void displayFileOnMessageList(const QString comment, const QString NameOfFile);
@@ -81,7 +86,6 @@ private:
     QLabel *lastText;
     QMenu *stmenu;
     QTcpSocket *socket;
-    chatBot *m_chatBot;
     QList<QMap<QString,QString>> saveMessage;
     QList<QString> listeClient;
     QList<QString> listeOfpPath;

@@ -11,7 +11,6 @@ CONFIG += c++11
 
 SOURCES += \
     client.cpp \
-    client/chatBot/chatbot.cpp \
     client/main.cpp \
     moreinformation.cpp \
     client/parametre.cpp \
@@ -19,18 +18,19 @@ SOURCES += \
     client/widget.cpp \
     cesar.cpp \
     client/chatBot/useraction.cpp \
-    client/chatBot/changeuserroom.cpp
+    client/chatBot/changeuserroom.cpp \
+    client/chatBot/chatBotInteraction.cpp
 
 HEADERS += \
     client.h \
-    client/chatBot/chatbot.h \
     moreinformation.h \
     cesar.h \
     succees.h \
     client/parametre.h \
     client/widget.h \
     client/chatBot/useraction.h \
-    client/chatBot/changeuserroom.h
+    client/chatBot/changeuserroom.h \
+    client/chatBot/chatBotInteraction.h
 
 
 FORMS += \

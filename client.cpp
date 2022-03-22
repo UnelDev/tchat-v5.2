@@ -239,10 +239,19 @@ void client::processthemessage(QMap<QString,QVariant> message)
         message["pseudo"]=encryptioncesar->deChiffre(message["pseudo"].toString());
         message["message"]=encryptioncesar->deChiffre(message["message"].toString());
         message["nameOfFile"]=encryptioncesar->deChiffre(message["nameOfFile"].toString());
+
+        QDir dir;
+        dir.mkpath("temp");//on crée le repertoir
+        QFile file("temp/"+message["nameOfFile"].toString());
+        if (!file.fileName().isEmpty()) {// Check that the path is valid
+            file.open(QIODevice::WriteOnly);
+            QByteArray ba = message["attachment"].toByteArray();//on crée le flux
+           file.write(ba);
+           qDebug()<<file;
+           file.close();// Close the file
+        }
+
         DisplayFile(generatemesage(message),message["nameOfFile"].toString());
-
-
-
         sendcommande("file?",message["nameOfFile"].toString());
     }else if(message["type"]=="attachmentFile"){
          message["pseudo"]=encryptioncesar->deChiffre(message["pseudo"].toString());

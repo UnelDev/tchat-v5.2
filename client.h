@@ -30,7 +30,6 @@ public:
     void senddatamap(const QMap<QString, QVariant> sendmap);
 protected:
     void senddatamap(const QString type);
-
     void senddatamap(const QString type, QString message, QString pseudo, QDateTime seconde, QDateTime minute, QDateTime heurs, QDateTime NoJour, QDate jour);
     void senddatamap(const QString type, QString message, QString pseudo);
     void senddatamap(const QString type, QString message);
