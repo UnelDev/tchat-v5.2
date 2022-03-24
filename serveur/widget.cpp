@@ -91,6 +91,7 @@ Widget::Widget(QWidget *parent)
     QObject::connect(clients, &client::newuser, this, &Widget::newuser);
     QObject::connect(clients, &client::newFileAndComent, this , &Widget::displayFileOnMessageList);
     QObject::connect(clients, &client::externalOrder, this , &Widget::executeCmd);
+    QObject::connect(clients, &client::newEmbed, this, &Widget::displayEmbed);
     clients->connectto("localhost",ui->serveurport->value(),ui->pseudo->text());
     //parametre
     QObject::connect(&parametres, &parametre::recapClicked, this, &Widget::recap);
@@ -354,6 +355,39 @@ void Widget::displayFileOnMessageList(const QString comment, const QString NameO
     lastText=0;
 
 }
+void Widget::displayEmbed(const QString name, const QString information, const QString describleText1, const QString text1, const QString describleText2, const QString text2){
+    if(settings->value("settings/SoundNotification").toBool())
+    {
+        if(!QApplication::activeWindow()){
+            QApplication::beep();
+        }
+    }
+
+    QGridLayout  *GLayout = new QGridLayout();
+    QLabel labelName(name);
+    QLabel labelInformation(information);
+
+    GLayout->addWidget(&labelName,0,0,2,1);
+    GLayout->addWidget(&labelInformation,1,0,2,1);
+    if(describleText1!=""&&text1!=""){
+        QLabel *describle1 = new QLabel(describleText1);
+        QLabel *LabelText1 = new QLabel(text1);
+
+        GLayout->addWidget(describle1,2,0);
+        GLayout->addWidget(LabelText1,2,1);
+    }
+    if(describleText2!=""&&text2!=""){
+        QLabel *describle2 = new QLabel(describleText2);
+        QLabel *LabelText2 = new QLabel(text2);
+
+        GLayout->addWidget(describle2,3,0);
+        GLayout->addWidget(LabelText2,3,1);
+    }
+    ui->messageliste->addLayout(GLayout);
+
+    lastMessageIsText=false;
+    lastText=0;
+}
 void Widget::openfile(){
     QPushButton *PushButton = qobject_cast<QPushButton*>(sender());
     PushButton->setText(PushButton->text().remove(tr("telecharger: ","dans le bouton de telechargement")));
@@ -389,80 +423,82 @@ QString Widget::returnpseudo()
 void Widget::processechatbot(QString command)
 {
     srand (time(NULL));
-   //reponse pré faite
-   if (command==tr("bonjour")||command==tr("salut")||command==tr("hello")){//posibilier de question
-       int random = rand() % 5 + 1;//on fait l'aleatoire
-       if(random == 1){
-           addmessage(generatemesage(tr("Bonjour") + ui->pseudo->text()+".",tr("Tchat Bot")));
-       }else if(random == 2){
-           addmessage(generatemesage(tr("Salut") + ui->pseudo->text()+".",tr("Tchat Bot")));
-       }else if(random == 3){
-           addmessage(generatemesage(tr("Salut🖖") + ui->pseudo->text()+".",tr("Tchat Bot")));
-       }else if(random == 4){
-           addmessage(generatemesage(tr("Hello") + ui->pseudo->text()+".",tr("Tchat Bot")));
-       }else if(random == 5){
-           addmessage(generatemesage(tr("Hello👋") + ui->pseudo->text()+".",tr("Tchat Bot")));
-       }
-   }else if (command==tr("comment t'apelle tu")||command==tr("quel est ton nom")){
-       int random = rand() % 2 + 1;
-       if(random == 1){
-          addmessage(generatemesage(tr("Tu peux m'appeller Tchat Bot."),tr("Tchat Bot")));
-       }else if(random == 2){
-          addmessage(generatemesage(tr("Tu peux m'appeller Tchat Bot 😊."),tr("Tchat Bot")));
-       }
-   }else if (command==tr("qui est tu")){
-       addmessage(generatemesage(tr("Je suis le Tchat Bot crée par les développeurs de Ananta System, je suis encore très inachevé."),tr("Tchat Bot")));
-   }else if (command=="clear"){
+    //reponse pré faite
+    if (command==tr("bonjour")||command==tr("salut")||command==tr("hello")){//posibilier de question
+        int random = rand() % 5 + 1;//on fait l'aleatoire
+        if(random == 1){
+            addmessage(generatemesage(tr("Bonjour") + ui->pseudo->text()+".",tr("Tchat Bot")));
+        }else if(random == 2){
+            addmessage(generatemesage(tr("Salut") + ui->pseudo->text()+".",tr("Tchat Bot")));
+        }else if(random == 3){
+            addmessage(generatemesage(tr("Salut🖖") + ui->pseudo->text()+".",tr("Tchat Bot")));
+        }else if(random == 4){
+            addmessage(generatemesage(tr("Hello") + ui->pseudo->text()+".",tr("Tchat Bot")));
+        }else if(random == 5){
+            addmessage(generatemesage(tr("Hello👋") + ui->pseudo->text()+".",tr("Tchat Bot")));
+        }
+    }else if (command==tr("comment t'apelle tu")||command==tr("quel est ton nom")){
+        int random = rand() % 2 + 1;
+        if(random == 1){
+            addmessage(generatemesage(tr("Tu peux m'appeller Tchat Bot."),tr("Tchat Bot")));
+        }else if(random == 2){
+            addmessage(generatemesage(tr("Tu peux m'appeller Tchat Bot 😊."),tr("Tchat Bot")));
+        }
+    }else if (command==tr("qui est tu")){
+        addmessage(generatemesage(tr("Je suis le Tchat Bot crée par les développeurs de Ananta System, je suis encore très inachevé."),tr("Tchat Bot")));
+    }else if (command=="clear"){
         executeCmd("clear");
-   }else if (command=="clearall"){
-             clients->sendcommande("clearForAll");
-  }else if(command.startsWith("promot")){
-      useraction *usrAction = new useraction;
-      usrAction->show();
-      for(int i=0;i<ui->clientlist->count();i++){
-          usrAction->addUser(ui->clientlist->item(i)->text());
-      }
-      QObject::connect(usrAction, &useraction::finish, this, &Widget::changeUserRole);
-   }else if(command.startsWith("acept")){
-       changeUserRoom *usrRoom = new changeUserRoom;
-       usrRoom->show();
-       for(int i=0;i<ui->clientlist->count();i++){
-           usrRoom->addUser(ui->clientlist->item(i)->text());
-       }
-       QObject::connect(usrRoom, &changeUserRoom::finish, this, &Widget::changeUsersaloon);
-   }else if (command=="actualise"||command=="update"){
+    }else if (command=="clearall"){
+        clients->sendcommande("clearForAll");
+    }else if(command.startsWith("promot")){
+        useraction *usrAction = new useraction;
+        usrAction->show();
+        for(int i=0;i<ui->clientlist->count();i++){
+            usrAction->addUser(ui->clientlist->item(i)->text());
+        }
+        QObject::connect(usrAction, &useraction::finish, this, &Widget::changeUserRole);
+    }else if(command.startsWith("acept")){
+        changeUserRoom *usrRoom = new changeUserRoom;
+        usrRoom->show();
+        for(int i=0;i<ui->clientlist->count();i++){
+            usrRoom->addUser(ui->clientlist->item(i)->text());
+        }
+        QObject::connect(usrRoom, &changeUserRoom::finish, this, &Widget::changeUsersaloon);
+    }else if (command=="actualise"||command=="update"){
         clients->sendcommande("updating");
-   }else if (command==tr("merci")){
-       int random = rand() % 7 + 1;
-       if(random == 1){
-           addmessage(generatemesage(tr("De rien 😀"),tr("Tchat Bot")));
-       }else if(random == 2){
-           addmessage(generatemesage(tr("Tout le plaisir est pour moi 😀"),tr("Tchat Bot")));
-       }else if(random == 3){
-           addmessage(generatemesage(tr("Tout le plaisir est pour moi!"),tr("Tchat Bot")));
-       }else if(random == 3){
-           addmessage(generatemesage(tr("De rien !"),tr("Tchat Bot")));
-       }else if(random == 4){
-          addmessage(generatemesage(tr("Mais je suis là pour ça bien sûr 😀"),tr("Tchat Bot")));
-       }else if(random == 5){
-          addmessage(generatemesage(tr("Mais je suis là pour ça bien sûr !"),tr("Tchat Bot")));
-       }else if (random == 6){
+    }else if (command==tr("merci")){
+        int random = rand() % 7 + 1;
+        if(random == 1){
+            addmessage(generatemesage(tr("De rien 😀"),tr("Tchat Bot")));
+        }else if(random == 2){
+            addmessage(generatemesage(tr("Tout le plaisir est pour moi 😀"),tr("Tchat Bot")));
+        }else if(random == 3){
+            addmessage(generatemesage(tr("Tout le plaisir est pour moi!"),tr("Tchat Bot")));
+        }else if(random == 3){
+            addmessage(generatemesage(tr("De rien !"),tr("Tchat Bot")));
+        }else if(random == 4){
+            addmessage(generatemesage(tr("Mais je suis là pour ça bien sûr 😀"),tr("Tchat Bot")));
+        }else if(random == 5){
+            addmessage(generatemesage(tr("Mais je suis là pour ça bien sûr !"),tr("Tchat Bot")));
+        }else if (random == 6){
             addmessage(generatemesage(tr("Quand tu ne me parle pas je fais que des actions répétitives, recevoir des messages et les afficher😥..."),tr("Tchat Bot")));
-       }else if (random == 7){
+        }else if (random == 7){
             addmessage(generatemesage(tr("Quand tu ne me parle pas je m'ennuie 😥"),tr("Tchat Bot")));
-   }else if (command==tr("condenses")||command==tr("condense")||command==tr("condense menu")){
-       condesed();
-    }else if (command==tr("comment condenser la fenetre")||command==tr("comment condenser le menu")||command==tr("compacter la fenetre")){
-       int random = rand() % 2 + 1;
-       if(random == 1){
-           displayMessagelist(generatemesage(tr("Il suffit de taper la commande /condense", "Attention bien taper la même commande!"),tr("Tchat Bot")));
-       }else if(random == 2){
-           addmessage(generatemesage(tr("Tu peux faire clique droit sur l'icône en bas à droite dans ta barre des tâches -> Condenser la fenêtre"),tr("Tchat Bot")));
-       }
-   }
-   }else{
-      displayMessagelist(generatemesage(tr("Je suis desolé, mais je n'ai pas compris votre demande, vérifiez l'orthographe."),tr("Tchat Bot")));
-  }
+        }else if (command==tr("condenses")||command==tr("condense")||command==tr("condense menu")){
+            condesed();
+        }else if (command==tr("comment condenser la fenetre")||command==tr("comment condenser le menu")||command==tr("compacter la fenetre")){
+            int random = rand() % 2 + 1;
+            if(random == 1){
+                displayMessagelist(generatemesage(tr("Il suffit de taper la commande /condense", "Attention bien taper la même commande!"),tr("Tchat Bot")));
+            }else if(random == 2){
+                addmessage(generatemesage(tr("Tu peux faire clique droit sur l'icône en bas à droite dans ta barre des tâches -> Condenser la fenêtre"),tr("Tchat Bot")));
+            }
+        }
+    }else if(command==tr("ping")){
+        clients->sendcommande("ping");
+    }else{
+        displayMessagelist(generatemesage(tr("Je suis desolé, mais je n'ai pas compris votre demande, vérifiez l'orthographe."),tr("Tchat Bot")));
+    }
 }
 void Widget::on_pseudo_editingFinished()
 {
@@ -483,8 +519,33 @@ QString Widget::generatedate()
     QString heures = QDateTime::currentDateTime().toString("hh:mm:ss");
     QString Date = QDateTime::currentDateTime().toString("ddd dd MMMM yyyy");
     QDateTime::fromString(heures, "hh:mm:ss");
-    return ("<span style=\"font-size: 10px\">"  +   tr("le ")    +   Date    +"</span> <span style=\"font-size: 10px\">"+   tr("à") +   heures +"</span><br>");
+    return ("<span style=\"font-size: 10px\">"  +   tr("le ")   +   Date    +"</span> <span style=\"font-size: 10px\">"+   tr("à") +   heures +"</span><br>");
 }
+void Widget::on_parametrebutton_clicked()
+{
+    parametres.show();
+}
+void Widget::on_pieceJointe_clicked()
+{
+    if(m_path==""){
+        const auto fichier = QFileDialog::getOpenFileName(nullptr, tr("Ouvrir un fichier","dans les upload de fichier"), QString());
+        QFile file(fichier);//on crée le fichier
+        if(!file.open(QIODevice::ReadOnly)){
+            QMessageBox::critical(nullptr ,tr("erreur de permision","dans les ouverture de fichier"),tr("le fichier ne peut pas etre lu sans doute une erreur d'autorisation","dans les ouverture de fichier"));
+            return;
+        }//on test louverture du ficher
+        if(file.size()>256901120){//si c'est superieur a 250mb
+            QMessageBox::critical(nullptr,tr("fichier trop lourd","dans les upload de fichier"),tr("le fichier est trop gros il faut qu'il fasse moin que 250mB","dans les upload de fichier"));
+            return;
+        }
+        ui->pieceJointe->setIcon(QIcon(":/image/resource/image/supression.png"));
+        m_path = fichier;
+    }else{
+        m_path="";
+        ui->pieceJointe->setIcon(QIcon(":/image/resource/image/paper-clip.png"));
+    }
+}
+
 void Widget::on_sentbutton_clicked()
 {
     QString message = ui->mesage->text(); // si le if prend trop de temps l'utilisateur ne pouras pas modifier son message
@@ -536,27 +597,4 @@ void Widget::on_sentbutton_clicked()
     }
     ui->mesage->clear();
 }
-void Widget::on_parametrebutton_clicked()
-{
-    parametres.show();
-}
-void Widget::on_pieceJointe_clicked()
-{
-    if(m_path==""){
-        const auto fichier = QFileDialog::getOpenFileName(nullptr, tr("Ouvrir un fichier","dans les upload de fichier"), QString());
-        QFile file(fichier);//on crée le fichier
-        if(!file.open(QIODevice::ReadOnly)){
-            QMessageBox::critical(nullptr,tr("erreur de permision","dans les ouverture de fichier"),tr("le fichier ne peut pas etre lu sans doute une erreur d'autorisation","dans les ouverture de fichier"));
-            return;
-        }//on test louverture du ficher
-        if(file.size()>256901120){//si c'est superieur a 250mb
-            QMessageBox::critical(nullptr,tr("fichier trop lourd","dans les upload de fichier"),tr("le fichier est trop gros il faut qu'il fasse moin que 250mB","dans les upload de fichier"));
-            return;
-        }
-        ui->pieceJointe->setIcon(QIcon(":/image/resource/image/supression.png"));
-        m_path = fichier;
-    }else{
-        m_path="";
-        ui->pieceJointe->setIcon(QIcon(":/image/resource/image/paper-clip.png"));
-    }
-}
+

@@ -309,6 +309,11 @@ void client::processcomand(QMap<QString, QVariant> commend)
     }else if(commend["message"]=="silentNameChange"){
         deleteclient(commend["arg"].toString());
         newclient(commend["arg2"].toString());
+    }else if(commend["message"]=="pong"){
+        auto sendigTime = QTime(commend["sendingtime"].toInt(),commend["minuteofsending"].toInt(),commend["secondofsending"].toInt()/*,command["sendingtime"].toInt()*/);
+        auto actualTime = QTime::currentTime();
+        const int time = actualTime.msecsTo(sendigTime);
+        emit client::newEmbed(tr("latence"),tr("afiche la latence avec le serveur"),tr("acendant 🔼"),commend["arg"].toString()+" ms",tr("decendant 🔽"),QString::number(time)+" ms");
     }else{
         QMessageBox::critical(nullptr, tr("Erreur"), tr("Un paquet de comande a été reçu mais la commande est incomprise. ")+commend["message"].toString());
     }
@@ -322,7 +327,7 @@ QString client::generatedate()
 }
 QString client::generatedate(QMap<QString, QVariant> date)
 {
-        return("<span style=\"font-size: 12px\">"+ tr(" Le ","dans la generationde message")+date["shippingday"].toString()+" "+date["sendingdate"].toString()+" "+date["shippingmonth"].toString()+" "+date["shippingyears"].toString() +"</span> <span style=\"font-size: 10px\">"+tr( " à ","dans la generationde message")+date["sendingtime"].toString()+" : "+date["minuteofsending"].toString()+tr(" </span><br/>"));
+    return("<span style=\"font-size: 12px\">"+ tr(" Le ","dans la generationde message")+date["shippingday"].toString()+" "+date["sendingdate"].toString()+" "+date["shippingmonth"].toString()+" "+date["shippingyears"].toString() +"</span> <span style=\"font-size: 10px\">"+tr( " à ","dans la generationde message")+date["sendingtime"].toString()+" : "+date["minuteofsending"].toString()+tr(" </span><br/>"));
 }
 QString client::generatemesage(QString message, QString pseudo)
 {

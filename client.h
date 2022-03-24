@@ -13,6 +13,7 @@ For Ananta Project */
 #include <QMessageBox>
 #include <QSettings>
 #include <QDir>
+#include "client/chatBot/embed.h"
 #include "cesar.h"
 class client : public QObject
 {
@@ -71,6 +72,7 @@ signals:
     void isConnected();
     void isDesconected();
     void externalCommend(QMap<QString, QVariant> message);
+    void newEmbed(const QString name,const QString information,const QString describleText1="" , const QString text1="", const QString describleText2="", const QString text2="");
 };
 
 #endif // CLIENT_H

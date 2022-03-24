@@ -141,7 +141,7 @@ void serveur::sentcomandto(const QVariant &message ,int usernaime)
     sentmessageto(sendmap,usernaime);
 
 }
-void serveur::sentcomandto(const QVariant &message,QString arg ,int usernaime)
+void serveur::sentcomandto(const QVariant &message,const QString arg ,const int usernaime)
 {
     QMap<QString,QVariant> sendmap;
     sendmap["type"]="cmd";
@@ -399,7 +399,7 @@ void serveur::recoverallfile()
 }
 void serveur::processcomand(QMap<QString, QVariant> command, int noclient)
 {
-    if (command["message"]=="change_psedo") {// changer psedo
+    if (command["message"].toString()=="change_psedo") {// changer psedo
         for(int i = 1; i < clientsList.size(); i++)
         {
             if(clientsList[i]->getpseudo()==command["arg"] && i != noclient){//si c'est le meme on coupe et on envoie une erreur
@@ -414,10 +414,10 @@ void serveur::processcomand(QMap<QString, QVariant> command, int noclient)
         sentmessagetoall("msg",clientsList[noclient]->getpseudo()+" a changer son psedo en "+ command["arg"].toString(),"Tchat Bot");
         emitlog(clientsList[noclient]->getpseudo()+tr(" a changer son psedo en : ", "dans les log")+command["arg"].toString());
         clientsList[noclient]->editpseudo(command["arg"].toString());
-    }else if(command["message"]=="file?") {
+    }else if(command["message"].toString()=="file?") {
         sendFileto(command["arg"].toString(),command["nameOfFile"].toString(),noclient);
         emitlog(clientsList[noclient]->getpseudo()+tr("a demander le fichier : ", "dans les log")+command["nameOfFile"].toString());
-    }else if (command["message"]=="clearForAll"){
+    }else if (command["message"].toString()=="clearForAll"){
         if (clientsList[noclient]->getGrade()==1||clientsList[noclient]->getGrade()==2){
             sentcommande("clear");
             saveMessage.clear();
@@ -426,7 +426,7 @@ void serveur::processcomand(QMap<QString, QVariant> command, int noclient)
             sentmessageto(tr("vous n'avais pas le droit de faire cette commende : clear est soumis a un rôle admin ou host","lors de lexecution d'une commende"), noclient);
             emitlog(clientsList[noclient]->getpseudo()+tr(" a voulue suprimée tout les messagemais n'a pas pue !", "dans les log"));
         }
-    }else if(command["message"]=="changeUsrRole"){
+    }else if(command["message"].toString()=="changeUsrRole"){
         int clientname=-1;
         for(int i = 0; i<clientsList.size(); i++){
             if(clientsList[i]->getpseudo()==command["arg"]){
@@ -448,7 +448,7 @@ void serveur::processcomand(QMap<QString, QVariant> command, int noclient)
             sentmessagetoall("msg",clientsList[noclient]->getpseudo()+tr(" a changer le grade de ")+ clientsList[clientname]->getpseudo()+ tr(" en ")+clientsList[clientname]->getGradeString(),tr("Tchat Bot"));
             emitlog(clientsList[noclient]->getpseudo()+tr(" a changer le grade de ", "dans les log")+ clientsList[clientname]->getpseudo()+ tr(" en ", "dans les log")+clientsList[clientname]->getGradeString());
         }
-    }else if(command["message"]=="changeUsrRoom"){
+    }else if(command["message"].toString()=="changeUsrRoom"){
         int clientname=-1;
         for(int i = 0; i<clientsList.size(); i++){
             if(clientsList[i]->getpseudo()==command["arg"].toString()){//on prend le n° du client
@@ -473,7 +473,13 @@ void serveur::processcomand(QMap<QString, QVariant> command, int noclient)
             outOfWating(clientname,name);
             clientsList[clientname]->editpseudo(clientsList[clientname]->getpseudo().remove(" ("+clientsList[clientname]->getRoom()+")"));//on le renome
         }
-    }else{
+    }else if(command["message"].toString()=="ping"){
+        auto sendigTime = QTime(command["sendingtime"].toInt(),command["minuteofsending"].toInt(),command["secondofsending"].toInt()/*,command["sendingtime"].toInt()*/);
+        auto actualTime = QTime::currentTime();
+        const int time = actualTime.msecsTo(sendigTime);
+        sentcomandto("pong",QString::number(time),noclient);
+    }
+    else{
         messageBox(tr("erreur"), tr("Un paquet de commande a été reçu mais la commande est incomprise."));
 }}
 void serveur::recap(){

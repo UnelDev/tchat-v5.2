@@ -13,6 +13,7 @@
 #include <QCheckBox>
 #include <QCoreApplication>
 #include <QTextBrowser>
+#include <QGridLayout>
 #include "parametre.h"
 #include "serveur.h"
 #include "client.h"
@@ -71,14 +72,15 @@ private slots:
     void displayMessagelist(const QString message);
     void displayMessagelistNoFormat(const QString message, const QString psedo);
     void displayFileOnMessageList(const QString comment, const QString NameOfFile);
+    void displayEmbed(const QString name, const QString information, const QString describleText1, const QString text1, const QString describleText2, const QString text2);
     void deletClient(QString nameOfClient);
     void newuser(QString name);
     void recap();
     void executeCmd(const QString cmd);
     //les auto generer
-    void on_sentbutton_clicked();
     void on_parametrebutton_clicked();
     void on_pieceJointe_clicked();
 
+    void on_sentbutton_clicked();
 };
 #endif // WIDGET_H
