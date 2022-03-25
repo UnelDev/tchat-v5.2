@@ -49,7 +49,7 @@ private:
     void processthemessage(QMap<QString, QVariant> message);
     void processcomand(QMap<QString, QVariant> commend);
     QString generatedate();
-    QString generatedate(QMap<QString, QVariant> date);
+    QString generatedate(QMap<QString, QVariant> message);
     QString generatemesage(QString message, QString pseudo);
     QString generatemesage(QMap<QString, QVariant> message);
 

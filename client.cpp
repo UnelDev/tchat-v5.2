@@ -183,6 +183,7 @@ void client::datareceived()
 void client::processthemessage(QMap<QString,QVariant> message)
 {
     if(message["type"]=="cmd"){
+        message["receviedTime"] = QDateTime::currentDateTime();
         message["pseudo"]=encryptioncesar->deChiffre(message["pseudo"].toString());
         message["arg"]=encryptioncesar->deChiffre(message["arg"].toString());
         message["arg2"]=encryptioncesar->deChiffre(message["arg2"].toString());
@@ -276,9 +277,11 @@ void client::processcomand(QMap<QString, QVariant> commend)
         deleteclient(commend["arg"].toString());
         newclient(commend["arg2"].toString());
     }else if(commend["message"]=="pong"){
-        auto sendigTime = QTime(commend["sendingtime"].toInt(),commend["minuteofsending"].toInt(),commend["secondofsending"].toInt()/*,command["sendingtime"].toInt()*/);
-        auto actualTime = QTime::currentTime();
-        const int time = actualTime.msecsTo(sendigTime);
+        QTime actualTime = QTime::currentTime();
+        const int time = commend["receviedTime"].toDateTime().time().msecsTo(actualTime);
+        int test0 = commend["receviedTime"].toDateTime().time().msec();
+        int test = commend["time"].toDateTime().time().msec();
+        int test2 = actualTime.msec();
         emit client::newEmbed(tr("latence"),tr("affiche la latence avec le serveur"),tr("ascendant 🔼"),commend["arg"].toString()+" ms",tr("descendant 🔽"),QString::number(time)+" ms");
     }else{
         QMessageBox::critical(nullptr, tr("Erreur"), tr("Un paquet de commande a été reçu mais la commande est incomprise. ")+commend["message"].toString());
@@ -291,9 +294,10 @@ QString client::generatedate()
     QDateTime::fromString(heures, "hh:mm:ss");
     return ("<span style=\"font-size: 12px\">"  +   tr(" le ")    +   Date    +"</span> <span style=\"font-size: 10px\">"+   tr("à") +   heures +"</span><br/>");
 }
-QString client::generatedate(QMap<QString, QVariant> date)
+QString client::generatedate(QMap<QString, QVariant> message)
 {
-    return("<span style=\"font-size: 12px\">"+ tr(" Le ","dans la generationde message")+date["shippingday"].toString()+" "+date["sendingdate"].toString()+" "+date["shippingmonth"].toString()+" "+date["shippingyears"].toString() +"</span> <span style=\"font-size: 10px\">"+tr( " à ","dans la generationde message")+date["sendingtime"].toString()+" : "+date["minuteofsending"].toString()+tr(" </span><br/>"));
+    auto date = message["time"].toDateTime().date();
+    return("<span style=\"font-size: 12px\">"+ tr(" Le ","dans la generationde message")+ date.toString("dddd") +" "+date.toString("d")+" "+date.toString("MMMM")+" "+date.toString("yyyy") +"</span> <span style=\"font-size: 10px\">"+tr( " à ","dans la generationde message")+date.toString("hh")+" : "+date.toString("mm")+tr(" </span><br/>"));
 }
 QString client::generatemesage(QString message, QString pseudo)
 {

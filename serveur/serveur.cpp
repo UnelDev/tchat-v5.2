@@ -73,13 +73,7 @@ void serveur::sentmessagetoall(const QString type, QString message, QString pseu
     sendmap["type"]=type;
     sendmap["message"]=encryptioncesar->chiffre(message);
     sendmap["pseudo"]=encryptioncesar->chiffre(pseudo);
-    sendmap["secondofsending"]=QDateTime::currentDateTime().toString("ss");;
-    sendmap["minuteofsending"]=QDateTime::currentDateTime().toString("mm");;
-    sendmap["sendingtime"]=QDateTime::currentDateTime().toString("hh");
-    sendmap["sendingdate"]=QDateTime::currentDateTime().toString("d");
-    sendmap["shippingday"]=QDateTime::currentDateTime().toString("dddd");
-    sendmap["shippingmonth"]=QDateTime::currentDateTime().toString("MMMM");
-    sendmap["shippingyears"]=QDateTime::currentDateTime().toString("yyyy");
+    sendmap["time"]=QDateTime::currentDateTime();
     sentmessagetoall(sendmap);
 }
 void serveur::sentmessageto(const QString &message, const int NoUtilisateur, QString pseudo)
@@ -91,13 +85,7 @@ void serveur::sentmessageto(const QString &message, const int NoUtilisateur, QSt
     sendmap["type"]="msg";
     sendmap["message"]=encryptioncesar->chiffre(message);
     sendmap["pseudo"]=encryptioncesar->chiffre(pseudo);
-    sendmap["secondofsending"]=QDateTime::currentDateTime().toString("ss");;
-    sendmap["minuteofsending"]=QDateTime::currentDateTime().toString("mm");;
-    sendmap["sendingtime"]=QDateTime::currentDateTime().toString("hh");
-    sendmap["sendingdate"]=QDateTime::currentDateTime().toString("d");
-    sendmap["shippingday"]=QDateTime::currentDateTime().toString("dddd");
-    sendmap["shippingmonth"]=QDateTime::currentDateTime().toString("MMMM");
-    sendmap["shippingyears"]=QDateTime::currentDateTime().toString("yyyy");
+    sendmap["time"]=QDateTime::currentDateTime();
     sentmessageto(sendmap,NoUtilisateur);
 }
 void serveur::sentMessageToRole(const QString message, const int role, QString psedoOfSent){
@@ -115,13 +103,7 @@ void serveur::sendFileto(const QString path, const QString NameOfFile, const int
     sendmap["type"]="attachmentFile";
     sendmap["nameOfFile"]=encryptioncesar->chiffre(NameOfFile);
     sendmap["version"]=QCoreApplication::applicationVersion();;
-    sendmap["secondofsending"]=QDateTime::currentDateTime().toString("ss");;
-    sendmap["minuteofsending"]=QDateTime::currentDateTime().toString("m");;
-    sendmap["sendingtime"]=QDateTime::currentDateTime().toString("hh");
-    sendmap["sendingdate"]=QDateTime::currentDateTime().toString("d");
-    sendmap["shippingday"]=QDateTime::currentDateTime().toString("ddd");
-    sendmap["shippingmonth"]=QDateTime::currentDateTime().toString("MMMM");
-    sendmap["shippingyears"]=QDateTime::currentDateTime().toString("yyyy");
+    sendmap["time"]=QDateTime::currentDateTime();
     sendmap["attachment"]=ba;
     sentmessageto(sendmap, NoUtilisateur);
 }
@@ -131,13 +113,7 @@ void serveur::sentcomandto(const QVariant &message ,int usernaime)
     sendmap["type"]="cmd";
     sendmap["message"]=message;
     sendmap["pseudo"]="serveur"+encryptioncesar->chiffre(psedo);
-    sendmap["secondofsending"]=QDateTime::currentDateTime().toString("ss");;
-    sendmap["minuteofsending"]=QDateTime::currentDateTime().toString("mm");;
-    sendmap["sendingtime"]=QDateTime::currentDateTime().toString("hh");
-    sendmap["sendingdate"]=QDateTime::currentDateTime().toString("d");
-    sendmap["shippingday"]=QDateTime::currentDateTime().toString("dddd");
-    sendmap["shippingmonth"]=QDateTime::currentDateTime().toString("MMMM");
-    sendmap["shippingyears"]=QDateTime::currentDateTime().toString("yyyy");
+    sendmap["time"]=QDateTime::currentDateTime();
     sentmessageto(sendmap,usernaime);
 
 }
@@ -148,13 +124,7 @@ void serveur::sentcomandto(const QVariant &message,const QString arg ,const int 
     sendmap["message"]=message;
     sendmap["arg"]=encryptioncesar->chiffre(arg);
     sendmap["pseudo"]="serveur"+encryptioncesar->chiffre(psedo);
-    sendmap["secondofsending"]=QDateTime::currentDateTime().toString("ss");;
-    sendmap["minuteofsending"]=QDateTime::currentDateTime().toString("mm");;
-    sendmap["sendingtime"]=QDateTime::currentDateTime().toString("hh");
-    sendmap["sendingdate"]=QDateTime::currentDateTime().toString("d");
-    sendmap["shippingday"]=QDateTime::currentDateTime().toString("dddd");
-    sendmap["shippingmonth"]=QDateTime::currentDateTime().toString("MMMM");
-    sendmap["shippingyears"]=QDateTime::currentDateTime().toString("yyyy");
+    sendmap["time"]=QDateTime::currentDateTime();
     sentmessageto(sendmap,usernaime);
 
 }
@@ -165,13 +135,7 @@ void serveur::sentcommande(const QString commande,const QString arg,const QStrin
     sendmap["arg"]=encryptioncesar->chiffre(arg);
     sendmap["arg2"]=encryptioncesar->chiffre(arg2);
     sendmap["pseudo"]="serveur"+encryptioncesar->chiffre(psedo);
-    sendmap["secondofsending"]=QDateTime::currentDateTime().toString("ss");;
-    sendmap["minuteofsending"]=QDateTime::currentDateTime().toString("mm");;
-    sendmap["sendingtime"]=QDateTime::currentDateTime().toString("hh");
-    sendmap["sendingdate"]=QDateTime::currentDateTime().toString("d");
-    sendmap["shippingday"]=QDateTime::currentDateTime().toString("dddd");
-    sendmap["shippingmonth"]=QDateTime::currentDateTime().toString("MMMM");
-    sendmap["shippingyears"]=QDateTime::currentDateTime().toString("yyyy");
+    sendmap["time"]=QDateTime::currentDateTime();
     sentmessagetoall(sendmap);
 }
 void serveur::newconect()
@@ -474,9 +438,10 @@ void serveur::processcomand(QMap<QString, QVariant> command, int noclient)
             clientsList[clientname]->editpseudo(clientsList[clientname]->getpseudo().remove(" ("+clientsList[clientname]->getRoom()+")"));//on le renome
         }
     }else if(command["message"].toString()=="ping"){
-        auto sendigTime = QTime(command["sendingtime"].toInt(),command["minuteofsending"].toInt(),command["secondofsending"].toInt()/*,command["sendingtime"].toInt()*/);
-        auto actualTime = QTime::currentTime();
-        const int time = actualTime.msecsTo(sendigTime);
+        QTime actualTime = QTime::currentTime();
+        const int time = command["time"].toDateTime().time().msecsTo(actualTime);
+        int test = command["time"].toDateTime().time().msec();
+        int test2 = actualTime.msec();
         sentcomandto("pong",QString::number(time),noclient);
     }
     else{
