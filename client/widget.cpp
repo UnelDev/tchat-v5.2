@@ -76,9 +76,10 @@ Widget::Widget(QWidget *parent)
    QObject::connect(clients, &client::newuser, this, &Widget::newuser);
    QObject::connect(clients, &client::externalOrder, this , &Widget::executeCmd);
    QObject::connect(clients, &client::newFileAndComent, this , &Widget::displayFileOnMessageList);
+   QObject::connect(clients, &client::newEmbed, this, &Widget::displayEmbed);
    //conexion
    auto *areaScrollBar = ui->scrollArea->verticalScrollBar();  // Je recupère un pointeur sur la ScrollBar
-   QObject::connect(areaScrollBar,&QAbstractSlider::rangeChanged, [this]() {
+   QObject::connect(areaScrollBar,&QAbstractSlider::rangeChanged, [this]() {//fo nction lambda
           ui->scrollArea->verticalScrollBar()->setValue(ui->scrollArea->verticalScrollBar()->maximum());
        });
 }
@@ -314,6 +315,51 @@ void Widget::displayFileOnMessageList(const QString comment, const QString NameO
     lastText=0;
 
 }
+void Widget::displayEmbed(const QString name, const QString information, const QString describleText1, const QString text1, const QString describleText2, const QString text2){
+    QFrame* line = new QFrame();
+    line->setFrameShape(QFrame::HLine);
+    line->setFrameShadow(QFrame::Sunken);
+    ui->messageliste->addWidget(line);
+    if(settings->value("settings/SoundNotification").toBool())
+    {
+        if(!QApplication::activeWindow()){
+            QApplication::beep();
+        }
+    }
+    QGridLayout  *GLayout = new QGridLayout();
+    ui->messageliste->addSpacing(10);
+    QLabel *labelName = new QLabel("<span style=\"font-size: 18px\">     "+name+"</p></span>");
+    QLabel *labelInformation = new QLabel("<span style=\"font-size: 15px\">     "+information+"</p></span>");
+    GLayout->addWidget(labelName, 0, 0, 1, 2);
+    GLayout->addWidget(labelInformation,1,0,1,2);
+    if(describleText1!=""&&text1!=""){
+        QLabel *describle1 = new QLabel(describleText1);
+        QLabel *LabelText1 = new QLabel(text1);
+
+        GLayout->addWidget(describle1,2,0);
+        GLayout->addWidget(LabelText1,2,1);
+    }
+    if(describleText2!=""&&text2!=""){
+        QLabel *describle2 = new QLabel(describleText2);
+        QLabel *LabelText2 = new QLabel(text2);
+
+        GLayout->addWidget(describle2,3,0);
+        GLayout->addWidget(LabelText2,3,1);
+    }
+    GLayout->setHorizontalSpacing(1);
+    //auto palette = taggerBox->palette();
+    //palette.setColor(QPalette::Window,QColor(94, 103, 114));
+    ui->messageliste->addLayout(GLayout);
+
+    QFrame* lineEnd = new QFrame();
+    lineEnd->setFrameShape(QFrame::HLine);
+    lineEnd->setFrameShadow(QFrame::Sunken);
+    ui->messageliste->addWidget(lineEnd);
+
+    lastMessageIsText=false;
+    lastText=0;
+
+}
 void Widget::openfile(){
     QPushButton *PushButton = qobject_cast<QPushButton*>(sender());
     PushButton->setText(PushButton->text().remove(tr("telecharger: ","dans le bouton de telechargement")));
@@ -351,80 +397,82 @@ QString Widget::returnpseudo()
 void Widget::processechatbot(QString command)
 {
     srand (time(NULL));
-   //reponse pré faite
-   if (command==tr("bonjour")||command==tr("salut")||command==tr("hello")){//posibilier de question
-       int random = rand() % 5 + 1;//on fait l'aleatoire
-       if(random == 1){
-           addmessage(generatemesage(tr("Bonjour") + ui->pseudo->text()+".",tr("Tchat Bot")));
-       }else if(random == 2){
-           addmessage(generatemesage(tr("Salut") + ui->pseudo->text()+".",tr("Tchat Bot")));
-       }else if(random == 3){
-           addmessage(generatemesage(tr("Salut🖖") + ui->pseudo->text()+".",tr("Tchat Bot")));
-       }else if(random == 4){
-           addmessage(generatemesage(tr("Hello") + ui->pseudo->text()+".",tr("Tchat Bot")));
-       }else if(random == 5){
-           addmessage(generatemesage(tr("Hello👋") + ui->pseudo->text()+".",tr("Tchat Bot")));
-       }
-   }else if (command==tr("comment t'apelle tu")||command==tr("quel est ton nom")){
-       int random = rand() % 2 + 1;
-       if(random == 1){
-           addmessage(generatemesage(tr("Tu peux m'appeller Tchat Bot."),tr("Tchat Bot")));
-       }else if(random == 2){
-           addmessage(generatemesage(tr("Tu peux m'appeller Tchat Bot 😊."),tr("Tchat Bot")));
-       }
-   }else if (command==tr("qui est tu")){
-       addmessage(generatemesage(tr("Je suis le Tchat Bot crée par les développeurs de Ananta System, je suis encore très inachevé."),tr("Tchat Bot")));
-   }else if (command=="clear"){
-       executeCmd("clear");
-   }else if (command=="clearall"){
-          clients->sendcommande("clearForAll");
-   }else if(command.startsWith("promot")){
-       useraction *usrAction = new useraction;
-       usrAction->show();
-       for(int i=0;i<ui->clientlist->count();i++){
-           usrAction->addUser(ui->clientlist->item(i)->text());
-       }
-       QObject::connect(usrAction, &useraction::finish, this, &Widget::changeUserRole);
-   }else if (command=="actualise"||command=="update"){
+    //reponse pré faite
+    if (command==tr("bonjour")||command==tr("salut")||command==tr("hello")){//posibilier de question
+        int random = rand() % 5 + 1;//on fait l'aleatoire
+        if(random == 1){
+            addmessage(generatemesage(tr("Bonjour") + ui->pseudo->text()+".",tr("Tchat Bot")));
+        }else if(random == 2){
+            addmessage(generatemesage(tr("Salut") + ui->pseudo->text()+".",tr("Tchat Bot")));
+        }else if(random == 3){
+            addmessage(generatemesage(tr("Salut🖖") + ui->pseudo->text()+".",tr("Tchat Bot")));
+        }else if(random == 4){
+            addmessage(generatemesage(tr("Hello") + ui->pseudo->text()+".",tr("Tchat Bot")));
+        }else if(random == 5){
+            addmessage(generatemesage(tr("Hello👋") + ui->pseudo->text()+".",tr("Tchat Bot")));
+        }
+    }else if (command==tr("comment t'apelle tu")||command==tr("quel est ton nom")){
+        int random = rand() % 2 + 1;
+        if(random == 1){
+            addmessage(generatemesage(tr("Tu peux m'appeller Tchat Bot."),tr("Tchat Bot")));
+        }else if(random == 2){
+            addmessage(generatemesage(tr("Tu peux m'appeller Tchat Bot 😊."),tr("Tchat Bot")));
+        }
+    }else if (command==tr("qui est tu")){
+        addmessage(generatemesage(tr("Je suis le Tchat Bot crée par les développeurs de Ananta System, je suis encore très inachevé."),tr("Tchat Bot")));
+    }else if (command=="clear"){
+        executeCmd("clear");
+    }else if (command=="clearall"){
+        clients->sendcommande("clearForAll");
+    }else if(command.startsWith("promot")){
+        useraction *usrAction = new useraction;
+        usrAction->show();
+        for(int i=0;i<ui->clientlist->count();i++){
+            usrAction->addUser(ui->clientlist->item(i)->text());
+        }
+        QObject::connect(usrAction, &useraction::finish, this, &Widget::changeUserRole);
+    }else if (command=="actualise"||command=="update"){
         clients->sendcommande("updating");
-   }else if(command.startsWith("acept")){
-          changeUserRoom *usrRoom = new changeUserRoom;
-          usrRoom->show();
-          for(int i=0;i<ui->clientlist->count();i++){
-              usrRoom->addUser(ui->clientlist->item(i)->text());
-          }
-          QObject::connect(usrRoom, &changeUserRoom::finish, this, &Widget::changeUsersaloon);
-   }else if (command==tr("merci")){
-       int random = rand() % 7 + 1;
-       if(random == 1){
-           addmessage(generatemesage(tr("De rien 😀"),tr("Tchat Bot")));
-       }else if(random == 2){
-           addmessage(generatemesage(tr("Tout le plaisir est pour moi 😀"),tr("Tchat Bot")));
-       }else if(random == 3){
-           addmessage(generatemesage(tr("Tout le plaisir est pour moi!"),tr("Tchat Bot")));
-       }else if(random == 3){
-           addmessage(generatemesage(tr("De rien !"),tr("Tchat Bot")));
-       }else if(random == 4){
-           addmessage(generatemesage(tr("Mais je suis là pour ça bien sûr 😀"),tr("Tchat Bot")));
-       }else if(random == 5){
-           addmessage(generatemesage(tr("Mais je suis là pour ça bien sûr !"),tr("Tchat Bot")));
-       }else if (random == 6){
+    }else if(command.startsWith("acept")){
+        changeUserRoom *usrRoom = new changeUserRoom;
+        usrRoom->show();
+        for(int i=0;i<ui->clientlist->count();i++){
+            usrRoom->addUser(ui->clientlist->item(i)->text());
+        }
+        QObject::connect(usrRoom, &changeUserRoom::finish, this, &Widget::changeUsersaloon);
+    }else if (command==tr("merci")){
+        int random = rand() % 7 + 1;
+        if(random == 1){
+            addmessage(generatemesage(tr("De rien 😀"),tr("Tchat Bot")));
+        }else if(random == 2){
+            addmessage(generatemesage(tr("Tout le plaisir est pour moi 😀"),tr("Tchat Bot")));
+        }else if(random == 3){
+            addmessage(generatemesage(tr("Tout le plaisir est pour moi!"),tr("Tchat Bot")));
+        }else if(random == 3){
+            addmessage(generatemesage(tr("De rien !"),tr("Tchat Bot")));
+        }else if(random == 4){
+            addmessage(generatemesage(tr("Mais je suis là pour ça bien sûr 😀"),tr("Tchat Bot")));
+        }else if(random == 5){
+            addmessage(generatemesage(tr("Mais je suis là pour ça bien sûr !"),tr("Tchat Bot")));
+        }else if (random == 6){
             addmessage(generatemesage(tr("Quand tu ne me parle pas je fais que des actions répétitives, recevoir des messages et les afficher😥..."),tr("Tchat Bot")));
-       }else if (random == 7){
+        }else if (random == 7){
             addmessage(generatemesage(tr("Quand tu ne me parle pas je m'ennuie 😥"),tr("Tchat Bot")));
-   }else if (command==tr("condenses")||command==tr("condense")||command==tr("condense menu")){
-       condesed();
-    }else if (command==tr("comment condenser la fenetre")||command==tr("comment condenser le menu")||command==tr("compacter la fenetre")){
-       int random = rand() % 2 + 1;
-       if(random == 1){
-           displayMessagelist(generatemesage(tr("Il suffit de taper la commande /condense", "Attention bien taper la même commande!"),tr("Tchat Bot")));
-       }else if(random == 2){
-           addmessage(generatemesage(tr("Tu peux faire clique droit sur l'icône en bas à droite dans ta barre des tâches -> Condenser la fenêtre"),tr("Tchat Bot")));
-       }
-   }
-   }else{
-      displayMessagelist(generatemesage(tr("Je suis desolé, mais je n'ai pas compris votre demande, vérifiez l'orthographe."),tr("Tchat Bot")));
-  }
+        }else if (command==tr("condenses")||command==tr("condense")||command==tr("condense menu")){
+            condesed();
+        }else if (command==tr("comment condenser la fenetre")||command==tr("comment condenser le menu")||command==tr("compacter la fenetre")){
+            int random = rand() % 2 + 1;
+            if(random == 1){
+                displayMessagelist(generatemesage(tr("Il suffit de taper la commande /condense", "Attention bien taper la même commande!"),tr("Tchat Bot")));
+            }else if(random == 2){
+                addmessage(generatemesage(tr("Tu peux faire clique droit sur l'icône en bas à droite dans ta barre des tâches -> Condenser la fenêtre"),tr("Tchat Bot")));
+            }
+        }
+    }else if(command==tr("ping")){
+        clients->sendcommande("ping");
+    }else{
+        displayMessagelist(generatemesage(tr("Je suis desolé, mais je n'ai pas compris votre demande, vérifiez l'orthographe."),tr("Tchat Bot")));
+    }
 }
 QString Widget::generatemesage(QString message, QString pseudo)
 {

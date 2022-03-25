@@ -11,7 +11,6 @@ CONFIG += c++11
 
 SOURCES += \
     client.cpp \
-    client/chatBot/embed.cpp \
     client/main.cpp \
     moreinformation.cpp \
     client/parametre.cpp \
@@ -24,7 +23,6 @@ SOURCES += \
 
 HEADERS += \
     client.h \
-    client/chatBot/embed.h \
     moreinformation.h \
     cesar.h \
     succees.h \
