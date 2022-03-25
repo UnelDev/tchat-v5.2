@@ -368,8 +368,8 @@ void Widget::displayEmbed(const QString name, const QString information, const Q
     }
     QGridLayout  *GLayout = new QGridLayout();
     ui->messageliste->addSpacing(10);
-    QLabel *labelName = new QLabel("<span style=\"font-size: 15px\">     "+name+"</p></span>");
-    QLabel *labelInformation = new QLabel("<span style=\"font-size: 10px\">     "+information+"</p></span>");
+    QLabel *labelName = new QLabel("<span style=\"font-size: 18px\">     "+name+"</p></span>");
+    QLabel *labelInformation = new QLabel("<span style=\"font-size: 15px\">     "+information+"</p></span>");
     GLayout->addWidget(labelName, 0, 0, 1, 2);
     GLayout->addWidget(labelInformation,1,0,1,2);
     if(describleText1!=""&&text1!=""){
