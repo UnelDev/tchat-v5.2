@@ -183,7 +183,6 @@ void client::datareceived()
 void client::processthemessage(QMap<QString,QVariant> message)
 {
     if(message["type"]=="cmd"){
-        message["receviedTime"] = QDateTime::currentDateTime();
         message["pseudo"]=encryptioncesar->deChiffre(message["pseudo"].toString());
         message["arg"]=encryptioncesar->deChiffre(message["arg"].toString());
         message["arg2"]=encryptioncesar->deChiffre(message["arg2"].toString());
@@ -278,11 +277,30 @@ void client::processcomand(QMap<QString, QVariant> commend)
         newclient(commend["arg2"].toString());
     }else if(commend["message"]=="pong"){
         QTime actualTime = QTime::currentTime();
-        const int time = commend["receviedTime"].toDateTime().time().msecsTo(actualTime);
-        int test0 = commend["receviedTime"].toDateTime().time().msec();
-        int test = commend["time"].toDateTime().time().msec();
-        int test2 = actualTime.msec();
-        emit client::newEmbed(tr("latence"),tr("affiche la latence avec le serveur"),tr("ascendant 🔼"),commend["arg"].toString()+" ms",tr("descendant 🔽"),QString::number(time)+" ms");
+        const int time = commend["time"].toDateTime().time().msecsTo(actualTime);
+        QList< QList<QString>>liste;
+        const QList<QString>one{tr("ascendant 🔼"),commend["arg"].toString()+" ms"};
+        liste.push_back(one);
+        const QList<QString>two{tr("descendant 🔽"),QString::number(time)+" ms"};
+        liste.push_back(two);
+
+        emit client::newEmbed(tr("latence"),tr("affiche la latence avec le serveur"),liste);
+    }else if(commend["message"]=="ReInfo"){
+        QTime actualTime = QTime::currentTime();
+        const int time = commend["time"].toDateTime().time().msecsTo(actualTime);
+        QList< QList<QString>>liste;
+        const QList<QString>one{tr("ascendant 🔼"),commend["arg"].toString()+" ms"};
+        liste.push_back(one);
+        const QList<QString>two{tr("traitement serveur 🔁"),commend["arg2"].toString()+" ms"};
+        liste.push_back(two);
+        const QList<QString>three{tr("descendant 🔽"),QString::number(time)+" ms"};
+        liste.push_back(three);
+        const int totalTime{commend["arg"].toInt()+commend["arg2"].toInt()+time};//total des ping
+        const QList<QString>four{tr("total ⏱️"),QString::number(totalTime)+" ms"};
+        liste.push_back(four);
+        const QList<QString>five{tr("nombre de clients 😏"),commend["arg3"].toString()};
+        liste.push_back(five);
+        emit client::newEmbed(tr("information de connexion"),tr("affiche les informationde connexion de serveur"),liste);
     }else{
         QMessageBox::critical(nullptr, tr("Erreur"), tr("Un paquet de commande a été reçu mais la commande est incomprise. ")+commend["message"].toString());
     }

@@ -107,22 +107,14 @@ void serveur::sendFileto(const QString path, const QString NameOfFile, const int
     sendmap["attachment"]=ba;
     sentmessageto(sendmap, NoUtilisateur);
 }
-void serveur::sentcomandto(const QVariant &message ,int usernaime)
-{
-    QMap<QString,QVariant> sendmap;
-    sendmap["type"]="cmd";
-    sendmap["message"]=message;
-    sendmap["pseudo"]="serveur"+encryptioncesar->chiffre(psedo);
-    sendmap["time"]=QDateTime::currentDateTime();
-    sentmessageto(sendmap,usernaime);
-
-}
-void serveur::sentcomandto(const QVariant &message,const QString arg ,const int usernaime)
+void serveur::sentcomandto(const int usernaime, const QVariant &message, const QString arg, const QString arg2, const QString arg3)
 {
     QMap<QString,QVariant> sendmap;
     sendmap["type"]="cmd";
     sendmap["message"]=message;
     sendmap["arg"]=encryptioncesar->chiffre(arg);
+    sendmap["arg2"]=encryptioncesar->chiffre(arg2);
+    sendmap["arg3"]=encryptioncesar->chiffre(arg3);
     sendmap["pseudo"]="serveur"+encryptioncesar->chiffre(psedo);
     sendmap["time"]=QDateTime::currentDateTime();
     sentmessageto(sendmap,usernaime);
@@ -172,7 +164,7 @@ void  serveur::outOfWating(int usernaime, const QString newpsedo)
             sentmessageto(saveMessage[i],usernaime);
         }
         for(int i = 0; i < clientsList.size()-1; i++){
-            sentcomandto("isconnected",clientsList[i]->getpseudo(),usernaime);
+            sentcomandto(usernaime,"isconnected",clientsList[i]->getpseudo());
         }
         emit serveur::ActionOnUser(clientsList[usernaime],true);
     }else if (clientsList[usernaime]->getRoom()=="waiting"){
@@ -219,7 +211,7 @@ void serveur::connect( QMap<QString, QVariant> &connectpack, int usernaime){
             sentmessageto(saveMessage[i],usernaime);
         }
         for(int i = 0; i < clientsList.size()-1; i++){
-            sentcomandto("isconnected",clientsList[i]->getpseudo(),usernaime);
+            sentcomandto(usernaime,"isconnected",clientsList[i]->getpseudo());
         }
         sentmessagetoall(connectpack);
         emit
@@ -263,6 +255,7 @@ void serveur::datareceived()
             in >> message;
             sendingClient->setmessageSize(static_cast<int>(0));
         if(message["type"]=="cmd"){//une commende
+            message["receviedTime"]=QDateTime::currentDateTime();
             message["arg"]=encryptioncesar->deChiffre(message["arg"].toString());
             message["arg2"]=encryptioncesar->deChiffre(message["arg2"].toString());
             message["pseudo"]=encryptioncesar->deChiffre(message["pseudo"].toString());
@@ -367,10 +360,10 @@ void serveur::processcomand(QMap<QString, QVariant> command, int noclient)
         for(int i = 1; i < clientsList.size(); i++)
         {
             if(clientsList[i]->getpseudo()==command["arg"] && i != noclient){//si c'est le meme on coupe et on envoie une erreur
-                sentcomandto("pseudoalreadyuse",noclient);
+                sentcomandto(noclient,"pseudoalreadyuse");
                 return;
             }else if(clientsList[i]->getpseudo().remove(" ")==command["arg"].toString().remove(" ") && i != noclient){//si c'est resembleaut on coupe et on envoie une erreur
-                sentcomandto("pseudoresembling",noclient);
+                sentcomandto(noclient,"pseudoresembling");
                 return;
             }
         }
@@ -429,7 +422,7 @@ void serveur::processcomand(QMap<QString, QVariant> command, int noclient)
             sentmessageto(tr("vous n'avais pas le droit de faire cette commende : changeUsrRoom ne peut etre fait sur un host","lors de lexecution d'une commende"), noclient);
             return;
         }else{
-            sentcomandto("clear",clientname);
+            sentcomandto(clientname,"clear");
             sentmessageto(tr("vous avez été changer de salle par ")+clientsList[noclient]->getpseudo()+ tr(" vous éte maintenant en salle : ")+command["arg2"].toString(), clientname);
             emitlog(command["arg"].toString()+tr(" a été changer de sale par : ", "dans les log")+clientsList[noclient]->getpseudo()+tr("il est maintenant en salle :", "dans les log")+command["arg2"].toString());
             const QString name =clientsList[clientname]->getpseudo().remove(" ("+clientsList[clientname]->getRoom()+")");
@@ -440,11 +433,13 @@ void serveur::processcomand(QMap<QString, QVariant> command, int noclient)
     }else if(command["message"].toString()=="ping"){
         QTime actualTime = QTime::currentTime();
         const int time = command["time"].toDateTime().time().msecsTo(actualTime);
-        int test = command["time"].toDateTime().time().msec();
-        int test2 = actualTime.msec();
-        sentcomandto("pong",QString::number(time),noclient);
-    }
-    else{
+        sentcomandto(noclient,"pong",QString::number(time));
+    }else if(command["message"].toString()=="info"){
+        QTime actualTime = QTime::currentTime();
+        const int ping =command["time"].toDateTime().time().msecsTo(command["receviedTime"].toDateTime().time());//te temps entre l'envoie est la reception
+        const int internalPing = command["receviedTime"].toDateTime().time().msecsTo(actualTime);
+        sentcomandto(noclient,"ReInfo",QString::number(ping),QString::number(internalPing),QString::number(clientsList.size()));
+    }else{
         messageBox(tr("erreur"), tr("Un paquet de commande a été reçu mais la commande est incomprise."));
 }}
 void serveur::recap(){

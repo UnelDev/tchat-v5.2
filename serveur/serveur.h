@@ -33,8 +33,7 @@ class serveur : public QObject
     void sentmessageto(const QString &message,const int NoUtilisateur,QString pseudo="");
     void sentMessageToRole(const QString message,const  int role, QString psedoOfSent = tr("Serveur Tchat Bot"));
     void sendFileto(const QString path, const QString NameOfFile, const int NoUtilisateur);
-    void sentcomandto(const QVariant &message ,int usernaime);
-    void sentcomandto(const QVariant &message,QString arg ,int usernaime);
+    void sentcomandto(int usernaime,const QVariant &message,const QString arg="",const QString arg2="",const QString arg3="");
 
     void newconect();
     void outOfWating(int usernaime, const QString newpsedo);

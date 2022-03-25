@@ -71,7 +71,7 @@ signals:
     void isConnected();
     void isDesconected();
     void externalCommend(QMap<QString, QVariant> message);
-    void newEmbed(const QString name,const QString information,const QString describleText1="" , const QString text1="", const QString describleText2="", const QString text2="");
+    void newEmbed(const QString name,const QString information,const QList<QList<QString >>liste);
 };
 
 #endif // CLIENT_H

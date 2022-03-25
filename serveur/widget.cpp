@@ -355,7 +355,7 @@ void Widget::displayFileOnMessageList(const QString comment, const QString NameO
     lastText=0;
 
 }
-void Widget::displayEmbed(const QString name, const QString information, const QString describleText1, const QString text1, const QString describleText2, const QString text2){
+void Widget::displayEmbed(const QString name, const QString information,const QList<QList<QString >>liste){
     QFrame* line = new QFrame();
     line->setFrameShape(QFrame::HLine);
     line->setFrameShadow(QFrame::Sunken);
@@ -372,20 +372,18 @@ void Widget::displayEmbed(const QString name, const QString information, const Q
     QLabel *labelInformation = new QLabel("<span style=\"font-size: 15px\">     "+information+"</p></span>");
     GLayout->addWidget(labelName, 0, 0, 1, 2);
     GLayout->addWidget(labelInformation,1,0,1,2);
-    if(describleText1!=""&&text1!=""){
-        QLabel *describle1 = new QLabel(describleText1);
-        QLabel *LabelText1 = new QLabel(text1);
 
-        GLayout->addWidget(describle1,2,0);
-        GLayout->addWidget(LabelText1,2,1);
-    }
-    if(describleText2!=""&&text2!=""){
-        QLabel *describle2 = new QLabel(describleText2);
-        QLabel *LabelText2 = new QLabel(text2);
+    for (int i = 0; i < liste.size(); ++i) {//liste.size()+1 = liste.size()-1 +2
+        if(liste[i][0]!=""&&liste[i][1]!=""){
+            QLabel * LabelText = new QLabel(liste[i][0]);
+            QLabel * describle = new QLabel(liste[i][1]);
 
-        GLayout->addWidget(describle2,3,0);
-        GLayout->addWidget(LabelText2,3,1);
+            GLayout->addWidget(LabelText,i+2,0);
+            GLayout->addWidget(describle,i+2,1);
+        }
+
     }
+
     GLayout->setHorizontalSpacing(1);
     //auto palette = taggerBox->palette();
     //palette.setColor(QPalette::Window,QColor(94, 103, 114));
@@ -508,6 +506,8 @@ void Widget::processechatbot(QString command)
         }
     }else if(command==tr("ping")){
         clients->sendcommande("ping");
+    }else if(command==tr("info")){
+        clients->sendcommande("info");
     }else{
         displayMessagelist(generatemesage(tr("Je suis desolé, mais je n'ai pas compris votre demande, vérifiez l'orthographe."),tr("Tchat Bot")));
     }

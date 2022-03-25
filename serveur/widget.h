@@ -72,7 +72,7 @@ private slots:
     void displayMessagelist(const QString message);
     void displayMessagelistNoFormat(const QString message, const QString psedo);
     void displayFileOnMessageList(const QString comment, const QString NameOfFile);
-    void displayEmbed(const QString name, const QString information, const QString describleText1, const QString text1, const QString describleText2, const QString text2);
+    void displayEmbed(const QString name, const QString information,const QList<QList<QString >>liste);
     void deletClient(QString nameOfClient);
     void newuser(QString name);
     void recap();
