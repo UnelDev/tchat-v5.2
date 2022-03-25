@@ -86,8 +86,8 @@ void client::senddatamap(const QString type){
     sendmap["type"]=type;
     sendmap["pseudo"]=encryptioncesar->chiffre(psedo);
     sendmap["version"]=QCoreApplication::applicationVersion();
-    sendmap["secondofsending"]=QDateTime::currentDateTime().toString("ss");;
-    sendmap["minuteofsending"]=QDateTime::currentDateTime().toString("mm");;
+    sendmap["secondofsending"]=QDateTime::currentDateTime().toString("ss");
+    sendmap["minuteofsending"]=QDateTime::currentDateTime().toString("mm");
     sendmap["sendingtime"]=QDateTime::currentDateTime().toString("hh");
     sendmap["sendingdate"]=QDateTime::currentDateTime().toString("d");
     sendmap["shippingday"]=QDateTime::currentDateTime().toString("dddd");
@@ -101,7 +101,7 @@ void client::senddatamap(const QString type, QString message, QString pseudo, QD
     sendmap["type"]=type;
     sendmap["message"]=encryptioncesar->chiffre(message);
     sendmap["pseudo"]=encryptioncesar->chiffre(pseudo);
-    sendmap["version"]=QCoreApplication::applicationVersion();;
+    sendmap["version"]=QCoreApplication::applicationVersion();
     sendmap["secondofsending"]=seconde.toString();
     sendmap["minuteofsending"]=minute.toString();
     sendmap["sendingtime"]=heures.toString();
@@ -114,9 +114,9 @@ void client::senddatamap(const QString type, QString message, QString pseudo){
     sendmap["type"]=type;
     sendmap["message"]=encryptioncesar->chiffre(message);
     sendmap["pseudo"]=encryptioncesar->chiffre(pseudo);
-    sendmap["version"]=QCoreApplication::applicationVersion();;
-    sendmap["secondofsending"]=QDateTime::currentDateTime().toString("ss");;
-    sendmap["minuteofsending"]=QDateTime::currentDateTime().toString("mm");;
+    sendmap["version"]=QCoreApplication::applicationVersion();
+    sendmap["secondofsending"]=QDateTime::currentDateTime().toString("ss");
+    sendmap["minuteofsending"]=QDateTime::currentDateTime().toString("mm");
     sendmap["sendingtime"]=QDateTime::currentDateTime().toString("hh");
     sendmap["sendingdate"]=QDateTime::currentDateTime().toString("d");
     sendmap["shippingday"]=QDateTime::currentDateTime().toString("dddd");
@@ -129,9 +129,9 @@ void client::senddatamap(const QString type, QString message){
     sendmap["type"]=type;
     sendmap["message"]=encryptioncesar->chiffre(message);
     sendmap["pseudo"]=encryptioncesar->chiffre(psedo);
-    sendmap["version"]=QCoreApplication::applicationVersion();;
-    sendmap["secondofsending"]=QDateTime::currentDateTime().toString("ss");;
-    sendmap["minuteofsending"]=QDateTime::currentDateTime().toString("mm");;
+    sendmap["version"]=QCoreApplication::applicationVersion();
+    sendmap["secondofsending"]=QDateTime::currentDateTime().toString("ss");
+    sendmap["minuteofsending"]=QDateTime::currentDateTime().toString("mm");
     sendmap["sendingtime"]=QDateTime::currentDateTime().toString("hh");
     sendmap["sendingdate"]=QDateTime::currentDateTime().toString("d");
     sendmap["shippingday"]=QDateTime::currentDateTime().toString("dddd");
@@ -148,13 +148,13 @@ void client::sendcommande(const QString commande, const QString arg, const QStri
     sendmap["arg2"]=encryptioncesar->chiffre(arg2);
     sendmap["pseudo"]=encryptioncesar->chiffre(psedo);
     sendmap["version"]=QCoreApplication::applicationVersion();;
-    sendmap["secondofsending"]=QDateTime::currentDateTime().toString("ss");;
-    sendmap["minuteofsending"]=QDateTime::currentDateTime().toString("m");;
+    sendmap["secondofsending"]=QDateTime::currentDateTime().toString("ss");
+    sendmap["minuteofsending"]=QDateTime::currentDateTime().toString("m");
     sendmap["sendingtime"]=QDateTime::currentDateTime().toString("hh");
     sendmap["sendingdate"]=QDateTime::currentDateTime().toString("d");
     sendmap["shippingday"]=QDateTime::currentDateTime().toString("ddd");
     sendmap["shippingmonth"]=QDateTime::currentDateTime().toString("MMMM");
-    sendmap["shippingyears"]=QDateTime::currentDateTime().toString("yyyy");;
+    sendmap["shippingyears"]=QDateTime::currentDateTime().toString("yyyy");
     senddatamap(sendmap);
 }
 void client::sendFile(const QString message, const QString path, const QString NameOfFile){
@@ -167,8 +167,8 @@ void client::sendFile(const QString message, const QString path, const QString N
     sendmap["nameOfFile"]=encryptioncesar->chiffre(NameOfFile);
     sendmap["pseudo"]=encryptioncesar->chiffre(psedo);
     sendmap["version"]=QCoreApplication::applicationVersion();;
-    sendmap["secondofsending"]=QDateTime::currentDateTime().toString("ss");;
-    sendmap["minuteofsending"]=QDateTime::currentDateTime().toString("m");;
+    sendmap["secondofsending"]=QDateTime::currentDateTime().toString("ss");
+    sendmap["minuteofsending"]=QDateTime::currentDateTime().toString("m");
     sendmap["sendingtime"]=QDateTime::currentDateTime().toString("hh");
     sendmap["sendingdate"]=QDateTime::currentDateTime().toString("d");
     sendmap["shippingday"]=QDateTime::currentDateTime().toString("ddd");
