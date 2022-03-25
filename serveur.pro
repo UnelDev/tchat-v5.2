@@ -10,7 +10,6 @@ CONFIG += c++11
 
 SOURCES += \
     client/chatBot/chatbotinteraction.cpp \
-    client/chatBot/embed.cpp \
     serveur/main.cpp \
     serveur/serveur.cpp \
     succees.cpp \
@@ -24,7 +23,6 @@ SOURCES += \
     client/chatBot/changeuserroom.cpp
 HEADERS += \
     client/chatBot/chatbotinteraction.h \
-    client/chatBot/embed.h \
     serveur/serveur.h \
     succees.h \
     serveur/utilisateur.h \

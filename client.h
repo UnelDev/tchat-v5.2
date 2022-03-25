@@ -13,7 +13,6 @@ For Ananta Project */
 #include <QMessageBox>
 #include <QSettings>
 #include <QDir>
-#include "client/chatBot/embed.h"
 #include "cesar.h"
 class client : public QObject
 {

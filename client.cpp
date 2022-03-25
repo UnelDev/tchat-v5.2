@@ -303,7 +303,7 @@ void client::processcomand(QMap<QString, QVariant> commend)
         deleteclient(commend["arg"].toString());
         --nbuser;
     }else if(commend["message"]=="changePsedo"){
-        displayMessagelist(commend["arg"].toString()+ tr(" a changer son psedo en : ","lors d'un changement de nom utilisateur")+commend["arg2"].toString());
+        displayMessagelist(commend["arg"].toString()+ tr(" à changer son pseudo en : ","lors d'un changement de nom utilisateur")+commend["arg2"].toString());
         deleteclient(commend["arg"].toString());
         newclient(commend["arg2"].toString());
     }else if(commend["message"]=="silentNameChange"){
@@ -313,9 +313,9 @@ void client::processcomand(QMap<QString, QVariant> commend)
         auto sendigTime = QTime(commend["sendingtime"].toInt(),commend["minuteofsending"].toInt(),commend["secondofsending"].toInt()/*,command["sendingtime"].toInt()*/);
         auto actualTime = QTime::currentTime();
         const int time = actualTime.msecsTo(sendigTime);
-        emit client::newEmbed(tr("latence"),tr("afiche la latence avec le serveur"),tr("acendant 🔼"),commend["arg"].toString()+" ms",tr("decendant 🔽"),QString::number(time)+" ms");
+        emit client::newEmbed(tr("latence"),tr("affiche la latence avec le serveur"),tr("ascendant 🔼"),commend["arg"].toString()+" ms",tr("descendant 🔽"),QString::number(time)+" ms");
     }else{
-        QMessageBox::critical(nullptr, tr("Erreur"), tr("Un paquet de comande a été reçu mais la commande est incomprise. ")+commend["message"].toString());
+        QMessageBox::critical(nullptr, tr("Erreur"), tr("Un paquet de commande a été reçu mais la commande est incomprise. ")+commend["message"].toString());
     }
 }
 QString client::generatedate()

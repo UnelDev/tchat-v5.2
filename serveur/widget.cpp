@@ -356,19 +356,22 @@ void Widget::displayFileOnMessageList(const QString comment, const QString NameO
 
 }
 void Widget::displayEmbed(const QString name, const QString information, const QString describleText1, const QString text1, const QString describleText2, const QString text2){
+    QFrame* line = new QFrame();
+    line->setFrameShape(QFrame::HLine);
+    line->setFrameShadow(QFrame::Sunken);
+    ui->messageliste->addWidget(line);
     if(settings->value("settings/SoundNotification").toBool())
     {
         if(!QApplication::activeWindow()){
             QApplication::beep();
         }
     }
-
     QGridLayout  *GLayout = new QGridLayout();
-    QLabel labelName(name);
-    QLabel labelInformation(information);
-
-    GLayout->addWidget(&labelName,0,0,2,1);
-    GLayout->addWidget(&labelInformation,1,0,2,1);
+    ui->messageliste->addSpacing(10);
+    QLabel *labelName = new QLabel("<span style=\"font-size: 15px\">     "+name+"</p></span>");
+    QLabel *labelInformation = new QLabel("<span style=\"font-size: 10px\">     "+information+"</p></span>");
+    GLayout->addWidget(labelName, 0, 0, 1, 2);
+    GLayout->addWidget(labelInformation,1,0,1,2);
     if(describleText1!=""&&text1!=""){
         QLabel *describle1 = new QLabel(describleText1);
         QLabel *LabelText1 = new QLabel(text1);
@@ -383,14 +386,23 @@ void Widget::displayEmbed(const QString name, const QString information, const Q
         GLayout->addWidget(describle2,3,0);
         GLayout->addWidget(LabelText2,3,1);
     }
+    GLayout->setHorizontalSpacing(1);
+    //auto palette = taggerBox->palette();
+    //palette.setColor(QPalette::Window,QColor(94, 103, 114));
     ui->messageliste->addLayout(GLayout);
+
+    QFrame* lineEnd = new QFrame();
+    lineEnd->setFrameShape(QFrame::HLine);
+    lineEnd->setFrameShadow(QFrame::Sunken);
+    ui->messageliste->addWidget(lineEnd);
 
     lastMessageIsText=false;
     lastText=0;
+
 }
 void Widget::openfile(){
     QPushButton *PushButton = qobject_cast<QPushButton*>(sender());
-    PushButton->setText(PushButton->text().remove(tr("telecharger: ","dans le bouton de telechargement")));
+    PushButton->setText(PushButton->text().remove(tr("télécharger: ","dans le bouton de téléchargement")));
     QString extention{PushButton->text().split(".").last()};
     QString path = QFileDialog::getSaveFileName(nullptr,tr("choisir le nom du fichier"))+"."+extention;
     if(!path.isEmpty()){
