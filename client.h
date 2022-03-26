@@ -57,6 +57,7 @@ private:
     cesar *encryptioncesar;
     QSettings* settings;
     QString psedo;
+    QString m_ip;
     int messagesize;
     int nbuser;
 signals:
