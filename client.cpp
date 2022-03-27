@@ -56,12 +56,13 @@ void client::connected()
 {
     emit client::isConnected();
     QString textmessage = generatemesage(tr("Connexion établie!"), tr("Tchat Bot"));
+
     const auto ipCalc = m_ip.split(".");
-    int clef = ( ( ipCalc[0].toInt() + ipCalc[1].toInt() + ipCalc[2].toInt() + ipCalc[3 ].toInt() )/*ajout de toute les ip*/
-            -m_port);/*moyene des ip*/
+    int clef = ( ( ipCalc[0].toInt() + ipCalc[1].toInt() + ipCalc[2].toInt() + ipCalc[3 ].toInt() )/*ajout de toute les ip*/-m_port);/*moyene des ip*/
     if(clef<0){clef=std::sqrt(pow(clef,2));}//on enleve la virgule
     if(clef==0){clef=ipCalc[0].toInt() + ipCalc[1].toInt();}//on donne les deux premier chifre assemblée
     encryptioncesar = new cesar(clef);
+
     senddatamap("connection");
     displayMessagelist(textmessage);
     changestateconnectbutton(true);
