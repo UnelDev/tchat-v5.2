@@ -59,6 +59,7 @@ private:
     QString psedo;
     int messagesize;
     int nbuser;
+    int m_port;
 signals:
     void newmessage();
     void display(const QString message);

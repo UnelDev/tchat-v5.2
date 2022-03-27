@@ -1,10 +1,15 @@
 /*By Unel at 30/12/21
 For Ananta Project*/
 #include "cesar.h"
-cesar::cesar(int selectSap)
+cesar::cesar(int selectGap)
 {
-    gap = selectSap;
+
     initialize();
+    const int size = static_cast<int>(alphabet.size());
+    while(selectGap>size){
+        selectGap-=size;
+    }
+    gap = selectGap;
 }
 bool cesar::initialize(){
     alphabet.push_back('a');//creation alphabet

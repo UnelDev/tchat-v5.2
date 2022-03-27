@@ -10,7 +10,7 @@ serveur::serveur()
     QCoreApplication::setApplicationVersion("5.2");
 
     settings = new QSettings("settings.ini", QSettings::IniFormat);
-    encryptioncesar = new cesar(2);
+    //encryptioncesar = new cesar(2);
     m_serveur = new QTcpServer(this);
     psedo=tr("non rensengner","dans le constructeur du client a letape du psedo. c'est le psedo par defaut");
     NbOfMessage=0;
@@ -38,6 +38,7 @@ int serveur::startserveur(const int port, const QString fileOfSave)
         displayMessagelist(tr("Le serveur a été démarré sur le port <strong>") + QString::number(m_serveur->serverPort()) + tr("</strong>.Des clients peuvent maintenant se connecter."), tr("Chat Bot"));
         QObject::connect(m_serveur, &QTcpServer::newConnection, this, &serveur::newconect);
     }
+    encryptioncesar = new cesar(port);
     return m_serveur->serverPort();
 }
 //serveur

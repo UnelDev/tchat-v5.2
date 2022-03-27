@@ -43,6 +43,7 @@ void client::sendmessage(QString message){ senddatamap("msg",message); }
 
 void client::connectto(QString ip, int port, QString newpsedo)
 {
+    m_port = port;
     psedo = newpsedo;
     displayMessagelist(generatemesage(tr("Tentative de connexion en cours..."),tr("Tchat Bot")));
     changestateconnectbutton(false);
@@ -52,6 +53,7 @@ void client::connectto(QString ip, int port, QString newpsedo)
 }
 void client::connected()
 {
+    encryptioncesar = new cesar(m_port);
     emit client::isConnected();
     QString textmessage = generatemesage(tr("Connexion établie!"), tr("Tchat Bot"));
     senddatamap("connection");
