@@ -11,7 +11,7 @@ client::client()
     //variable global
     //variable complex
     cesar(1);
-    //encryptioncesar = new cesar(2);
+    encryptioncesar = new cesar(2);
     settings = new QSettings("settings.ini", QSettings::IniFormat);
     socket = new QTcpSocket(this);
     //variable simple
@@ -43,8 +43,6 @@ void client::sendmessage(QString message){ senddatamap("msg",message); }
 
 void client::connectto(QString ip, int port, QString newpsedo)
 {
-    m_port = port;
-    m_ip = ip;
     psedo = newpsedo;
     displayMessagelist(generatemesage(tr("Tentative de connexion en cours..."),tr("Tchat Bot")));
     changestateconnectbutton(false);
@@ -56,13 +54,6 @@ void client::connected()
 {
     emit client::isConnected();
     QString textmessage = generatemesage(tr("Connexion établie!"), tr("Tchat Bot"));
-
-    const auto ipCalc = m_ip.split(".");
-    int clef = ( ( ipCalc[0].toInt() + ipCalc[1].toInt() + ipCalc[2].toInt() + ipCalc[3 ].toInt() )/*ajout de toute les ip*/-m_port);/*moyene des ip*/
-    if(clef<0){clef=std::sqrt(pow(clef,2));}//on enleve la virgule
-    if(clef==0){clef=ipCalc[0].toInt() + ipCalc[1].toInt();}//on donne les deux premier chifre assemblée
-    encryptioncesar = new cesar(clef);
-
     senddatamap("connection");
     displayMessagelist(textmessage);
     changestateconnectbutton(true);
@@ -195,7 +186,6 @@ void client::processthemessage(QMap<QString,QVariant> message)
         message["pseudo"]=encryptioncesar->deChiffre(message["pseudo"].toString());
         message["arg"]=encryptioncesar->deChiffre(message["arg"].toString());
         message["arg2"]=encryptioncesar->deChiffre(message["arg2"].toString());
-        message["arg3"]=encryptioncesar->deChiffre(message["arg3"].toString());
         processcomand(message);
     }else if(message["type"]=="msg"){
         message["pseudo"]=encryptioncesar->deChiffre(message["pseudo"].toString());

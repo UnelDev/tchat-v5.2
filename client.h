@@ -13,7 +13,6 @@ For Ananta Project */
 #include <QMessageBox>
 #include <QSettings>
 #include <QDir>
-#include <math.h>
 #include "cesar.h"
 class client : public QObject
 {
@@ -58,8 +57,6 @@ private:
     cesar *encryptioncesar;
     QSettings* settings;
     QString psedo;
-    QString m_ip;
-    int m_port;
     int messagesize;
     int nbuser;
 signals:
