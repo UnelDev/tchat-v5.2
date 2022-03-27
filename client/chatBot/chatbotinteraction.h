@@ -14,6 +14,7 @@ public:
     static bool ImageSupported(const QString nameOfFile);
     static bool textSuported(const QString nameOfFile);
     static QString exctractText(const QString nameOfFile,const int nbOfLinePrint=10);
+    static const QList<QList<QString >>helpChatBot();
 };
 
 #endif // CHATBOTINTERACTION_H

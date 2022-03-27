@@ -369,15 +369,18 @@ void Widget::displayEmbed(const QString name, const QString information,const QL
     QGridLayout  *GLayout = new QGridLayout();
     ui->messageliste->addSpacing(10);
     QLabel *labelName = new QLabel("<span style=\"font-size: 18px\">     "+name+"</p></span>");
-    QLabel *labelInformation = new QLabel("<span style=\"font-size: 15px\">     "+information+"</p></span>");
+    labelName->setWordWrap(true);
+    QLabel *labelInformation = new QLabel("<span style=\"font-size: 10px\">     "+information+"</p></span>");
+    labelInformation->setWordWrap(true);
     GLayout->addWidget(labelName, 0, 0, 1, 2);
     GLayout->addWidget(labelInformation,1,0,1,2);
 
     for (int i = 0; i < liste.size(); ++i) {//liste.size()+1 = liste.size()-1 +2
         if(liste[i][0]!=""&&liste[i][1]!=""){
             QLabel * LabelText = new QLabel(liste[i][0]);
+            labelName->setWordWrap(true);
             QLabel * describle = new QLabel(liste[i][1]);
-
+            describle->setWordWrap(true);
             GLayout->addWidget(LabelText,i+2,0);
             GLayout->addWidget(describle,i+2,1);
         }
@@ -474,7 +477,7 @@ void Widget::processechatbot(QString command)
             usrRoom->addUser(ui->clientlist->item(i)->text());
         }
         QObject::connect(usrRoom, &changeUserRoom::finish, this, &Widget::changeUsersaloon);
-    }else if (command=="actualise"||command=="update"){
+    }else if (command==tr("actualise")||command=="update"){
         clients->sendcommande("updating");
     }else if (command==tr("merci")){
         int random = rand() % 7 + 1;
@@ -494,20 +497,24 @@ void Widget::processechatbot(QString command)
             addmessage(generatemesage(tr("Quand tu ne me parle pas je fais que des actions répétitives, recevoir des messages et les afficher😥..."),tr("Tchat Bot")));
         }else if (random == 7){
             addmessage(generatemesage(tr("Quand tu ne me parle pas je m'ennuie 😥"),tr("Tchat Bot")));
-        }else if (command==tr("condenses")||command==tr("condense")||command==tr("condense menu")){
+        }else if (command==tr("condenses")||command==tr("condense")||command==tr("condense menu")||command==tr("cmprs")){
             condesed();
         }else if (command==tr("comment condenser la fenetre")||command==tr("comment condenser le menu")||command==tr("compacter la fenetre")){
             int random = rand() % 2 + 1;
             if(random == 1){
                 displayMessagelist(generatemesage(tr("Il suffit de taper la commande /condense", "Attention bien taper la même commande!"),tr("Tchat Bot")));
+                condesed();
             }else if(random == 2){
                 addmessage(generatemesage(tr("Tu peux faire clique droit sur l'icône en bas à droite dans ta barre des tâches -> Condenser la fenêtre"),tr("Tchat Bot")));
+                condesed();
             }
         }
     }else if(command==tr("ping")){
         clients->sendcommande("ping");
     }else if(command==tr("info")){
         clients->sendcommande("info");
+    }else if(command==tr("aide")||command=="help"){
+        displayEmbed(tr("aide"),tr("permet d'optenire de l'aide ❓"),chatBotInteraction::helpChatBot());
     }else{
         displayMessagelist(generatemesage(tr("Je suis desolé, mais je n'ai pas compris votre demande, vérifiez l'orthographe."),tr("Tchat Bot")));
     }

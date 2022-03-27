@@ -62,3 +62,32 @@ QString chatBotInteraction::exctractText(const QString nameOfFile, const int nbO
         return QString::number(-1);
     }
 }
+const QList<QList<QString>>chatBotInteraction::helpChatBot(){
+    QList< QList<QString>>liste;//creation de la liste principale
+
+    const QList<QString>one{tr("help"),tr("permet d'aficher l'aide ❓")};
+    liste.push_back(one);
+
+    const QList<QString>two{tr("ping"),tr("permet de montrer le ping avec le serveur ⏱️")};
+    liste.push_back(two);
+
+    const QList<QString>four{tr("info"),tr("permet de montrer ceertaine info sur le serveur ℹ️")};
+    liste.push_back(four);
+
+    const QList<QString>five{tr("cmprs"),tr("permet de compresser la fenetre 📏 peut aussi etre : condense")};
+    liste.push_back(five);
+
+    const QList<QString>six{"clear",tr("permet de netoier la zonne de reception 🗑️")};
+    liste.push_back(six);
+
+    const QList<QString>seven{"clearAll",tr("permet de netoier la zonne de reception pour tout les utilisateur 🗑️")};
+    liste.push_back(seven);
+
+    const QList<QString>eight{"promot",tr("permet de promouvoir un utilisateur a un grade inférieur au vautre 🆙")};
+    liste.push_back(eight);
+
+    const QList<QString>nine{"acept",tr("permet chager de salon un utilisateur il faut etre admin ou superieur pour faire cette action 💱")};
+    liste.push_back(nine);
+
+    return liste;
+}
