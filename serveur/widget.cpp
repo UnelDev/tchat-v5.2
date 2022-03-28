@@ -375,7 +375,7 @@ void Widget::displayEmbed(const QString name, const QString information,const QL
     GLayout->addWidget(labelName, 0, 0, 1, 2);
     GLayout->addWidget(labelInformation,1,0,1,2);
 
-    for (int i = 0; i < liste.size(); ++i) {//liste.size()+1 = liste.size()-1 +2
+    for (int i = 0; i < liste.size(); ++i) {
         if(liste[i][0]!=""&&liste[i][1]!=""){
             QLabel * LabelText = new QLabel(liste[i][0]);
             labelName->setWordWrap(true);
@@ -387,9 +387,7 @@ void Widget::displayEmbed(const QString name, const QString information,const QL
 
     }
 
-    GLayout->setHorizontalSpacing(1);
-    //auto palette = taggerBox->palette();
-    //palette.setColor(QPalette::Window,QColor(94, 103, 114));
+    GLayout->setHorizontalSpacing(10);
     ui->messageliste->addLayout(GLayout);
 
     QFrame* lineEnd = new QFrame();
@@ -515,6 +513,8 @@ void Widget::processechatbot(QString command)
         clients->sendcommande("info");
     }else if(command==tr("aide")||command=="help"){
         displayEmbed(tr("aide"),tr("permet d'optenire de l'aide ❓"),chatBotInteraction::helpChatBot());
+    }else if(command=="debug"||command==tr("deverminage")||command==tr("debogage")){
+        clients->sendcommande("debug");
     }else{
         displayMessagelist(generatemesage(tr("Je suis desolé, mais je n'ai pas compris votre demande, vérifiez l'orthographe."),tr("Tchat Bot")));
     }
@@ -528,7 +528,7 @@ void Widget::on_pseudo_editingFinished()
 }
 QString Widget::generatemesage(QString message, QString pseudo)
 {
-    if(pseudo == "" ||pseudo == " "){
+    if(pseudo.remove(" ") == ""){
         pseudo = "anonymous";
     }
     return("<span style=\"font-size: 12px; font-weight: bold;\">"+pseudo+tr("</span>")+generatedate()+"<span style=\"font-size: 14px; \">"+message+"</span>");

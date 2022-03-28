@@ -113,9 +113,22 @@ void serveur::sentcomandto(const int usernaime, const QVariant &message, const Q
     QMap<QString,QVariant> sendmap;
     sendmap["type"]="cmd";
     sendmap["message"]=message;
+    sendmap["encrypt?"]=true;
     sendmap["arg"]=encryptioncesar->chiffre(arg);
     sendmap["arg2"]=encryptioncesar->chiffre(arg2);
     sendmap["arg3"]=encryptioncesar->chiffre(arg3);
+    sendmap["pseudo"]="serveur"+encryptioncesar->chiffre(psedo);
+    sendmap["time"]=QDateTime::currentDateTime();
+    sentmessageto(sendmap,usernaime);
+
+}
+void serveur::sentcomandto(const int usernaime, const QString message, const QVariant arg)
+{
+    QMap<QString,QVariant> sendmap;
+    sendmap["type"]="cmd";
+    sendmap["encrypt?"]=false;
+    sendmap["message"]=message;
+    sendmap["arg"]=arg;
     sendmap["pseudo"]="serveur"+encryptioncesar->chiffre(psedo);
     sendmap["time"]=QDateTime::currentDateTime();
     sentmessageto(sendmap,usernaime);
@@ -440,8 +453,15 @@ void serveur::processcomand(QMap<QString, QVariant> command, int noclient)
         const int ping =command["time"].toDateTime().time().msecsTo(command["receviedTime"].toDateTime().time());//te temps entre l'envoie est la reception
         const int internalPing = command["receviedTime"].toDateTime().time().msecsTo(actualTime);
         sentcomandto(noclient,"ReInfo",QString::number(ping),QString::number(internalPing),QString::number(clientsList.size()));
+    }else if(command["message"].toString()=="debug"){
+        if(clientsList[noclient]->getGrade()==0){
+            sentmessageto(tr("vous n'avais pas le droit de faire cette commende : debug est soumis a un rôle admin ou host","lors de lexecution d'une commende"), noclient);
+        }else{
+            QList<QVariant> test =recapEmbed();
+            sentcomandto(noclient,"reDebug",test);
+        }
     }else{
-        messageBox(tr("erreur"), tr("Un paquet de commande a été reçu mais la commande est incomprise."));
+        messageBox(tr("Erreur"), tr("Un paquet de commande a été reçu mais la commande est incomprise."));
 }}
 void serveur::recap(){
     const auto fichier = "raport.txt";
@@ -468,4 +488,38 @@ void serveur::recap(){
        }
     }
     out << tr("-----------------generate-by-Ananta-System-5.2-----------------","dans la generation de recapitulatif")<< Qt::endl;
+}
+QList<QVariant> serveur::recapEmbed(){
+
+    QList<QVariant>liste;//creation de la liste principale
+
+    const QList<QVariant>one{tr("port du serveur","dans la generation de recapitulatif"),QString::number(m_serveur->serverPort())};
+    liste.push_back(one);
+
+    const QList<QVariant>four{tr("derniere erreur : ","dans la generation de recapitulatif"),m_serveur->errorString()};
+    liste.push_back(four);
+
+    if(m_serveur->hasPendingConnections()){
+        const QList<QVariant>five{tr("il y a une connexion en attente : ","dans la generation de recapitulatif"),tr("oui")};
+        liste.push_back(five);
+    }else{
+        const QList<QVariant>five{tr("il y a une connexion en attente : ","dans la generation de recapitulatif"),tr("non")};
+        liste.push_back(five);
+    }
+
+    if(m_serveur->isListening()){
+        const QList<QVariant>six{tr("le serveur ecoute les connexion : ","dans la generation de recapitulatif"),tr("oui")};
+        liste.push_back(six);
+    }else{
+        const QList<QVariant>six{tr("le serveur ecoute les connexion : ","dans la generation de recapitulatif"),tr("non")};
+        liste.push_back(six);
+    }
+    const QList<QVariant>two{tr("le nombre max de connexion en atente est : ","dans la generation de recapitulatif"),QString::number(m_serveur->maxPendingConnections())};
+    liste.push_back(two);
+
+    const QList<QVariant>seven{ tr("l'adresse du serveur : ","dans la generation de recapitulatif")," scolpeID :"+m_serveur->serverAddress().scopeId()+" to string : "+m_serveur->serverAddress().toString()};
+    QVariant test = seven;
+    liste.push_back(test);
+
+return liste;
 }

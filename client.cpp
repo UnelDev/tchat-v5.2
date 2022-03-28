@@ -185,9 +185,12 @@ void client::datareceived()
 void client::processthemessage(QMap<QString,QVariant> message)
 {
     if(message["type"]=="cmd"){
+        if(message["encrypt?"]!=false){
+
+            message["arg"]=encryptioncesar->deChiffre(message["arg"].toString());
+            message["arg2"]=encryptioncesar->deChiffre(message["arg2"].toString());
+        }
         message["pseudo"]=encryptioncesar->deChiffre(message["pseudo"].toString());
-        message["arg"]=encryptioncesar->deChiffre(message["arg"].toString());
-        message["arg2"]=encryptioncesar->deChiffre(message["arg2"].toString());
         processcomand(message);
     }else if(message["type"]=="msg"){
         message["pseudo"]=encryptioncesar->deChiffre(message["pseudo"].toString());
@@ -303,6 +306,22 @@ void client::processcomand(QMap<QString, QVariant> commend)
         const QList<QString>five{tr("nombre de clients 😏"),commend["arg3"].toString()};
         liste.push_back(five);
         emit client::newEmbed(tr("information de connexion"),tr("affiche les informationde connexion de serveur"),liste);
+    }else if(commend["message"]=="reDebug"){
+        QList<QVariant> origin=commend["arg"].toList();
+        QList<QList<QString>> copy;
+
+        for (int i = 0; i < origin.size(); ++i) {
+
+            QList<QVariant> ligne = origin[i].toList();
+            QList<QString>completLigne;
+
+            for (int j = 0; j < ligne.size(); ++j) {
+                 completLigne.append(ligne[j].toString());
+            }
+            copy.append(completLigne);
+        }
+
+        emit client::newEmbed(tr("iformation de debug"),tr("information sur le serveur"),copy);
     }else{
         QMessageBox::critical(nullptr, tr("Erreur"), tr("Un paquet de commande a été reçu mais la commande est incomprise. ")+commend["message"].toString());
     }
@@ -312,7 +331,7 @@ QString client::generatedate()
     QString heures = QDateTime::currentDateTime().toString("hh:mm:ss");
     QString Date = QDateTime::currentDateTime().toString("ddd dd MMMM yyyy");
     QDateTime::fromString(heures, "hh:mm:ss");
-    return ("<span style=\"font-size: 12px\">"  +   tr(" le ")    +   Date    +"</span> <span style=\"font-size: 10px\">"+   tr("à") +   heures +"</span><br/>");
+    return ("<span style=\"font-size: 12px\">"  +   tr(" le ")    +   Date    +"</span> <span style=\"font-size: 10px\">"+   tr(" à ") +   heures +"</span><br/>");
 }
 QString client::generatedate(QMap<QString, QVariant> message)
 {

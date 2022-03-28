@@ -12,6 +12,8 @@
 #include <QDir>
 #include <QNetworkInterface>
 #include <future>         // std::async, std::future
+#include <QGridLayout>
+#include <QLabel>
 #include "utilisateur.h"
 #include "cesar.h"
 
@@ -22,7 +24,9 @@ class serveur : public QObject
     serveur();
     int startserveur(const int port = 2048, const QString fileOfSave = "chat.dat");
     void recap();
+    QList<QVariant> recapEmbed();
     void sentcommande(const QString commande,const QString arg = "",const QString arg2 = "");
+    void sentcomandto(const int usernaime, const QString message, const QVariant arg);
     void sentmessagetoall(const QString type, QString message, QString pseudo);
     void sentmessagetoall(const QMap<QString, QVariant> &message);
     void sentmessageto(const QMap<QString, QVariant> &message, int NoUtilisateur);
