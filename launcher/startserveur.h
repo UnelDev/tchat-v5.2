@@ -31,6 +31,8 @@ private slots:
     void on_port_valueChanged(int arg1);
     void on_checkBox_2_clicked(bool checked);
 
+    void on_out_clicked(bool checked);
+
 private:
     serverInteraction* interactServer;
     QSettings* settings;

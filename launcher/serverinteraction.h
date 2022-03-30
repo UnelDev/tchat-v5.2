@@ -14,7 +14,7 @@ class serverInteraction : public QObject
 public:
     serverInteraction();
     ~serverInteraction();
-    void connectTo(int port=2048);
+    void connectTo(const int port=2048, const QString ip="anantasystem.com");
 
 private:
     int progresse;

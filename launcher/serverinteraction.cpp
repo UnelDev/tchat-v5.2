@@ -5,13 +5,13 @@ serverInteraction::serverInteraction()
     progresse=0;
     name="";
 }
-void serverInteraction::connectTo(int port){
+void serverInteraction::connectTo( const int port,const QString ip){
     QCoreApplication::setApplicationVersion("5.2");
     encryptioncesar = new cesar(2);
-    externalServ = new externalServer(&progresse,"127.0.0.1");
+    externalServ = new externalServer(&progresse,ip);
     externalServ->show();
     clients = new client();
-    clients->connectto("127.0.0.1", port, "launcher");
+    clients->connectto(ip, port, "launcher");
     QObject::connect(clients,&client::isConnected, this, &serverInteraction::connect);
     QObject::connect(clients,&client::isDesconected, this, &serverInteraction::desconnect);
     QObject::connect(clients,&client::externalCommend, this, &serverInteraction::external);
@@ -19,7 +19,7 @@ void serverInteraction::connectTo(int port){
 }
 serverInteraction::~serverInteraction(){
     if(clients!=nullptr){
-        delete clients;
+        clients->deleteLater();
     }
 
 }

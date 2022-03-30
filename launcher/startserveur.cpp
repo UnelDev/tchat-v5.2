@@ -81,7 +81,7 @@ void startserveur::on_pushButton_clicked()
         qApp->quit();
     }else{
        interactServer = new serverInteraction();
-       interactServer->connectTo(ui->port->value());
+       interactServer->connectTo(ui->port->value(),ui->ip->text());
     }
 
 }
@@ -118,3 +118,16 @@ void startserveur::on_checkBox_2_clicked(bool checked)
         ui->erorLabel->setVisible(false);
     }
 }
+
+void startserveur::on_out_clicked(bool checked)
+{
+    if(checked){
+        QString ip;
+        foreach (const QHostAddress &address, QNetworkInterface::allAddresses()) {
+            if (address.protocol() == QAbstractSocket::IPv4Protocol && address != QHostAddress(QHostAddress::LocalHost))
+                 ip = (address.toString());
+        }
+        ui->ip->setText(ip);
+    }else{ui->ip->setText("anantasystem.com");}
+}
+
