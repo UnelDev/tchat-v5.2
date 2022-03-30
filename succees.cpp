@@ -35,13 +35,13 @@ sucees::sucees(QWidget *parent) :
         ui->userdifferent10->setText("");
         ui->userdifferent30->setText("");
         ui->userdifferent100->setText("");
-        ui->message10->setIcon(QIcon(":/image/suprimer.png"));
-        ui->message100->setIcon(QIcon(":/image/suprimer.png"));
-        ui->message1000->setIcon(QIcon(":/image/suprimer.png"));
-        ui->messagemaxint->setIcon(QIcon(":/image/suprimer.png"));
-        ui->userdifferent10->setIcon(QIcon(":/image/suprimer.png"));
-        ui->userdifferent30->setIcon(QIcon(":/image/suprimer.png"));
-        ui->userdifferent100->setIcon(QIcon(":/image/suprimer.png"));
+        ui->message10->setIcon(QIcon(":/image/resource/image/supprimer.png"));
+        ui->message100->setIcon(QIcon(":/image/resource/image/supprimer.png"));
+        ui->message1000->setIcon(QIcon(":/image/resource/image/supprimer.png"));
+        ui->messagemaxint->setIcon(QIcon(":/image/resource/image/supprimer.png"));
+        ui->userdifferent10->setIcon(QIcon(":/image/resource/image/supprimer.png"));
+        ui->userdifferent30->setIcon(QIcon(":/image/resource/image/supprimer.png"));
+        ui->userdifferent100->setIcon(QIcon(":/image/resource/image/supprimer.png"));
     }if(settings->value("succes/nbmessage").toInt()<0&&settings->value("succes/succes").toBool()==false){
         ui->message10->setToolTip("imposible de l'avoir vous avez desactiver les succés");
         ui->message100->setToolTip("imposible de l'avoir vous avez desactiver les succés");
@@ -57,41 +57,41 @@ sucees::sucees(QWidget *parent) :
         ui->userdifferent10->setText("");
         ui->userdifferent30->setText("");
         ui->userdifferent100->setText("");
-        ui->message10->setIcon(QIcon(":/image/suprimer.png"));
-        ui->message100->setIcon(QIcon(":/image/suprimer.png"));
-        ui->message1000->setIcon(QIcon(":/image/suprimer.png"));
-        ui->messagemaxint->setIcon(QIcon(":/image/suprimer.png"));
-        ui->userdifferent10->setIcon(QIcon(":/image/suprimer.png"));
-        ui->userdifferent30->setIcon(QIcon(":/image/suprimer.png"));
-        ui->userdifferent100->setIcon(QIcon(":/image/suprimer.png"));
+        ui->message10->setIcon(QIcon(":/image/resource/image/supprimer.png"));
+        ui->message100->setIcon(QIcon(":/image/resource/image/supprimer.png"));
+        ui->message1000->setIcon(QIcon(":/image/resource/image/supprimer.png"));
+        ui->messagemaxint->setIcon(QIcon(":/image/resource/image/supprimer.png"));
+        ui->userdifferent10->setIcon(QIcon(":/image/resource/image/supprimer.png"));
+        ui->userdifferent30->setIcon(QIcon(":/image/resource/image/supprimer.png"));
+        ui->userdifferent100->setIcon(QIcon(":/image/resource/image/supprimer.png"));
     }if(settings->value("succes/nbmessage").toInt()>=10){
         ui->message10->setToolTip("obtenus");
         ui->message10->setText("");
-        ui->message10->setIcon(QIcon(":/image/Check_green.png"));
+        ui->message10->setIcon(QIcon(":/image/resource/image/Check_green.png"));
     }if(settings->value("succes/nbmessage").toInt()>=100){
         ui->message100->setToolTip("obtenus");
         ui->message100->setText("");
-        ui->message100->setIcon(QIcon(":/image/Check_green.png"));
+        ui->message100->setIcon(QIcon(":/image/resource/image/Check_green.png"));
     } if(settings->value("succes/nbmessage").toInt()>=1000){
         ui->message1000->setToolTip("obtenus");
         ui->message1000->setText("");
-        ui->message1000->setIcon(QIcon(":/image/Check_green.png"));
+        ui->message1000->setIcon(QIcon(":/image/resource/image/Check_green.png"));
     } if(settings->value("succes/nbmessage").toInt()>=2147483647){
         ui->messagemaxint->setToolTip("obtenus");
         ui->messagemaxint->setText("");
-        ui->messagemaxint->setIcon(QIcon(":/image/Check_green.png"));
+        ui->messagemaxint->setIcon(QIcon(":/image/resource/image/Check_green.png"));
     }if(settings->value("succes/10userSimultaneously").toBool()){
         ui->userdifferent10->setToolTip("obtenus");
         ui->userdifferent10->setText("");
-        ui->userdifferent10->setIcon(QIcon(":/image/Check_green.png"));
+        ui->userdifferent10->setIcon(QIcon(":/image/resource/image/Check_green.png"));
     }if(settings->value("succes/30userSimultaneously").toBool()){
         ui->userdifferent30->setToolTip("obtenus");
         ui->userdifferent30->setText("");
-        ui->userdifferent30->setIcon(QIcon(":/image/Check_green.png"));
+        ui->userdifferent30->setIcon(QIcon(":/image/resource/image/Check_green.png"));
     }if(settings->value("succes/100userSimultaneously").toBool()){
         ui->userdifferent100->setToolTip("obtenus");
         ui->userdifferent100->setText("");
-        ui->userdifferent100->setIcon(QIcon(":/image/Check_green.png"));
+        ui->userdifferent100->setIcon(QIcon(":/image/resource/image/Check_green.png"));
     }
 
 }
