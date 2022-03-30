@@ -67,7 +67,7 @@ private:
     //asseseur
     void displayMessagelist(QString message);
     void displayFileOnMessageList(const QString comment, const QString NameOfFile);
-    void displayEmbed(const QString name, const QString information, const QString describleText1, const QString text1, const QString describleText2, const QString text2);
+    void displayEmbed(const QString name, const QString information,const QList<QList<QString>>liste);
     void changestateconnectbutton(bool state);
     void displayconnectlabel(QString text);
     void deletClient(QString nameOfClient);

@@ -202,7 +202,7 @@ void  serveur::outOfWating(int usernaime, const QString newpsedo)
     }
 }
 void serveur::connect( QMap<QString, QVariant> &connectpack, int usernaime){
-    QString username =encryptioncesar->deChiffre(connectpack["pseudo"].toString());
+    QString username{encryptioncesar->deChiffre(connectpack["pseudo"].toString())};
 
     clientsList[usernaime]->editversion(connectpack["version"].toString());
     if(clientsList[usernaime]->getRoom()!="waiting"){// si  il est pas en sale d'atente{
@@ -227,8 +227,6 @@ void serveur::connect( QMap<QString, QVariant> &connectpack, int usernaime){
         for(int i = 0; i < clientsList.size()-1; i++){
             sentcomandto(usernaime,"isconnected",clientsList[i]->getpseudo());
         }
-        sentmessagetoall(connectpack);
-        emit
     }else{//il est en sale d'atente
         clientsList[usernaime]->editpseudo(username+" ("+clientsList[usernaime]->getRoom()+")");//on le nome
         sentmessageto(tr("vous avez ete placée en sale d'atente...","lors d'une connexion"),usernaime,tr("tchat bot"));
@@ -237,7 +235,6 @@ void serveur::connect( QMap<QString, QVariant> &connectpack, int usernaime){
         sentmessageto(tr("les administarteur est l'host on été prevenu","lors d'une connexion"),usernaime,tr("tchat bot"));
         emitlog(clientsList[usernaime]->getpseudo()+tr(" vien de se connecter... il a été placée en salle d'atente","lors d'une connexion"));
         connectpack["pseudo"]=encryptioncesar->chiffre(encryptioncesar->deChiffre(connectpack["pseudo"].toString())+" ("+clientsList[usernaime]->getRoom()+")");
-        sentmessagetoall(connectpack);
     }
 
 }

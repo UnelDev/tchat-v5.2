@@ -13,7 +13,7 @@ Widget::Widget(QWidget *parent)
     QCoreApplication::setOrganizationName("ananta system");
     QCoreApplication::setOrganizationDomain("https://anantasystem.com/");
     QCoreApplication::setApplicationName("tchat");
-    QCoreApplication::setApplicationVersion("5.0");
+    QCoreApplication::setApplicationVersion("5.2");
 
     settings = new QSettings("settings.ini", QSettings::IniFormat);
     if(!settings->contains("succes/succes")){
@@ -200,6 +200,7 @@ void Widget::connectClient()
     ui->clientlist->clear();
 }
 void Widget::newuser(QString name){
+    if(name.remove(" ")==""){return;}
     listeClient.append(name);
     ui->clientlist->addItem(name);
 }
