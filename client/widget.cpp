@@ -558,6 +558,10 @@ void Widget::on_sentbuton_clicked()
         ui->pieceJointe->setEnabled(true);
     }
     ui->mesage->clear();
+    for (int i = 0; i < ui->mention->count(); i++)
+    {
+        ui->mention->itemAt(i)->widget()->deleteLater();
+    }
 }
 
 void Widget::on_parametrebuton_2_clicked()
@@ -592,3 +596,47 @@ void Widget::on_pseudo_editingFinished()
         clients->editPsedo(ui->pseudo->text());
     }
 }
+
+void Widget::on_mesage_cursorPositionChanged(int arg1, int arg2)
+{
+    //si le message ne contien pas @ est que ui->mension n'est pas vide on le vide
+    if (!ui->mesage->text().contains("@") && ui->mention->count() != 0){
+        for (int i = 0; i < ui->mention->count(); i++)
+        {
+            ui->mention->itemAt(i)->widget()->deleteLater();
+        }
+    }
+    //si le message ne contien pas de @ on quitte la fonction
+    if (!ui->mesage->text().contains("@")){return;}
+    //si metion n'est pas vide on quitte la fonction
+    if (ui->mention->count() != 0){return;}
+    //si le message contien des @ on le split
+    QStringList list = ui->mesage->text().split(" ");
+    for (int i = 0; i < list.length(); i++)
+    {
+        if (list.at(i).startsWith("@"))
+        {
+            QLabel *label = new QLabel("qui voulez vous mentionnez ?");
+            ui->mention->addWidget(label);
+            for (int j = 0; j < ui->clientlist->count(); j++)
+            {
+                // on ajout des les bouton
+                QPushButton *button = new QPushButton(ui->clientlist->item(j)->text());
+                // on les met dans ui->mention
+                ui->mention->addWidget(button);
+                // on les connect
+                connect(button, &QPushButton::clicked, this, &Widget::mentionButonCliked);
+            }
+        }
+    }
+}
+void Widget::mentionButonCliked()
+{
+    QPushButton *button = qobject_cast<QPushButton *>(sender());
+    QString text = ui->mesage->text();
+    //si le message contien des @ on le split
+    QStringList list = ui->mesage->text().split(" ");
+    //remplacée le mot a cursorPosition
+    ui->mesage->setText(text.replace(text.mid(text.lastIndexOf("@"), text.lastIndexOf(" ") - text.lastIndexOf("@")), "@" + button->text()));
+}
+

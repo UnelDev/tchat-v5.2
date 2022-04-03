@@ -46,6 +46,7 @@ private slots:
     void openfile();
     void on_pieceJointe_clicked();
     void on_pseudo_editingFinished();
+    void on_mesage_cursorPositionChanged(int arg1, int arg2);
 
 private:
     QString returnpseudo();
@@ -74,6 +75,7 @@ private:
     void newuser(QString name);
     void internalCmd(const QString cmd);
     void internalcommende(const QString commende,const QVariant arg1 = "",const QVariant arg2 = "");
+    void mentionButonCliked();
     //variable
     QString m_path;
     QString encryption;

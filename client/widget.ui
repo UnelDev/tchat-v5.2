@@ -31,7 +31,7 @@
         <x>0</x>
         <y>0</y>
         <width>399</width>
-        <height>374</height>
+        <height>371</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
@@ -41,58 +41,6 @@
       </layout>
      </widget>
     </widget>
-   </item>
-   <item row="2" column="0" colspan="2">
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
-     <item>
-      <widget class="QLabel" name="label_psedo">
-       <property name="text">
-        <string>Pseudo:</string>
-       </property>
-      </widget>
-     </item>
-     <item alignment="Qt::AlignLeft">
-      <widget class="QLineEdit" name="pseudo"/>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_message_3">
-       <property name="text">
-        <string>Message:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pieceJointe">
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset resource="resources.qrc">
-         <normaloff>:/image/resource/image/paper-clip.png</normaloff>:/image/resource/image/paper-clip.png</iconset>
-       </property>
-       <property name="flat">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="mesage"/>
-     </item>
-     <item>
-      <widget class="QPushButton" name="sentbuton">
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
-       <property name="text">
-        <string>Envoyer</string>
-       </property>
-       <property name="icon">
-        <iconset resource="resources.qrc">
-         <normaloff>:/image/resource/image/sent.png</normaloff>:/image/resource/image/sent.png</iconset>
-       </property>
-      </widget>
-     </item>
-    </layout>
    </item>
    <item row="0" column="0">
     <widget class="QLabel" name="erorLabel">
@@ -208,6 +156,61 @@
       </widget>
      </item>
     </layout>
+   </item>
+   <item row="3" column="0" colspan="2">
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QLabel" name="label_psedo">
+       <property name="text">
+        <string>Pseudo:</string>
+       </property>
+      </widget>
+     </item>
+     <item alignment="Qt::AlignLeft">
+      <widget class="QLineEdit" name="pseudo"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_message_3">
+       <property name="text">
+        <string>Message:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pieceJointe">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="resources.qrc">
+         <normaloff>:/image/resource/image/paper-clip.png</normaloff>:/image/resource/image/paper-clip.png</iconset>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="mesage"/>
+     </item>
+     <item>
+      <widget class="QPushButton" name="sentbuton">
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
+       <property name="text">
+        <string>Envoyer</string>
+       </property>
+       <property name="icon">
+        <iconset resource="resources.qrc">
+         <normaloff>:/image/resource/image/sent.png</normaloff>:/image/resource/image/sent.png</iconset>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="2" column="0" colspan="2">
+    <layout class="QVBoxLayout" name="mention"/>
    </item>
   </layout>
  </widget>
