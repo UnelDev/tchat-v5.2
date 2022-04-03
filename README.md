@@ -1,12 +1,9 @@
 # introduction
 
-------
-
 Ananta System Tchat est un projet de développement d'un système de tchat. il permet de discuter avec des amis dans un réseau local. l'interface est simple et intuitive, elle a uniquement deux boutons, un pour envoyer un message et un pour accéder au paramètre.
 pour l'instant le tchat est uniquement disponible dans un réseau local, toutefois des test sont en cours pour pouvoir y accéder de partout sur internet.
 
 # Sommaire
-------
 - [Introduction](#introduction)
 - [presentation](#presentation)
 - [avantage](#avantage)
@@ -17,11 +14,9 @@ pour l'instant le tchat est uniquement disponible dans un réseau local, toutefo
 - [Architecture](#architecture)
 
 # présentation du Project
-------
 Ananta System Tchat est né d'un besoin anonymat dans un collège. pour pouvoir continuée a discuter entre amis pendant les cour en salle informatique je me suis mis a développé un système de tchat. il était dans un autre langage : le batch. il était peut efficace. je e sui donc lancée dans le c++. cella fait maintenant 5 ans que je développe ce projet en c++, il est donc de plus en plus stable est plein de fonctionnalité.
 
 # avantage
-------
 - le tchat est chiffrée de bout en bout
 - il est personnalisable
     - il possède par exemple de plusieurs thèmes
@@ -30,7 +25,6 @@ Ananta System Tchat est né d'un besoin anonymat dans un collège. pour pouvoir 
 - il est 100% gratuit est open source
 
 # fonctionnalités
-------
 ce tchat permet bien évidement d'envoyer des message, mais aussi plusieurs autre fonctionnalité est cette liste s'agrandit de mise a jour en mise a jour :
 - [x] envoyer des fichiers jusqu'à 250Mo
 - [x] prévisualiser les fichiers
@@ -40,24 +34,21 @@ ce tchat permet bien évidement d'envoyer des message, mais aussi plusieurs autr
     - ping : permet de voir le temps de réponse du serveur
     - info : permet de voir les information détailler sur le ping
     - help : permet de voir la liste des commande
-    - debug : permet de voir les information de dégugage
+    - debug : permet de voir les information de débugage
     - est plus encore
 - [x] a un historique qui permet de sauvegarder les messages même après une fermeture du tchat
 
 # installation
-------
 le développement du site étant devenus difficile uniquement les version 4.1 est inferieur son disponible dessus. pour les version plus récente il est possible de télécharger le projet sur le GitHub.
 ##### pour l’installation depuis GitHub :
 rendez vous sur la page du projet sur GitHub : [ici pour la version 5.1](https://github.com/https-github-com-anantasystem/anantaSystemTchat5.1) et [ici pour la 5.2](https://github.com/https-github-com-anantasystem/tchat-v5.2)
 a droite se trouve un bouton Releases qui permet de voir les version disponible. une fois sur cette page cliquer sur la dernière version ou il n'est pas notée Beta. d'ici il vous sera possible de télécharger le code source, un fichier zip qui contient la version portable de application, ou encore le setup de l'application.
 
 # Compatibilité
-------
 le tchat est compatible avec tout les système d'exploitation sauf mac.
 pour windows le tchat a été compilée uniquemment pour les version 64bit. si toute fois vous voulez le tchat pour un autre os ou une autre architecture, vous pouvez le [compiler](compilation) sur votre machine, ou me demander de le faire pour vous sur notre discord.
 
 # compilation
-------
 La compilation permet de créer une application interprétable par un appareil donné, dans notre cas votre ordinateur à partir du code source.
 l’application se base sur la bibliothèque Qt5. il vous faudra donc installer Qt5 sur votre ordinateur. pour cella il vous suffit de suivre les instructions suivantes :
 
@@ -68,7 +59,6 @@ l’application se base sur la bibliothèque Qt5. il vous faudra donc installer 
 pour obtenir de l'aide rendez vous sur notre discord
 
 # Architecture
-------
 Ananta System Tchat est codé suivant une architecture MVC.
 - interface : les ficher widget.cpp et le contenus du dossier /client/chatBot/ sont les fichier d'interface, dans ces fichier vous pouvez trouver toute les fonction relative a l'interface graphique.
 - /client  contiens tout les fonction relative au client :
@@ -81,7 +71,6 @@ Ananta System Tchat est codé suivant une architecture MVC.
 - /tchat-serveur-console : est le Project encore en beta test de lancement automatique de /serveurConsoleAutoLaunch.
 
 # contribution
-------
 le projet est open source, vous pouvez donc contribuer au Project sur GitHub : [ici](https://github.com/https-github-com-anantasystem) 
 - merci au différant contributeur qui ont aidé à participer au projet en me suggérant des fonctionnalités et en montrant des bugs que je n'aurai sûrement jamais remarqués, ou que j'aurai bien aimé oublier 😏.
 <table>
@@ -95,11 +84,16 @@ le projet est open source, vous pouvez donc contribuer au Project sur GitHub : [
 </table>
 
 # contact
-------
 le discord du projet est : [ici](https://discord.com/invite/rFm24ZznnT)
+
 le site du projet est : [ici](http://anantasystem.com/)
+
 le twitter du projet est : [ici](https://twitter.com/AnantaSystems)
+
 le GitHub du projet est : [ici](https://github.com/https-github-com-anantasystem)
+
+
+
 #### nos adresse mail :
 - pour des demande d’amélioration : [ici](mailto:amelioration@anantasystem.com) : amelioration@anantasystem.com
 - pour raporter des bug : [ici](mailto:bug@anantasystem.com) : bug@anantasystem.com
