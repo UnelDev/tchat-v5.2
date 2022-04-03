@@ -599,15 +599,22 @@ void Widget::on_pseudo_editingFinished()
 
 void Widget::on_mesage_cursorPositionChanged(int arg1, int arg2)
 {
-    //si le message ne contien pas @ est que ui->mension n'est pas vide on le vide
-    if (!ui->mesage->text().contains("@") && ui->mention->count() != 0){
+    //si le message ne contien pas @ on suprimme tout
+    if (!ui->mesage->text().contains("@")){
         for (int i = 0; i < ui->mention->count(); i++)
         {
             ui->mention->itemAt(i)->widget()->deleteLater();
         }
+        return;
     }
-    //si le message ne contien pas de @ on quitte la fonction
-    if (!ui->mesage->text().contains("@")){return;}
+    //si le dernier mot ne commence pas par @ on vide ui->mention et on quitte la fonction
+    if (!ui->mesage->text().split(" ").last().startsWith("@")){
+        for (int i = 0; i < ui->mention->count(); i++)
+        {
+            ui->mention->itemAt(i)->widget()->deleteLater();
+        }
+        return;
+    }
     //si metion n'est pas vide on quitte la fonction
     if (ui->mention->count() != 0){return;}
     //si le message contien des @ on le split
@@ -627,6 +634,7 @@ void Widget::on_mesage_cursorPositionChanged(int arg1, int arg2)
                 // on les connect
                 connect(button, &QPushButton::clicked, this, &Widget::mentionButonCliked);
             }
+            return;
         }
     }
 }

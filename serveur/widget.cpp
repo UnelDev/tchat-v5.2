@@ -829,9 +829,9 @@ void Widget::on_mesage_cursorPositionChanged(int arg1, int arg2)
                 // on les connect
                 connect(button, &QPushButton::clicked, this, &Widget::mentionButonCliked);
             }
+            return;
         }
     }
-
 }
 void Widget::mentionButonCliked()
 {

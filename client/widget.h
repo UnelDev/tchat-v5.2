@@ -1,6 +1,6 @@
 #ifndef WIDGET_H
 #define WIDGET_H
-#include <QMediaPlayer>
+
 #include <QWidget>
 #include <QTcpSocket>
 #include <QDateTime>
