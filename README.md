@@ -12,6 +12,8 @@ pour l'instant le tchat est uniquement disponible dans un réseau local, toutefo
 - [Compatibilité](#compatibilité)
 - [compilation](#compilation)
 - [Architecture](#architecture)
+- [contribution](#contribution)
+- [contact](#contact)
 
 # présentation du Project
 Ananta System Tchat est né d'un besoin anonymat dans un collège. pour pouvoir continuée a discuter entre amis pendant les cour en salle informatique je me suis mis a développé un système de tchat. il était dans un autre langage : le batch. il était peut efficace. je e sui donc lancée dans le c++. cella fait maintenant 5 ans que je développe ce projet en c++, il est donc de plus en plus stable est plein de fonctionnalité.
@@ -46,7 +48,7 @@ a droite se trouve un bouton Releases qui permet de voir les version disponible.
 
 # Compatibilité
 le tchat est compatible avec tout les système d'exploitation sauf mac.
-pour windows le tchat a été compilée uniquemment pour les version 64bit. si toute fois vous voulez le tchat pour un autre os ou une autre architecture, vous pouvez le [compiler](compilation) sur votre machine, ou me demander de le faire pour vous sur notre discord.
+pour windows le tchat a été compilée uniquemment pour les version 64bit. si toute fois vous voulez le tchat pour un autre os ou une autre architecture, vous pouvez le [compiler](compilation) sur votre machine, ou me demander de le faire pour vous sur notre [discord](https://[discord](https://discord.com/invite/rFm24ZznnT).com/invite/rFm24ZznnT).
 
 # compilation
 La compilation permet de créer une application interprétable par un appareil donné, dans notre cas votre ordinateur à partir du code source.
@@ -56,7 +58,7 @@ l’application se base sur la bibliothèque Qt5. il vous faudra donc installer 
 - créer vous un compte sur le site de Qt
 - connectez vous avec votre compte sur l’application installée plus haut, lorsque application vous le proposera, installée la version 5.15.2 : ![](https://cdn.discordapp.com/attachments/960222007180529775/960222092660441208/Capture_decran_2022-04-03_175730.png) 
 - une fois l’installation terminée il vous suffit d'ouvrir le dossier des source du tchat.
-pour obtenir de l'aide rendez vous sur notre discord
+pour obtenir de l'aide rendez vous sur notre [discord](https://[discord](https://discord.com/invite/rFm24ZznnT).com/invite/rFm24ZznnT)
 
 # Architecture
 Ananta System Tchat est codé suivant une architecture MVC.
@@ -84,7 +86,7 @@ le projet est open source, vous pouvez donc contribuer au Project sur GitHub : [
 </table>
 
 # contact
-le discord du projet est : [ici](https://discord.com/invite/rFm24ZznnT)
+le discord du projet est : [ici](https://[discord](https://discord.com/invite/rFm24ZznnT).com/invite/rFm24ZznnT)
 
 le site du projet est : [ici](http://anantasystem.com/)
 
