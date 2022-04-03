@@ -233,19 +233,27 @@ void helpcondesed(){
 }
 void Widget::displayMessagelist(QString message)
 {
-    if(settings->value("settings/SoundNotification").toBool())
-    {
-        if(!QApplication::activeWindow()){
-            QApplication::beep();
+    //verification des @
+    if(message.contains("@"+ui->pseudo->text())){
+        message.replace("@"+ui->pseudo->text(),"<strong> <span style=\"background:#5865f2\">@"+ui->pseudo->text() + " </span></strong>");
+        QApplication::beep();
+        auto text = QTextDocumentFragment::fromHtml(message);
+        sticon->showMessage("nouvelle mention",text.toPlainText(),QSystemTrayIcon::Information,2000);
+    }else{
+        if(settings->value("settings/SoundNotification").toBool())
+        {
+            if(!QApplication::activeWindow()){
+                QApplication::beep();
+            }
         }
-    }
-    if(settings->value("settings/visualNotification").toBool())
-    {
-        if(!QApplication::activeWindow()){
-            auto text = QTextDocumentFragment::fromHtml(message);
-            sticon->showMessage("",text.toPlainText(),QSystemTrayIcon::Information,2000);
+        if(settings->value("settings/visualNotification").toBool())
+        {
+            if(!QApplication::activeWindow()){
+                auto text = QTextDocumentFragment::fromHtml(message);
+                sticon->showMessage("",text.toPlainText(),QSystemTrayIcon::Information,2000);
+            }
+            QApplication::alert(this);
         }
-        QApplication::alert(this);
     }
     addmessage(message);
 }

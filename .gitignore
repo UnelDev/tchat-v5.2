@@ -32,3 +32,6 @@
 *.app
 *.json
 *.31d184c
+*.db
+*.DB-shm
+*.DB-wal

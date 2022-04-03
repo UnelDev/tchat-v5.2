@@ -202,7 +202,21 @@ void  serveur::outOfWating(int usernaime, const QString newpsedo)
     }
 }
 void serveur::connect( QMap<QString, QVariant> &connectpack, int usernaime){
-    QString username{encryptioncesar->deChiffre(connectpack["pseudo"].toString())};
+    QString username =encryptioncesar->deChiffre(connectpack["pseudo"].toString());
+
+    for(int i = 0; i < clientsList.size(); i++)
+    {
+        if(clientsList[i]->getpseudo().remove(" ")=="" && i != usernaime){
+            sentcomandto(usernaime,"pseudoalreadyuse");
+        }
+        if(clientsList[i]->getpseudo()==connectpack["pseudo"] && i != usernaime){//si c'est le meme on coupe et on envoie une erreur
+            sentcomandto(usernaime,"pseudoalreadyuse");
+            return;
+        }else if(clientsList[i]->getpseudo().remove(" ")==connectpack["arg"].toString().remove(" ") && i != usernaime){//si c'est resembleaut on coupe et on envoie une erreur
+            sentcomandto(usernaime,"pseudoresembling");
+            return;
+        }
+    }
 
     clientsList[usernaime]->editversion(connectpack["version"].toString());
     if(clientsList[usernaime]->getRoom()!="waiting"){// si  il est pas en sale d'atente{
@@ -227,6 +241,7 @@ void serveur::connect( QMap<QString, QVariant> &connectpack, int usernaime){
         for(int i = 0; i < clientsList.size()-1; i++){
             sentcomandto(usernaime,"isconnected",clientsList[i]->getpseudo());
         }
+        sentmessagetoall(connectpack);
     }else{//il est en sale d'atente
         clientsList[usernaime]->editpseudo(username+" ("+clientsList[usernaime]->getRoom()+")");//on le nome
         sentmessageto(tr("vous avez ete placée en sale d'atente...","lors d'une connexion"),usernaime,tr("tchat bot"));
@@ -306,6 +321,7 @@ void serveur::datareceived()
         sendingClient->setmessageSize(static_cast<int>(0));
     }
 }
+
 void serveur::disconnectclients()
 {
     QTcpSocket* disconnectingClientSocket = qobject_cast<QTcpSocket*>(sender());
@@ -368,21 +384,24 @@ void serveur::recoverallfile()
 }
 void serveur::processcomand(QMap<QString, QVariant> command, int noclient)
 {
-    if (command["message"].toString()=="change_psedo") {// changer psedo
-        for(int i = 1; i < clientsList.size(); i++)
+    if (command["message"].toString()=="change_psedo") {// changer psedo)
+        for(int i = 0; i < clientsList.size(); i++)
         {
-            if(clientsList[i]->getpseudo()==command["arg"] && i != noclient){//si c'est le meme on coupe et on envoie une erreur
+            if(clientsList[i]->getpseudo().remove(" ")=="" && i != noclient){
+                sentcomandto(noclient,"pseudoalreadyuse");
+            }
+            if(clientsList[i]->getpseudo()==command["pseudo"] && i != noclient){//si c'est le meme on coupe et on envoie une erreur
                 sentcomandto(noclient,"pseudoalreadyuse");
                 return;
             }else if(clientsList[i]->getpseudo().remove(" ")==command["arg"].toString().remove(" ") && i != noclient){//si c'est resembleaut on coupe et on envoie une erreur
                 sentcomandto(noclient,"pseudoresembling");
                 return;
             }
+            sentcommande("changePsedo",clientsList[noclient]->getpseudo(),command["arg"].toString());
+            sentmessagetoall("msg",clientsList[noclient]->getpseudo()+" a changer son psedo en "+ command["arg"].toString(),"Tchat Bot");
+            emitlog(clientsList[noclient]->getpseudo()+tr(" a changer son psedo en : ", "dans les log")+command["arg"].toString());
+            clientsList[noclient]->editpseudo(command["arg"].toString());
         }
-        sentcommande("changePsedo",clientsList[noclient]->getpseudo(),command["arg"].toString());
-        sentmessagetoall("msg",clientsList[noclient]->getpseudo()+" a changer son psedo en "+ command["arg"].toString(),"Tchat Bot");
-        emitlog(clientsList[noclient]->getpseudo()+tr(" a changer son psedo en : ", "dans les log")+command["arg"].toString());
-        clientsList[noclient]->editpseudo(command["arg"].toString());
     }else if(command["message"].toString()=="file?") {
         sendFileto(command["arg"].toString(),command["nameOfFile"].toString(),noclient);
         emitlog(clientsList[noclient]->getpseudo()+tr("a demander le fichier : ", "dans les log")+command["nameOfFile"].toString());
@@ -420,7 +439,7 @@ void serveur::processcomand(QMap<QString, QVariant> command, int noclient)
     }else if(command["message"].toString()=="changeUsrRoom"){
         int clientname=-1;
         for(int i = 0; i<clientsList.size(); i++){
-            if(clientsList[i]->getpseudo()==command["arg"].toString()){//on prend le n° du client
+            if(clientsList[i]->getpseudo().remove(" ")==command["arg"].toString().remove(" ")){//on prend le n° du client
                 clientname=i;
             }
         }
@@ -435,6 +454,10 @@ void serveur::processcomand(QMap<QString, QVariant> command, int noclient)
             return;
         }else{
             sentcomandto(clientname,"clear");
+            for(int i = 0; i < saveMessage.size()-1; i++)
+            {
+                sentmessageto(saveMessage[i],clientname);
+            }
             sentmessageto(tr("vous avez été changer de salle par ")+clientsList[noclient]->getpseudo()+ tr(" vous éte maintenant en salle : ")+command["arg2"].toString(), clientname);
             emitlog(command["arg"].toString()+tr(" a été changer de sale par : ", "dans les log")+clientsList[noclient]->getpseudo()+tr("il est maintenant en salle :", "dans les log")+command["arg2"].toString());
             const QString name =clientsList[clientname]->getpseudo().remove(" ("+clientsList[clientname]->getRoom()+")");

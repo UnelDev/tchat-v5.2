@@ -69,7 +69,7 @@ private slots:
     void changeUsersaloon(const QString username, const QString room);
     //asseseur
     void errorServer(QString title, QString msg);
-    void displayMessagelist(const QString message);
+    void displayMessagelist(QString message);
     void displayMessagelistNoFormat(const QString message, const QString psedo);
     void displayFileOnMessageList(const QString comment, const QString NameOfFile);
     void displayEmbed(const QString name, const QString information,const QList<QList<QString >>liste);
@@ -77,10 +77,11 @@ private slots:
     void newuser(QString name);
     void recap();
     void executeCmd(const QString cmd);
+    void mentionButonCliked();
     //les auto generer
     void on_parametrebutton_clicked();
     void on_pieceJointe_clicked();
-
     void on_sentbutton_clicked();
+    void on_mesage_cursorPositionChanged(int arg1, int arg2);
 };
 #endif // WIDGET_H

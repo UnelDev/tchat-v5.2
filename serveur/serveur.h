@@ -12,8 +12,6 @@
 #include <QDir>
 #include <QNetworkInterface>
 #include <future>         // std::async, std::future
-#include <QGridLayout>
-#include <QLabel>
 #include "utilisateur.h"
 #include "cesar.h"
 
