@@ -803,36 +803,24 @@ void Widget::on_mesage_cursorPositionChanged(int arg1, int arg2)
     }
     //si le message ne contien pas de @ on quitte la fonction
     if (!ui->mesage->text().contains("@")){return;}
-    
+    //si metion n'est pas vide on quitte la fonction
+    if (ui->mention->count() != 0){return;}
     //si le message contien des @ on le split
     QStringList list = ui->mesage->text().split(" ");
     for (int i = 0; i < list.length(); i++)
     {
         if (list.at(i).startsWith("@"))
         {
-            if(list.length()>=i+1 && list.at(i+1)!=" "||list.at(i+1)!=""){
-                for(int j=0;j< ui->clientlist->count() ;j++){
-                    if(ui->clientlist->item(j)->text().startsWith(list.at(i+1))){
-                    // on ajout des les bouton
-                    QPushButton *button = new QPushButton(ui->clientlist->item(j)->text());
-                    // on les met dans ui->mention
-                    ui->mention->addWidget(button);
-                    // on les connect
-                    connect(button, &QPushButton::clicked, this, &Widget::mentionButonCliked);
-                    }
-                }
-            }else{
-                QLabel *label = new QLabel("qui voulez vous mentionnez ?");
-                ui->mention->addWidget(label);
-                for (int j = 0; j < ui->clientlist->count(); j++)
-                {
-                    // on ajout des les bouton
-                    QPushButton *button = new QPushButton(ui->clientlist->item(j)->text());
-                    // on les met dans ui->mention
-                    ui->mention->addWidget(button);
-                    // on les connect
-                    connect(button, &QPushButton::clicked, this, &Widget::mentionButonCliked);
-                }
+            QLabel *label = new QLabel("qui voulez vous mentionnez ?");
+            ui->mention->addWidget(label);
+            for (int j = 0; j < ui->clientlist->count(); j++)
+            {
+                // on ajout des les bouton
+                QPushButton *button = new QPushButton(ui->clientlist->item(j)->text());
+                // on les met dans ui->mention
+                ui->mention->addWidget(button);
+                // on les connect
+                connect(button, &QPushButton::clicked, this, &Widget::mentionButonCliked);
             }
         }
     }
