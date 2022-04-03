@@ -97,7 +97,7 @@ le GitHub du projet est : [ici](https://github.com/https-github-com-anantasystem
 
 
 #### nos adresse mail :
-nos adresse mail sont a utiliser avec moderation, nous preferont que vous utilisiez le discord dans les salon aproprié ou le github pour les demandes de fonctionnalité et de resolutio de bug.
+nos adresse mail sont a utiliser avec moderation, nous preferont que vous utilisiez le discord dans les salon aproprié ou le github pour les demandes de fonctionnalité et de resolution de bug.
 - pour des demande d’amélioration : [ici](mailto:amelioration@anantasystem.com) : amelioration@anantasystem.com
 - pour raporter des bug : [ici](mailto:bug@anantasystem.com) : bug@anantasystem.com
 - pour contacter les dev : [ici](mailto:dev@anantasystem.com) : dev@anantasystem.com
