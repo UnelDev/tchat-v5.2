@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/iconeConsole">
+        <file>resource/Logo Ananta Console.txt</file>
+    </qresource>
+</RCC>

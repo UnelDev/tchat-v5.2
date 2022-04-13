@@ -90,6 +90,9 @@ void console::serverLog(const QString logs){
 }
 int console::createFile(const QString name, const int index){
     QSettings room("room.ini", QSettings::IniFormat);
+    if(!room.contains("NbOpenPort")){room.setValue("NbOpenPort",0);}
+    if(!room.contains("NbOfRoom")){room.setValue("NbOfRoom",1);}
+    if(!room.contains("1")){room.setValue("1",2049);}
     if(settings->value("settings/port/NbOpenPort").toInt()<=room.value("NbOfRoom").toInt()){
         log("error all port is taken");
         return(0);

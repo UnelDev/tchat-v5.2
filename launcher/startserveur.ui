@@ -61,8 +61,11 @@ p, li { white-space: pre-wrap; }
      <property name="text">
       <string>127.0.0.1</string>
      </property>
-     <property name="readOnly">
+     <property name="dragEnabled">
       <bool>true</bool>
+     </property>
+     <property name="readOnly">
+      <bool>false</bool>
      </property>
     </widget>
    </item>

@@ -30,7 +30,12 @@ int main(int argc, char *argv[])
     }if(!settings.contains("settings/port/NbOpenPort")){
         settings.setValue("settings/port/NbOpenPort",0);
     }
-    std::cout << "-----------------generate-by-Ananta-System-5.2-on-"<< QDateTime::currentDateTime().toString("-dddd-dd-MMMM-yyyy-hh:mm:ss").toStdString() << "s----------------"<<std::endl;
+    QFile file(":/iconeConsole/resource/Logo Ananta Console.txt");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)){}
+    else{
+        const QString text{file.readAll()};
+        std::cout << text.toStdString() << std::endl;
+    }
     console display(settings.value("settings/port").toInt());
     display.save("-----------------generate-by-Ananta-System-5.2-on-"+QDateTime::currentDateTime().toString("-dddd-dd-MMMM-yyyy-hh:mm:ss")+"s----------------");
     return a.exec();
