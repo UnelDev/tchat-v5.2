@@ -90,23 +90,26 @@ void console::serverLog(const QString logs){
 }
 int console::createFile(const QString name, const int index){
     QSettings room("room.ini", QSettings::IniFormat);
-    if(!room.contains("NbOpenPort")){room.setValue("NbOpenPort",0);}
-    if(!room.contains("NbOfRoom")){room.setValue("NbOfRoom",1);}
+    if(!room.contains("NbOpenPort")){room.setValue("NbOpenPort",1);}
+    if(!room.contains("NbOfRoom")){room.setValue("NbOfRoom",0);}
     if(!room.contains("1")){room.setValue("1",2049);}
-    if(settings->value("settings/port/NbOpenPort").toInt()<=room.value("NbOfRoom").toInt()){
+    if(room.value("NbOpenPort").toInt()<=room.value("NbOfRoom").toInt()){
         log("error all port is taken");
         return(0);
     }
     room.setValue("NbOfRoom",room.value("NbOfRoom").toInt()+1);//on augmente le nombre de salle
 
-    QProcess *starter = new QProcess();
+    QProcess* starter = new QProcess();
     QStringList arg;
     const int portPrefered = room.value(room.value("NbOfRoom").toString()).toInt();
     arg.push_back(QString::number(portPrefered));//on met le port
     arg.push_back(name);
     starter->setArguments(arg);
     starter->setProgram(settings->value("settings/serverPath").toString());
-    if(!starter->startDetached()){
+    starter->start(settings->value("settings/serverPath").toString(),arg);
+    connect(starter, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
+        [=](int exitCode, QProcess::ExitStatus exitStatus){ console::finished(exitCode,exitStatus);});
+    if(0){
         log("error on start server");
     }else{
         servName.append(name);
@@ -114,4 +117,15 @@ int console::createFile(const QString name, const int index){
         createPacket(index, "starting",QString::number(portPrefered));
     }
     return room.value(room.value("NbOfRoom").toString()).toInt();//on donne le port
+}
+
+
+void console::finished(int exitCode, QProcess::ExitStatus exitStatus){
+    //une erreur avec le serveur est survenus
+    if(exitCode!=0){
+        log("error on server: exit code "+QString::number(exitCode));
+    }
+    if(exitStatus==QProcess::CrashExit){
+        log("error on server: exit status crash");
+    }
 }

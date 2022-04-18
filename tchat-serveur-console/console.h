@@ -32,6 +32,10 @@ private:
     void serverLog(const QString logs);
     bool copyFile(const QString name);
     int createFile(const QString name, const int index);
+
+    //connexion
+    void finished(int exitCode, QProcess::ExitStatus exitStatus);
+
     QSettings *settings;
     bool write;
     serveur* serv;
