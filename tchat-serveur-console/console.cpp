@@ -119,7 +119,6 @@ int console::createFile(const QString name, const int index){
     return room.value(room.value("NbOfRoom").toString()).toInt();//on donne le port
 }
 
-
 void console::finished(int exitCode, QProcess::ExitStatus exitStatus){
     //une erreur avec le serveur est survenus
     if(exitCode!=0){
