@@ -5,7 +5,10 @@ serverInteraction::serverInteraction()
     progresse=0;
     name="";
 }
-void serverInteraction::connectTo( const int port,const QString ip){
+void serverInteraction::connectTo(const QString userName , const int port, const QString ip){
+    m_ip = ip;
+    m_port = port;
+    m_psedo = userName;
     QCoreApplication::setApplicationVersion("5.2");
     encryptioncesar = new cesar(2);
     externalServ = new externalServer(&progresse,ip);
@@ -70,7 +73,7 @@ void serverInteraction::external(QMap<QString, QVariant> message){
         }else if(message["message"].toString()=="starting"){
             progresse=progresse+1;
             externalServ->changeProgress(progresse);
-            externalServ->setState(tr("initialisation terminée sur le port : ","luncher")+message["arg"].toString());
+            externalServ->interactionFinish(message["arg"].toInt(),m_psedo);
         }
     }
 }

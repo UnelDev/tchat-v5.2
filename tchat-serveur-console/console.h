@@ -26,6 +26,7 @@ public:
     void log(const QString log);
     void save(QString msg);
     void createPacket(const int index, const QString message, const QString arg1 = "", const QString arg2 = "");
+    void sentMap(const int index, const QString message, QMap<QString, QVariant> mymap);
 private:
     void errorOnServer(QString title, QString msg);
     void exernalCommende(QMap<QString, QVariant> &message,const int user);
@@ -41,7 +42,7 @@ private:
     serveur* serv;
 
     cesar* encryptioncesar;
-    QList<QString> servName;
+    QMap<QString,QVariant> listeServer;
 };
 
 #endif // CONSOLE_H

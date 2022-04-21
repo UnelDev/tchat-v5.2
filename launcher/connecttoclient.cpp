@@ -43,18 +43,27 @@ connecttoclient::~connecttoclient()
 }
 void connecttoclient::on_pushButton_clicked()
 {
-    QFile file(settings->value("launcher/AutoConectClientPosition").toString());
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-        QMessageBox::information(this,tr("erreur a louverture du registre"),tr("la clef de registre n'est pas presente faite nous un signalement"));
-    QTextStream out(&file);
-    out << ui->ip->text()+"\n";
-    out <<QString::number(ui->port->value())+"\n";
-    out << ui->username->text();
-    QUrl client(settings->value("launcher/clientPosition").toString());
-    if(!QDesktopServices::openUrl(client)){
-        QMessageBox::information(this,tr("erreur a louverture du lien"),tr("le lien ne veut pas souvrir la clef du registre a du etre modifier reinstaler le tchat"));
+    if(!ui->out->isChecked()){
+        clientconnexion = new clientInteraction();
+        clientconnexion->show();
+        clientconnexion->connectto(ui->ip->text(),ui->port->value());
+        ui->username->setEnabled(false);
+        QObject::connect(clientconnexion,&clientInteraction::serverSelected, this, &connecttoclient::serverSelected);
+    }else{
+        QFile file(settings->value("launcher/AutoConectClientPosition").toString());
+        if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+            QMessageBox::information(this,tr("erreur a louverture du registre"),tr("la clef de registre n'est pas presente faite nous un signalement"));
+        QTextStream out(&file);
+        out << ui->ip->text()+"\n";
+        out <<QString::number(ui->port->value())+"\n";
+        out << ui->username->text();
+        QUrl client(settings->value("launcher/clientPosition").toString());
+        if(!QDesktopServices::openUrl(client)){
+            QMessageBox::information(this,tr("erreur a louverture du lien"),tr("le lien ne veut pas souvrir la clef du registre a du etre modifier reinstaler le tchat"));
+        }
+        qApp->quit();
     }
-    qApp->quit();
+
 }
 void connecttoclient::on_checkBox_toggled(bool checked)
 {
@@ -64,3 +73,29 @@ void connecttoclient::on_checkBox_toggled(bool checked)
     ui->username->setVisible(!checked);
     this->adjustSize();
 }
+void connecttoclient::serverSelected(const QString ip, const int port){
+    QFile file(settings->value("launcher/AutoConectClientPosition").toString());
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+        QMessageBox::information(this,tr("erreur a louverture du registre"),tr("la clef de registre n'est pas presente faite nous un signalement"));
+    QTextStream out(&file);
+    out << ip+"\n";
+    out <<QString::number(port)+"\n";
+    out << ui->username->text();
+    QUrl client(settings->value("launcher/clientPosition").toString());
+    if(!QDesktopServices::openUrl(client)){
+        QMessageBox::information(this,tr("erreur a louverture du lien"),tr("le lien ne veut pas souvrir la clef du registre a du etre modifier reinstaler le tchat"));
+    }
+    qApp->quit();
+}
+void connecttoclient::on_out_toggled(bool checked)
+{
+    if(checked){
+        QString ip;
+        foreach (const QHostAddress &address, QNetworkInterface::allAddresses()) {
+            if (address.protocol() == QAbstractSocket::IPv4Protocol && address != QHostAddress(QHostAddress::LocalHost))
+                 ip = (address.toString());
+        }
+        ui->ip->setText(ip);
+    }else{ui->ip->setText("anantasystem.com");}
+}
+

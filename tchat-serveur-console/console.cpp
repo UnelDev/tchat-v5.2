@@ -67,15 +67,34 @@ void console::exernalCommende(QMap<QString, QVariant> &message,const int user){
     }else if(message["message"].toString()=="startNew"){
         createPacket(user,"createServer");
         createFile(message["arg"].toString(),user);
+    }else if(message["message"].toString()=="getListServer"){
+        //nous allon listée les serveur
+        sentMap(user,"listServer",listeServer);
     }
 }
-void console::createPacket(const int index,const QString message, const QString arg1, const QString arg2){
+void console::createPacket(const int index, const QString message, const QString arg1, const QString arg2){
     QMap<QString, QVariant> packet;
     packet["type"]="laucher";
     packet["message"]=encryptioncesar->chiffre(message);
     packet["pseudo"]=encryptioncesar->chiffre("botLauncher");
     packet["arg"]=encryptioncesar->chiffre(arg1);
     packet["arg1"]=encryptioncesar->chiffre(arg2);
+    packet["secondofsending"]=QDateTime::currentDateTime().toString("ss");;
+    packet["minuteofsending"]=QDateTime::currentDateTime().toString("mm");;
+    packet["sendingtime"]=QDateTime::currentDateTime().toString("hh");
+    packet["sendingdate"]=QDateTime::currentDateTime().toString("d");
+    packet["shippingday"]=QDateTime::currentDateTime().toString("dddd");
+    packet["shippingmonth"]=QDateTime::currentDateTime().toString("MMMM");
+    packet["shippingyears"]=QDateTime::currentDateTime().toString("yyyy");
+    serv->sentmessageto(packet,index);
+}
+void console::sentMap(const int index, const QString message,QMap<QString,QVariant>mymap){
+    // Create a map and insert some values
+    QMap<QString, QVariant> packet;
+    packet["type"]="laucher";
+    packet["message"]=encryptioncesar->chiffre(message);
+    packet["pseudo"]=encryptioncesar->chiffre("botLauncher");
+    packet["arg"]=mymap;
     packet["secondofsending"]=QDateTime::currentDateTime().toString("ss");;
     packet["minuteofsending"]=QDateTime::currentDateTime().toString("mm");;
     packet["sendingtime"]=QDateTime::currentDateTime().toString("hh");
@@ -112,12 +131,13 @@ int console::createFile(const QString name, const int index){
     if(0){
         log("error on start server");
     }else{
-        servName.append(name);
+        listeServer[name]=portPrefered;
         log("the demarage is down");
         createPacket(index, "starting",QString::number(portPrefered));
     }
     return room.value(room.value("NbOfRoom").toString()).toInt();//on donne le port
 }
+
 
 void console::finished(int exitCode, QProcess::ExitStatus exitStatus){
     //une erreur avec le serveur est survenus

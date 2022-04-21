@@ -9,6 +9,7 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    launcher/clientinteraction.cpp \
     launcher/externalserver.cpp \
     launcher/connecttoclient.cpp \
     launcher/main.cpp \
@@ -19,6 +20,7 @@ SOURCES += \
     cesar.cpp
 
 HEADERS += \
+    launcher/clientinteraction.h \
     launcher/externalserver.h \
     launcher/connecttoclient.h \
     launcher/launcher.h \
@@ -28,6 +30,7 @@ HEADERS += \
     cesar.h
 
 FORMS += \
+    launcher/clientinteraction.ui \
     launcher/externalserver.ui \
     launcher/connecttoclient.ui \
     launcher/launcher.ui \

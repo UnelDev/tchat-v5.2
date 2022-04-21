@@ -9,6 +9,9 @@
 #include <QTextStream>
 #include <string>
 #include <QSettings>
+#include <QHostAddress>
+#include <QNetworkInterface>
+#include "clientinteraction.h"
 
 namespace Ui {
 class connecttoclient;
@@ -26,9 +29,14 @@ private slots:
 
     void on_checkBox_toggled(bool checked);
     void on_pushButton_clicked();
+    void serverSelected(const QString ip, const int port);
+
+    void on_out_toggled(bool checked);
 
 private:
+
     QSettings* settings;
+    clientInteraction* clientconnexion;
     Ui::connecttoclient *ui;
 };
 

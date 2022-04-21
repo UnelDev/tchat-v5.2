@@ -14,10 +14,13 @@ class serverInteraction : public QObject
 public:
     serverInteraction();
     ~serverInteraction();
-    void connectTo(const int port=2048, const QString ip="anantasystem.com");
+    void connectTo(const QString userName,const int port=2048, const QString ip="anantasystem.com");
 
 private:
     int progresse;
+    QString m_ip;
+    QString m_psedo;
+    int m_port;
     QString name;
     client* clients;
     externalServer* externalServ;

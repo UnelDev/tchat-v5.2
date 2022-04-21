@@ -65,8 +65,7 @@ void startserveur::on_checkBox_toggled(bool checked)
 }
 void startserveur::on_pushButton_clicked()
 {
-    bool test{ui->out->isChecked()};
-    if(test){
+    if(ui->out->isChecked()){
         QString name = settings->value("launcher/AutoConectServeurPosition").toString();
         QFile file(name);
         if(!file.open(QIODevice::WriteOnly|QIODevice::Text))
@@ -81,7 +80,8 @@ void startserveur::on_pushButton_clicked()
         qApp->quit();
     }else{
        interactServer = new serverInteraction();
-       interactServer->connectTo(ui->port->value(),ui->ip->text());
+       interactServer->connectTo(ui->username->text(),ui->port->value(),ui->ip->text());
+       ui->username->setEnabled(false);
     }
 
 }
@@ -130,4 +130,3 @@ void startserveur::on_out_clicked(bool checked)
         ui->ip->setText(ip);
     }else{ui->ip->setText("anantasystem.com");}
 }
-

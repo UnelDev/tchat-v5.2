@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
     }if(!settings.contains("settings/port")){
         settings.setValue("settings/port",2048);
     }if(!settings.contains("settings/serverPath")){
-        settings.setValue("settings/serverPath","serveur.exe");
+        settings.setValue("settings/serverPath","serveurConsoleAutoLaunch");
     }if(!settings.contains("settings/port/NbOpenPort")){
         settings.setValue("settings/port/NbOpenPort",0);
     }

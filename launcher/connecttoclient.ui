@@ -18,38 +18,14 @@
     <normaloff>:/images/Anantasite.png</normaloff>:/images/Anantasite.png</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <widget class="QLabel" name="label">
+   <item row="7" column="0" colspan="2">
+    <widget class="QPushButton" name="pushButton">
      <property name="text">
-      <string>rejoindre</string>
+      <string>rejoindre la discution</string>
      </property>
     </widget>
    </item>
-   <item row="0" column="1">
-    <widget class="QLineEdit" name="ip">
-     <property name="text">
-      <string>127.0.0.1</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0" colspan="2">
-    <widget class="QCheckBox" name="checkBox">
-     <property name="text">
-      <string>idantifiant par default</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="label_idantufiant">
-     <property name="text">
-      <string>pin</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="1">
+   <item row="5" column="1">
     <widget class="QSpinBox" name="port">
      <property name="minimum">
       <number>1024</number>
@@ -62,20 +38,64 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="0">
+   <item row="2" column="0" colspan="2">
+    <widget class="QCheckBox" name="checkBox">
+     <property name="text">
+      <string>idantifiant par default</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0">
+    <widget class="QLabel" name="label_idantufiant">
+     <property name="text">
+      <string>pin</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>rejoindre</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0">
     <widget class="QLabel" name="labelUsername">
      <property name="text">
       <string>identifiant</string>
      </property>
     </widget>
    </item>
-   <item row="3" column="1">
+   <item row="6" column="1">
     <widget class="QLineEdit" name="username"/>
    </item>
-   <item row="4" column="0" colspan="2">
-    <widget class="QPushButton" name="pushButton">
+   <item row="0" column="1">
+    <widget class="QLineEdit" name="ip">
      <property name="text">
-      <string>rejoindre la discution</string>
+      <string>127.0.0.1</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="2">
+    <widget class="QCheckBox" name="out">
+     <property name="text">
+      <string>crée hors ligne</string>
+     </property>
+     <property name="icon">
+      <iconset resource="resource.qrc">
+       <normaloff>:/images/admin.png</normaloff>:/images/admin.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>16</width>
+       <height>16</height>
+      </size>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
