@@ -18,23 +18,13 @@
     <normaloff>:/images/Anantasite.png</normaloff>:/images/Anantasite.png</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="4" column="1">
-    <widget class="QSpinBox" name="port">
-     <property name="minimum">
-      <number>1024</number>
-     </property>
-     <property name="maximum">
-      <number>65535</number>
-     </property>
-     <property name="value">
-      <number>2048</number>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="label">
+   <item row="3" column="0" colspan="2">
+    <widget class="QCheckBox" name="checkBox">
      <property name="text">
-      <string>crée sur :</string>
+      <string>idantifiant par default</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
@@ -49,10 +39,61 @@ p, li { white-space: pre-wrap; }
      </property>
     </widget>
    </item>
+   <item row="6" column="0" colspan="2">
+    <widget class="QPushButton" name="pushButton">
+     <property name="text">
+      <string>crée la discution</string>
+     </property>
+    </widget>
+   </item>
    <item row="5" column="0">
     <widget class="QLabel" name="labelUsername">
      <property name="text">
       <string>identifiant</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="2">
+    <widget class="QCheckBox" name="out">
+     <property name="text">
+      <string>crée hors ligne</string>
+     </property>
+     <property name="icon">
+      <iconset resource="resource.qrc">
+       <normaloff>:/images/admin.png</normaloff>:/images/admin.png</iconset>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1">
+    <widget class="QLineEdit" name="username"/>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="label_idantufiant">
+     <property name="text">
+      <string>pin</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>crée sur :</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1">
+    <widget class="QSpinBox" name="port">
+     <property name="minimum">
+      <number>1024</number>
+     </property>
+     <property name="maximum">
+      <number>65535</number>
+     </property>
+     <property name="value">
+      <number>2048</number>
      </property>
     </widget>
    </item>
@@ -69,51 +110,43 @@ p, li { white-space: pre-wrap; }
      </property>
     </widget>
    </item>
-   <item row="3" column="0" colspan="2">
-    <widget class="QCheckBox" name="checkBox">
-     <property name="text">
-      <string>idantifiant par default</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0">
-    <widget class="QLabel" name="label_idantufiant">
-     <property name="text">
-      <string>pin</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="0" colspan="2">
-    <widget class="QPushButton" name="pushButton">
-     <property name="text">
-      <string>crée la discution</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="1">
-    <widget class="QLineEdit" name="username"/>
-   </item>
-   <item row="2" column="0" colspan="2">
-    <widget class="QCheckBox" name="out">
-     <property name="text">
-      <string>crée hors ligne</string>
-     </property>
-     <property name="icon">
-      <iconset resource="resource.qrc">
-       <normaloff>:/images/admin.png</normaloff>:/images/admin.png</iconset>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
   </layout>
  </widget>
  <resources>
   <include location="resource.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>ip</sender>
+   <signal>returnPressed()</signal>
+   <receiver>pushButton</receiver>
+   <slot>animateClick()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>180</x>
+     <y>58</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>72</x>
+     <y>224</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>username</sender>
+   <signal>returnPressed()</signal>
+   <receiver>pushButton</receiver>
+   <slot>animateClick()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>210</x>
+     <y>190</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>265</x>
+     <y>226</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

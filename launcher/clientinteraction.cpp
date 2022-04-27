@@ -6,6 +6,7 @@ clientInteraction::clientInteraction(QWidget *parent) :
     ui(new Ui::clientInteraction)
 {
     ui->setupUi(this);
+    encryptioncesar = new cesar(2);
 }
 
 clientInteraction::~clientInteraction()
@@ -18,17 +19,12 @@ clientInteraction::~clientInteraction()
 }
 
 void clientInteraction::createPacket(const QString message, const QString arg1, const QString arg2){
-qDebug()<<"create in progress";
     QMap<QString, QVariant> packet;
-    qDebug()<<"create -1";
     packet["type"]="laucher";
-    qDebug()<<"create 0";
     packet["message"]=encryptioncesar->chiffre(message);
-    qDebug()<<"create 1";
     packet["pseudo"]=encryptioncesar->chiffre("botLauncher");
     packet["arg"]=encryptioncesar->chiffre(arg1);
     packet["arg2"]=encryptioncesar->chiffre(arg2);
-    qDebug()<<"create 2";
     packet["secondofsending"]=QDateTime::currentDateTime().toString("ss");
     packet["minuteofsending"]=QDateTime::currentDateTime().toString("mm");
     packet["sendingtime"]=QDateTime::currentDateTime().toString("hh");
@@ -36,9 +32,7 @@ qDebug()<<"create in progress";
     packet["shippingday"]=QDateTime::currentDateTime().toString("dddd");
     packet["shippingmonth"]=QDateTime::currentDateTime().toString("MMMM");
     packet["shippingyears"]=QDateTime::currentDateTime().toString("yyyy");
-    qDebug()<<"create 3";
     clients->senddatamap(packet);
-    qDebug()<<"create down";
 }
 void clientInteraction::connect(){
     ui->errorLabel->setText("");
@@ -52,7 +46,7 @@ void clientInteraction::desconnect(){
     ui->pushButton->setEnabled(false);
 }
 void clientInteraction::external(QMap<QString, QVariant> message){
-    qDebug()<<"external recevied";
+
     message["message"]=encryptioncesar->deChiffre(message["message"].toString());
     message["arg"]=encryptioncesar->deChiffre(message["arg"].toString());
     message["arg2"]=encryptioncesar->deChiffre(message["arg2"].toString());
@@ -60,7 +54,8 @@ void clientInteraction::external(QMap<QString, QVariant> message){
     if(message["type"].toString()=="laucher"){
         //on a recu un tableaux de serveur on afiche les clef (les valeur sont les port on les utilisera plus tard
         if(message["message"]=="listServer"){
-            if(!message["arg"].toMap().isEmpty()){
+            qDebug()<<"list of server recevied";
+            if(message["arg"].toMap().isEmpty()){
                 ui->errorLabel->setText("aucun serveur lancée, vous pouvez en lancée un depuis la precedente etape du launcher");
             }
             ui->pushButton->setEnabled(true);
