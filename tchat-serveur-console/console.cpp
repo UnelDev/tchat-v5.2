@@ -18,6 +18,7 @@ console::console(int Preferedport)
 
     int port =serv->startserveur(Preferedport);
     pinUp("the server has been start of port "+QString::number(port));
+    listeServer = QMap<QString,QVariant>();
     pinUp("initialization down !");
     pinUp("");
 }
