@@ -647,4 +647,3 @@ void Widget::mentionButonCliked()
     //remplacée le mot a cursorPosition
     ui->mesage->setText(text.replace(text.mid(text.lastIndexOf("@"), text.lastIndexOf(" ") - text.lastIndexOf("@")), "@" + button->text()));
 }
-

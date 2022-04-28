@@ -335,7 +335,7 @@ QString client::generatedate()
 }
 QString client::generatedate(QMap<QString, QVariant> message)
 {
-    auto date = message["time"].toDateTime().date();
+    auto date = message["time"].toDateTime();
     return("<span style=\"font-size: 12px\">"+ tr(" Le ","dans la generationde message")+ date.toString("dddd") +" "+date.toString("d")+" "+date.toString("MMMM")+" "+date.toString("yyyy") +"</span> <span style=\"font-size: 10px\">"+tr( " à ","dans la generationde message")+date.toString("hh")+" : "+date.toString("mm")+tr(" </span><br/>"));
 }
 QString client::generatemesage(QString message, QString pseudo)
