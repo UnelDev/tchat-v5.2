@@ -7,7 +7,7 @@ clientInteraction::clientInteraction(QWidget *parent) :
 {
     ui->setupUi(this);
     encryptioncesar = new cesar(2);
-    ui->errorLabel->setText("en atenete de la connexion");
+    ui->errorLabel->setText(tr("en atenete de la connexion"));
 }
 
 clientInteraction::~clientInteraction()
@@ -36,7 +36,7 @@ void clientInteraction::createPacket(const QString message, const QString arg1, 
     clients->senddatamap(packet);
 }
 void clientInteraction::connect(){
-    ui->errorLabel->setText("connectée ! recuperation de la liste des serveur");
+    ui->errorLabel->setText(tr("connectée ! recuperation de la liste des serveur"));
     ui->errorLabel->setVisible(false);
     ui->pushButton->setEnabled(false);
     createPacket("getListServer");
@@ -58,7 +58,7 @@ void clientInteraction::external(QMap<QString, QVariant> message){
         if(message["message"]=="listServer"){
             qDebug()<<"list of server recevied";
             if(message["arg"].toMap().isEmpty()){
-                ui->errorLabel->setText("aucun serveur lancée, vous pouvez en lancée un depuis la precedente etape du launcher");
+                ui->errorLabel->setText(tr("aucun serveur lancée, vous pouvez en lancée un depuis la precedente etape du launcher"));
             }
             ui->pushButton->setEnabled(true);
             listeServer = QMap<QString, int>();
@@ -70,6 +70,7 @@ void clientInteraction::external(QMap<QString, QVariant> message){
                  i.previous();
                  qDebug() << i.key() << ": " << i.value().toInt();
                  ui->serveurList->addItem(i.key());
+                 listeServer.insert(i.key(),i.value().toInt());
              }
         }
 
@@ -79,9 +80,13 @@ void clientInteraction::external(QMap<QString, QVariant> message){
 
 void clientInteraction::on_pushButton_clicked()
 {
-    if(listeServer.contains(ui->serveurList->currentItem()->text())){
+    auto selectText = ui->serveurList->currentItem()->text();
+    if(listeServer.contains(selectText)){
         //[nom,port]
         emit clientInteraction::serverSelected(m_ip,listeServer[ui->serveurList->currentItem()->text()]);
+    }else{
+        ui->errorLabel->setText(tr("erreur le serveur selectionée n'a pas été trouvée dans la liste de serveur"));
+        ui->errorLabel->setVisible(true);
     }
 
 }
