@@ -101,3 +101,9 @@ void clientInteraction::connectto(const QString ip,const int port){
     ui->errorLabel->setText(tr("la connexion a été lancée... passienter"));
     ui->pushButton->setEnabled(false);
 }
+
+void clientInteraction::on_serveurList_itemDoubleClicked(QListWidgetItem *item)
+{
+    on_pushButton_clicked();
+}
+

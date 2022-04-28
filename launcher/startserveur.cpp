@@ -5,6 +5,7 @@ startserveur::startserveur(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::startserveur)
 {
+    interactServer = new serverInteraction();
     //ui
     ui->setupUi(this);
     ui->port->setVisible(false);
@@ -51,7 +52,10 @@ startserveur::startserveur(QWidget *parent) :
 
 startserveur::~startserveur()
 {
-    delete interactServer;
+    if(interactServer!=NULL){
+      delete interactServer;
+    }
+
     delete settings;
     delete ui;
 }
@@ -79,7 +83,6 @@ void startserveur::on_pushButton_clicked()
         }
         qApp->quit();
     }else{
-       interactServer = new serverInteraction();
        interactServer->connectTo(ui->username->text(),ui->port->value(),ui->ip->text());
        ui->username->setEnabled(false);
     }

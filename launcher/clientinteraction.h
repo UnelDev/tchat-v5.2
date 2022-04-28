@@ -2,6 +2,7 @@
 #define CLIENTINTERACTION_H
 
 #include <QDialog>
+#include <QListWidgetItem>
 #include "client.h"
 
 namespace Ui {
@@ -24,6 +25,8 @@ public:
     void createPacket(const QString message, const QString arg1="", const QString arg2="");
 private slots:
     void on_pushButton_clicked();
+
+    void on_serveurList_itemDoubleClicked(QListWidgetItem *item);
 
 private:
     Ui::clientInteraction *ui;
