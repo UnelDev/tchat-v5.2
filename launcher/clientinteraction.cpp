@@ -7,6 +7,7 @@ clientInteraction::clientInteraction(QWidget *parent) :
 {
     ui->setupUi(this);
     encryptioncesar = new cesar(2);
+    ui->errorLabel->setText("en atenete de la connexion");
 }
 
 clientInteraction::~clientInteraction()
@@ -35,7 +36,7 @@ void clientInteraction::createPacket(const QString message, const QString arg1, 
     clients->senddatamap(packet);
 }
 void clientInteraction::connect(){
-    ui->errorLabel->setText("");
+    ui->errorLabel->setText("connectée ! recuperation de la liste des serveur");
     ui->errorLabel->setVisible(false);
     ui->pushButton->setEnabled(false);
     createPacket("getListServer");
@@ -48,9 +49,10 @@ void clientInteraction::desconnect(){
 void clientInteraction::external(QMap<QString, QVariant> message){
 
     message["message"]=encryptioncesar->deChiffre(message["message"].toString());
-    message["arg"]=encryptioncesar->deChiffre(message["arg"].toString());
-    message["arg2"]=encryptioncesar->deChiffre(message["arg2"].toString());
+//  /!\atention pas de dechifremment des arg  message["arg"]=encryptioncesar->deChiffre(message["arg"].toString());
+//  /!\atention pas de dechifremment des arg    message["arg2"]=encryptioncesar->deChiffre(message["arg2"].toString());
     message["pseudo"]=encryptioncesar->deChiffre(message["pseudo"].toString());
+    QMap<QString, QVariant> receved = message["arg"].toMap();
     if(message["type"].toString()=="laucher"){
         //on a recu un tableaux de serveur on afiche les clef (les valeur sont les port on les utilisera plus tard
         if(message["message"]=="listServer"){
@@ -60,10 +62,15 @@ void clientInteraction::external(QMap<QString, QVariant> message){
             }
             ui->pushButton->setEnabled(true);
             listeServer = QMap<QString, int>();
-           for(int i=0;i<message["arg"].toMap().size();i++){
-               ui->serveurList->addItem(message["arg"].toMap().key(i));
-               listeServer[message["arg"].toMap().key(i)] = message[message["arg"].toMap().key(i)].toInt();
-           }
+
+
+            QMapIterator<QString, QVariant> i(receved);
+             i.toBack();
+             while (i.hasPrevious()) {
+                 i.previous();
+                 qDebug() << i.key() << ": " << i.value().toInt();
+                 ui->serveurList->addItem(i.key());
+             }
         }
 
     }
@@ -79,7 +86,6 @@ void clientInteraction::on_pushButton_clicked()
 
 }
 void clientInteraction::connectto(const QString ip,const int port){
-    qDebug()<<"connect lauch";
     clients = new client();
     m_ip=ip;
     clients->connectto(ip, port, "launcher");
@@ -89,5 +95,4 @@ void clientInteraction::connectto(const QString ip,const int port){
     ui->errorLabel->setVisible(true);
     ui->errorLabel->setText(tr("la connexion a été lancée... passienter"));
     ui->pushButton->setEnabled(false);
-    qDebug()<<"connect lauch2";
 }
