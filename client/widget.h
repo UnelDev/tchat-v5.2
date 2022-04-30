@@ -38,6 +38,14 @@ public:
     ~Widget();
     parametre parametres;
 
+protected:
+    QString generatemesage(QString message, QString pseudo);
+    QString generatemesage(QMap<QString, QString> message);
+    void client_sentdatamap(const QString type);
+    void helpcondesed();
+    void client_processechatbot(QString command);
+    void client_generatemesage();
+
 private slots:
     void on_conectbuton_clicked();
     void on_sentbuton_clicked();
@@ -48,18 +56,12 @@ private slots:
     void on_pseudo_editingFinished();
     void on_mesage_cursorPositionChanged(int arg1, int arg2);
     QString returnpseudo();
-    QString generatemesage(QString message, QString pseudo);
-    QString generatemesage(QMap<QString, QString> message);
     QString generatedate();
-    void client_sentdatamap(const QString type);
     void startTrayIcon();
     void changetransparency(Qt::ApplicationState state);
     void condesed();
-    void helpcondesed();
     void autoconnect();
     void processechatbot(const QString command);
-    void client_processechatbot(QString command);
-    void client_generatemesage();
     void executeCmd(const QString cmd);
     void changeUserRole(QList<QString>usrRole);
     void changeUsersaloon(const QString username, const QString room);

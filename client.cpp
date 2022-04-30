@@ -256,6 +256,10 @@ void client::processcomand(QMap<QString, QVariant> commend)
         QMessageBox::critical(nullptr, tr("Erreur"), tr("Un autre client porte déjà ce pseudo. Veuillez changer de pseudo pour vous connecter."));
     }else if(commend["message"]=="pseudoresembling"){
         QMessageBox::critical(nullptr, tr("Erreur"), tr("Un autre client porte déjà un pseudo ressemblant. Veuillez changer de pseudo pour vous connecter."));
+    }else if(commend["message"]=="not_change_psedo_in_waiting"){
+        QMessageBox::critical(nullptr, tr("Erreur"), tr("vous ne pouvez pas changer de pseudo en attendant l'aprobation de l'administrateur."));
+    }else if(commend["message"]=="psedoNull"){
+        QMessageBox::critical(nullptr, tr("Erreur"), tr("Vous devez entrer un pseudo."));
     }else if (commend["message"]=="update_") {
         displayMessagelist(commend["arg"].toString());
     }else if (commend["message"]=="isconnected"){

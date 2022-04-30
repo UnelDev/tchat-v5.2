@@ -206,13 +206,18 @@ void serveur::connect( QMap<QString, QVariant> &connectpack, int usernaime){
 
     for(int i = 0; i < clientsList.size(); i++)
     {
+        if(clientsList[usernaime]->getpseudo().remove(" ")==""){
+            sentcomandto(usernaime,"psedoNull");
+            return;
+        }
         if(clientsList[i]->getpseudo().remove(" ")=="" && i != usernaime){
             sentcomandto(usernaime,"pseudoalreadyuse");
+            return;
         }
         if(clientsList[i]->getpseudo()==connectpack["pseudo"] && i != usernaime){//si c'est le meme on coupe et on envoie une erreur
             sentcomandto(usernaime,"pseudoalreadyuse");
             return;
-        }else if(clientsList[i]->getpseudo().remove(" ")==connectpack["arg"].toString().remove(" ") && i != usernaime){//si c'est resembleaut on coupe et on envoie une erreur
+        }else if(clientsList[i]->getpseudo().remove(" ").remove(".")==connectpack["arg"].toString().remove(" ").remove(".") && i != usernaime){//si c'est resembleaut on coupe et on envoie une erreur
             sentcomandto(usernaime,"pseudoresembling");
             return;
         }
@@ -385,10 +390,16 @@ void serveur::recoverallfile()
 void serveur::processcomand(QMap<QString, QVariant> command, int noclient)
 {
     if (command["message"].toString()=="change_psedo") {// changer psedo)
+        //on verifie que l'utilisateur est pas en salle d'attente
+        if(clientsList[noclient]->getRoom()=="waiting"){
+            sentcomandto(noclient,"not_change_psedo_in_waiting");
+            return;
+        }
         for(int i = 0; i < clientsList.size(); i++)
         {
             if(clientsList[i]->getpseudo().remove(" ")=="" && i != noclient){
                 sentcomandto(noclient,"pseudoalreadyuse");
+                return;
             }
             if(clientsList[i]->getpseudo()==command["pseudo"] && i != noclient){//si c'est le meme on coupe et on envoie une erreur
                 sentcomandto(noclient,"pseudoalreadyuse");

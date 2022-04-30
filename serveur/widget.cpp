@@ -222,6 +222,7 @@ void Widget::executeCmd(const QString cmd)
 {
     if (cmd == "clear")
     {
+        //recursive remouve
         QLayout* layout = ui->messageliste->layout();
         QLayoutItem* child;
         while(layout->count()!=0)
