@@ -226,7 +226,6 @@ void serveur::connect( QMap<QString, QVariant> &connectpack, int usernaime){
     clientsList[usernaime]->editversion(connectpack["version"].toString());
     if(clientsList[usernaime]->getRoom()!="waiting"){// si  il est pas en sale d'atente{
         clientsList[usernaime]->editpseudo(username);//on le nomme
-        sentmessagetoall(connectpack);
         emitlog(tr("un client vien de sidentifier : ", "dans les log")+ clientsList[usernaime]->getpseudo());
         srand (time(NULL));
         int random = rand() % 4 + 1;

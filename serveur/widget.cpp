@@ -346,7 +346,7 @@ void Widget::displayMessagelist(QString message)
     // verification des @
     if (message.contains("@" + ui->pseudo->text()))
     {
-        message.replace("@" + ui->pseudo->text(), "<strong> <span style=\"background:#5865f2\">@" + ui->pseudo->text() + " </span></strong>");
+        message.replace("@" + ui->pseudo->text(), "<strong><span style=\"background:#6340b2; border-radius: 5px\"> @" + ui->pseudo->text() +"</span></strong>");
         QApplication::beep();
         auto text = QTextDocumentFragment::fromHtml(message);
         sticon->showMessage("nouvelle mention", text.toPlainText(), QSystemTrayIcon::Information, 2000);
