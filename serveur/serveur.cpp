@@ -435,7 +435,7 @@ void serveur::processcomand(QMap<QString, QVariant> command, int noclient)
             sentmessageto(tr("vous n'avais pas le droit de faire cette commende : changeUsrRole est soumis a un rôle admin ou host","lors de lexecution d'une commende"), noclient);
             return;
         }else if(clientsList[noclient]->getGrade()<command["arg2"].toInt()){
-            sentmessageto(tr("vous n'avais pas le droit de donée un grade plus élever que le votre","lors de lexecution d'une commende"), noclient);
+            sentmessageto(tr("vous n'avais pas le droit de donée un grade plus élever que le votre","lors de lexecution d'une commenoutde"), noclient);
             return;
         }else if(command["arg2"].toInt()==2){
             sentmessageto(tr("il est imposible de donée le grade host","lors de lexecution d'une commende"), noclient);
@@ -474,7 +474,7 @@ void serveur::processcomand(QMap<QString, QVariant> command, int noclient)
             const QString name =clientsList[clientname]->getpseudo().remove(" ("+clientsList[clientname]->getRoom()+")");
             clientsList[clientname]->changeRoom(command["arg2"].toString());
             outOfWating(clientname,name);
-            clientsList[clientname]->editpseudo(clientsList[clientname]->getpseudo().remove(" ("+clientsList[clientname]->getRoom()+")"));//on le renome
+            clientsList[clientname]->editpseudo(name);//on le renome
         }
     }else if(command["message"].toString()=="ping"){
         QTime actualTime = QTime::currentTime();
@@ -489,8 +489,8 @@ void serveur::processcomand(QMap<QString, QVariant> command, int noclient)
         if(clientsList[noclient]->getGrade()==0){
             sentmessageto(tr("vous n'avais pas le droit de faire cette commende : debug est soumis a un rôle admin ou host","lors de lexecution d'une commende"), noclient);
         }else{
-            QList<QVariant> test =recapEmbed();
-            sentcomandto(noclient,"reDebug",test);
+            QList<QVariant> debug =recapEmbed();
+            sentcomandto(noclient,"reDebug",debug);
         }
     }else{
         messageBox(tr("Erreur"), tr("Un paquet de commande a été reçu mais la commande est incomprise."));

@@ -27,7 +27,11 @@
       </widget>
      </item>
      <item alignment="Qt::AlignLeft">
-      <widget class="QLineEdit" name="pseudo"/>
+      <widget class="QLineEdit" name="pseudo">
+       <property name="text">
+        <string>serv</string>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QLabel" name="label_message_3">
