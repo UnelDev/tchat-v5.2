@@ -204,19 +204,41 @@ void Widget::recap()
 {
     server->recap();
 }
+void Widget::remove( QLayout* layout )
+{
+    QLayoutItem* child;
+    while ( layout->count() != 0 ) {
+        child = layout->takeAt ( 0 );
+        if ( child->layout() != 0 ) {
+            remove ( child->layout() );
+        } else if ( child->widget() != 0 ) {
+            delete child->widget();
+        }
+
+        delete child;
+    }
+}
 void Widget::executeCmd(const QString cmd)
 {
     if (cmd == "clear")
     {
-        QLayoutItem *child;
-        while ((child = ui->messageliste->takeAt(0)) != 0)
+        QLayout* layout = ui->messageliste->layout();
+        QLayoutItem* child;
+        while(layout->count()!=0)
         {
-            if (child->widget() != 0)
+            child = layout->takeAt(0);
+            if(child->layout() != 0)
+            {
+                remove(child->layout());
+            }
+            else if(child->widget() != 0)
             {
                 delete child->widget();
             }
+
             delete child;
         }
+            //after we signal of the last mssage is not a text
         lastMessageIsText = false;
     }
     else
@@ -392,18 +414,18 @@ void Widget::displayFileOnMessageList(const QString comment, const QString NameO
             auto text = QTextDocumentFragment::fromHtml(comment);
             sticon->showMessage("", text.toPlainText(), QSystemTrayIcon::Information, 2000);
         }
-        QApplication::alert(this);
+        QApplication::alert(ui->messageliste->widget());
     }
-    QLabel *label = new QLabel(this); // creation du label pour le message
+    QLabel *label = new QLabel(ui->messageliste->widget()); // creation du label pour le message
     label->setText(comment);
     label->setTextInteractionFlags(Qt::TextSelectableByMouse | Qt::TextSelectableByKeyboard | Qt::LinksAccessibleByMouse | Qt::LinksAccessibleByKeyboard);
     ui->messageliste->addWidget(label);
 
-    QPushButton *PushButton = new QPushButton(this); // creation du bouton pour le telechargement
+    QPushButton *PushButton = new QPushButton(ui->messageliste->widget()); // creation du bouton pour le telechargement
     PushButton->setText(tr("telecharger: ", "dans le bouton de telechargement") + NameOfFile);
     connect(PushButton, &QPushButton::clicked, this, &Widget::openfile);
 
-    QVBoxLayout *vlayout = new QVBoxLayout(this); // creation du layout pour metre en forme tout
+    QVBoxLayout *vlayout = new QVBoxLayout(ui->messageliste->widget()); // creation du layout pour metre en forme tout
     vlayout->addWidget(label);
     vlayout->addWidget(PushButton);
     vlayout->setSpacing(2);
@@ -411,7 +433,7 @@ void Widget::displayFileOnMessageList(const QString comment, const QString NameO
 
     if (chatBotInteraction::ImageSupported(NameOfFile))
     {
-        QLabel *label = new QLabel(this);
+        QLabel *label = new QLabel(ui->messageliste->widget());
         QPixmap *pixmap_img = new QPixmap(QPixmap("temp/" + NameOfFile).scaledToWidth(ui->scrollArea->size().width() - 50, Qt::SmoothTransformation)); // on redimentionne a la taille de l'afichage
         ui->scrollArea->setMinimumWidth(ui->scrollArea->size().width());
         PushButton->setMaximumWidth(ui->scrollArea->size().width() - 50);
@@ -423,7 +445,7 @@ void Widget::displayFileOnMessageList(const QString comment, const QString NameO
         const QString file = chatBotInteraction::exctractText("temp/" + NameOfFile, 10);
         if (file != QString::number(-1))
         {
-            QTextBrowser *TextBrowser = new QTextBrowser(this);
+            QTextBrowser *TextBrowser = new QTextBrowser(ui->messageliste->widget());
             TextBrowser->append(file);
             const int number_of_lines = file.split("<br>").size();
             // Get the height of the font being used
@@ -442,7 +464,7 @@ void Widget::displayFileOnMessageList(const QString comment, const QString NameO
 }
 void Widget::displayEmbed(const QString name, const QString information, const QList<QList<QString>> liste)
 {
-    QFrame *line = new QFrame();
+    QFrame *line = new QFrame(ui->messageliste->widget());
     line->setFrameShape(QFrame::HLine);
     line->setFrameShadow(QFrame::Sunken);
     ui->messageliste->addWidget(line);
@@ -453,11 +475,11 @@ void Widget::displayEmbed(const QString name, const QString information, const Q
             QApplication::beep();
         }
     }
-    QGridLayout *GLayout = new QGridLayout();
+    QGridLayout *GLayout = new QGridLayout(ui->messageliste->widget());
     ui->messageliste->addSpacing(10);
-    QLabel *labelName = new QLabel("<span style=\"font-size: 18px\">     " + name + "</p></span>");
+    QLabel *labelName = new QLabel("<span style=\"font-size: 18px\">     " + name + "</p></span>",ui->messageliste->widget());
     labelName->setWordWrap(true);
-    QLabel *labelInformation = new QLabel("<span style=\"font-size: 10px\">     " + information + "</p></span>");
+    QLabel *labelInformation = new QLabel("<span style=\"font-size: 10px\">     " + information + "</p></span>",ui->messageliste->widget());
     labelInformation->setWordWrap(true);
     GLayout->addWidget(labelName, 0, 0, 1, 2);
     GLayout->addWidget(labelInformation, 1, 0, 1, 2);
@@ -466,9 +488,9 @@ void Widget::displayEmbed(const QString name, const QString information, const Q
     {
         if (liste[i][0] != "" && liste[i][1] != "")
         {
-            QLabel *LabelText = new QLabel(liste[i][0]);
+            QLabel *LabelText = new QLabel(liste[i][0],ui->messageliste->widget());
             labelName->setWordWrap(true);
-            QLabel *describle = new QLabel(liste[i][1]);
+            QLabel *describle = new QLabel(liste[i][1],ui->messageliste->widget());
             describle->setWordWrap(true);
             GLayout->addWidget(LabelText, i + 2, 0);
             GLayout->addWidget(describle, i + 2, 1);
@@ -478,7 +500,7 @@ void Widget::displayEmbed(const QString name, const QString information, const Q
     GLayout->setHorizontalSpacing(10);
     ui->messageliste->addLayout(GLayout);
 
-    QFrame *lineEnd = new QFrame();
+    QFrame *lineEnd = new QFrame(ui->messageliste->widget());
     lineEnd->setFrameShape(QFrame::HLine);
     lineEnd->setFrameShadow(QFrame::Sunken);
     ui->messageliste->addWidget(lineEnd);
@@ -503,7 +525,7 @@ void Widget::addmessage(QString message)
 {
     if (!lastMessageIsText)
     { // le dernier message n'est pas du texte
-        QLabel *label = new QLabel(this);
+        QLabel *label = new QLabel(ui->messageliste->widget());
         label->setText(message);
         label->setTextInteractionFlags(Qt::TextSelectableByMouse | Qt::TextSelectableByKeyboard | Qt::LinksAccessibleByMouse | Qt::LinksAccessibleByKeyboard);
         label->setWordWrap(true);

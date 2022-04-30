@@ -52,7 +52,6 @@ private:
     serveur *server;
     QString m_path;
     QList<QString> listeOfpPath;
-private slots:
     QString returnpseudo();
     QString generatemesage(QString message, QString pseudo);
     QString generatedate();
@@ -67,6 +66,8 @@ private slots:
     void openfile();
     void changeUserRole(QList<QString>usrRole);
     void changeUsersaloon(const QString username, const QString room);
+    void remove( QLayout* layout );
+private slots:
     //asseseur
     void errorServer(QString title, QString msg);
     void displayMessagelist(QString message);
