@@ -47,8 +47,6 @@ private slots:
     void on_pieceJointe_clicked();
     void on_pseudo_editingFinished();
     void on_mesage_cursorPositionChanged(int arg1, int arg2);
-
-private:
     QString returnpseudo();
     QString generatemesage(QString message, QString pseudo);
     QString generatemesage(QMap<QString, QString> message);
@@ -65,6 +63,9 @@ private:
     void executeCmd(const QString cmd);
     void changeUserRole(QList<QString>usrRole);
     void changeUsersaloon(const QString username, const QString room);
+    void remove( QLayout* layout );
+
+private:
     //asseseur
     void displayMessagelist(QString message);
     void displayFileOnMessageList(const QString comment, const QString NameOfFile);

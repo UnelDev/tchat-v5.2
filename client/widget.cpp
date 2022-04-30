@@ -145,19 +145,48 @@ void Widget::startTrayIcon(){
     connect(actTexte1, SIGNAL(triggered()), qApp, SLOT(quit()));
     connect(condense,&QAction::triggered,this, &Widget::condesed);
 }
-void Widget::executeCmd(const QString cmd){
-    if(cmd=="clear"){
-        QLayoutItem* child;
-        while((child = ui->messageliste->takeAt(0)) != 0)
-        {
-           if(child->widget() != 0)
-           {
+void Widget::remove( QLayout* layout )
+{
+    QLayoutItem* child;
+    while ( layout->count() != 0 ) {
+        child = layout->takeAt ( 0 );
+        if ( child->layout() != 0 ) {
+            remove ( child->layout() );
+        } else if ( child->widget() != 0 ) {
             delete child->widget();
-           }
-           delete child;
         }
+
+        delete child;
     }
-    lastMessageIsText =false;
+}
+void Widget::executeCmd(const QString cmd)
+{
+    if (cmd == "clear")
+    {
+        //recursive remouve
+        QLayout* layout = ui->messageliste->layout();
+        QLayoutItem* child;
+        while(layout->count()!=0)
+        {
+            child = layout->takeAt(0);
+            if(child->layout() != 0)
+            {
+                remove(child->layout());
+            }
+            else if(child->widget() != 0)
+            {
+                delete child->widget();
+            }
+
+            delete child;
+        }
+            //after we signal of the last mssage is not a text
+        lastMessageIsText = false;
+    }
+    else
+    {
+        addmessage(tr("erreur une commende emise par le serveur n'a pas été comprise", "dans la reseption des commende externe"));
+    }
 }
 void Widget::changeUserRole(QList<QString>usrRole){
     clients->sendcommande("changeUsrRole",usrRole[0]/*le nom d'utilisateur*/,usrRole[1]/*le role en int*/);
