@@ -597,7 +597,7 @@ void Widget::processechatbot(QString command)
     {
         clients->sendcommande("clearForAll");
     }
-    else if (command.startsWith("promot"))
+    /*else if (command.startsWith("promot"))
     {
         useraction *usrAction = new useraction;
         usrAction->show();
@@ -606,7 +606,7 @@ void Widget::processechatbot(QString command)
             usrAction->addUser(ui->clientlist->item(i)->text());
         }
         QObject::connect(usrAction, &useraction::finish, this, &Widget::changeUserRole);
-    }
+    } fait crash*/
     else if (command.startsWith("acept"))
     {
         changeUserRoom *usrRoom = new changeUserRoom;
