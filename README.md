@@ -1,3 +1,7 @@
+#alert
+ce repository est un reupload du project original crée par unelDev
+
+
 # introduction
 
 Ananta System Tchat est un projet de développement d'un système de tchat. il permet de discuter avec des amis dans un réseau local. l'interface est simple et intuitive, elle a uniquement deux boutons, un pour envoyer un message et un pour accéder au paramètre.
