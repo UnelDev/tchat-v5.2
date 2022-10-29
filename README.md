@@ -1,10 +1,15 @@
-#alert
-ce repository est un reupload du project original crée par unelDev
+# Warning
+
+ 
+
+This project is a reupload of my first project.
+
+⚠️this project is my first so it can be unsafe or can cause problems on your machine
 
 
 # introduction
 
-Ananta System Tchat est un projet de développement d'un système de tchat. il permet de discuter avec des amis dans un réseau local. l'interface est simple et intuitive, elle a uniquement deux boutons, un pour envoyer un message et un pour accéder au paramètre.
+Ananta System Tchat est un projet de tchat. il permet de discuter avec des amis dans un réseau local. l'interface est simple et intuitive, elle a uniquement deux boutons, un pour envoyer un message et un pour accéder au paramètre.
 pour l'instant le tchat est uniquement disponible dans un réseau local, toutefois des test sont en cours pour pouvoir y accéder de partout sur internet.
 
 # Sommaire
@@ -20,10 +25,10 @@ pour l'instant le tchat est uniquement disponible dans un réseau local, toutefo
 - [contact](#contact)
 
 # présentation du Project
-Ananta System Tchat est né d'un besoin anonymat dans un collège. pour pouvoir continuée a discuter entre amis pendant les cour en salle informatique je me suis mis a développé un système de tchat. il était dans un autre langage : le batch. il était peut efficace. je e sui donc lancée dans le c++. cella fait maintenant 5 ans que je développe ce projet en c++, il est donc de plus en plus stable est plein de fonctionnalité.
+Ananta System Tchat est né d'un besoin dans un collège. pour pouvoir continuée a discuter entre amis pendant les cour en salle informatique je me suis mis a développé un système de tchat. il était dans un autre langage : le batch. il était peut efficace. je me suis donc lancée dans le c++. cella fait maintenant 5 ans que je développe ce projet en c++, il est donc de plus en plus stable est plein de fonctionnalité.
 
 # avantage
-- le tchat est chiffrée de bout en bout
+- le tchat est chiffrée de bout en bout-
 - il est personnalisable
     - il possède par exemple de plusieurs thèmes
     - il est possible de désactiver les notifications
@@ -36,7 +41,7 @@ ce tchat permet bien évidement d'envoyer des message, mais aussi plusieurs autr
 - [x] prévisualiser les fichiers
 - [x] a une salle d’attente qui permet approuver ou non les nouveaux membres
 - [x] a une liste de membres qui permet de voir les membres connectés
-- [x] a plusieurs commende utile :
+- [x] a plusieurs commendes utiles :
     - ping : permet de voir le temps de réponse du serveur
     - info : permet de voir les information détailler sur le ping
     - help : permet de voir la liste des commande
@@ -73,8 +78,8 @@ Ananta System Tchat est codé suivant une architecture MVC.
 - /serveur  contiens tout les fonction relative au serveur :
     - /serveur/serveur.h/cpp : contient toute les fonction relative au serveur.
     - /serveur/parametre.h/cpp/ui : contient toute les fonction relative aux paramètre et leur interface graphique.
-- /serveurConsoleAutoLaunch : est le Project encore en beta test de lancement automatique de serveur grâce a /tchat-serveur-console.
-- /tchat-serveur-console : est le Project encore en beta test de lancement automatique de /serveurConsoleAutoLaunch.
+- /serveurConsoleAutoLaunch : est le Project encore en beta test de lancement sur demande de serveur
+- /tchat-serveur-console : est le Project encore en beta test de lancement sur demande de /serveurConsoleAutoLaunch.
 
 # contribution
 le projet est open source, vous pouvez donc contribuer au Project sur GitHub : [ici](https://github.com/https-github-com-anantasystem) 
